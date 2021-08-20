@@ -1,53 +1,43 @@
-setInterval(function() {
-    function cleanup() {
-        var b1=document.getElementById("bullet1");
-        var b2=document.getElementById("bullet2");
-        if (b1!=null)b1.remove();
-        if (b2!=null)b2.remove();
-    }    cleanup();
+function createBullet(tower) {
     var bullet=document.createElement("div");
+    bullet.towerId=tower.id;
     bullet.innerHTML="*";
     bullet.style.position="absolute";
-    bullet.id="bullet1";
-    bullet.style.color="#df5151";
-
-    var bullet2=document.createElement("div");
-    bullet2.innerHTML="*";
-    bullet2.style.position="absolute";
-    bullet2.id="bullet2";
-    bullet2.style.color="#8fc2f0";
-
-    var t1=document.getElementById("tower1");
-    var t2=document.getElementById("tower2");
-
-    if (t1 == null)return; if (t2==null)return;
-    bullet.left=t1.getBoundingClientRect().left + (t1.getBoundingClientRect().width)/2;
+    bullet.classList.add("bullet");
+    if (tower.frost) {
+        bullet.style.color="#8fc2f0";
+    } else {
+        bullet.style.color="#df5151";
+    }
+    bullet.left=tower.getBoundingClientRect().left + (tower.getBoundingClientRect().width)/2;
     bullet.style.left=bullet.left  + "px";
-    bullet.top=t1.getBoundingClientRect().top
+    bullet.top=tower.getBoundingClientRect().top
     bullet.style.top=bullet.top + "px";
-
-    bullet2.left=t2.getBoundingClientRect().left + (t2.getBoundingClientRect().width)/2;
-    bullet2.style.left=bullet2.left  + "px";
-    bullet2.top=t2.getBoundingClientRect().top+10;
-    bullet2.style.top=bullet2.top + "px";
-
+    bullet.style.zIndex=100000;
     document.body.appendChild(bullet);
-    document.body.appendChild(bullet2);
+    return bullet;
+}
+function positionBullet(bullet) {
+    var roadTop=document.getElementById("road").getBoundingClientRect().top;
+    var roadCenter=roadTop + ((document.getElementById("road").getBoundingClientRect().height)/2);
 
-}, 3500);
+    if (bullet.top<roadCenter) {
+        var tower=document.getElementById(bullet.towerId);
+        bullet.left=tower.getBoundingClientRect().left + (tower.getBoundingClientRect().width)/2;
+        bullet.style.left=bullet.left  + "px";
+        bullet.top=tower.getBoundingClientRect().top
+        bullet.style.top=bullet.top + "px";
+        return;
+    }
+    bullet.left=bullet.left+10;
+    bullet.style.left=(bullet.left)+"px";
+    bullet.top=bullet.top-10;
+    bullet.style.top=(bullet.top)+"px";
+}
 
 setInterval(function() {
-    var b1=document.getElementById("bullet1");
-    var b2=document.getElementById("bullet2");
-    if (b1==null)return;
-    if (b2==null)return;
-    b1.left=b1.left+10;
-    b1.style.left=(b1.left)+"px";
-    b1.top=b1.top-10;
-    b1.style.top=(b1.top)+"px";
-
-    b2.left=b2.left+10;
-    b2.style.left=(b2.left)+"px";
-    b2.top=b2.top-10;
-    b2.style.top=(b2.top)+"px";
-}, 500);
+    var bullets = document.getElementsByClassName("bullet");
+    for (var i=0; i<bullets.length; i++) {
+        positionBullet(bullets[i]);
+    }
+}, 300);

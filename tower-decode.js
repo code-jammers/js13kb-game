@@ -9,18 +9,21 @@ function create_tower(ascii_char, attrs) {
     var type="fire-tower";
     var tow=document.createElement("div");
     tow.innerHTML = "{"+ascii_char+"}";
-	
-    if (attrs[7] == '1') {
+    tow.frost = (attrs[7] == '1');
+    if (tow.frost) {
         type="frost-tower";
     }
     var tow_cont=document.createElement(type);
     tow_cont.appendChild(tow);
     container.appendChild(tow_cont);
+    return tow;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     var towers=GAME_DATA.towers;
     for (var i=0;i<towers.length;i++) {
-	create_tower( towers[i], tower_decode(towers[i]) );
+	var t = create_tower( towers[i], tower_decode(towers[i]) );
+        t.id="tower"+i;
+        createBullet(t);
     }
 });

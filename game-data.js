@@ -1,3 +1,3 @@
 GAME_DATA = {
-    towers: "M0"
+    towers: "*@M0ODY"
 }
