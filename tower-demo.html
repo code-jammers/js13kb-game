@@ -36,16 +36,18 @@
       }
 
       frost-tower div {
-        position: absolute;
+        display: block;
+        position: relative;//absolute;
         line-height: calc(var(--tower-size) * 2);
-        left: calc(50% - 6px);
+        //left: calc(50% - 6px);
         color: #8fc2f0;
       }
 
       fire-tower div {
-        position: absolute;
+        display: block;
+        position: relative;//absolute;
         line-height: calc(var(--tower-size) - 6px);
-        left: calc(50% - 9px);
+        //left: calc(50% - 9px);
         color: #df5151;
       }
 
@@ -90,9 +92,10 @@
         left: 3px;
       }
     </style>
+    <button onclick="stack()" id="stack">Stack</button>
     <div id="alphabet">
       <tower-row>
-        <tower-container>
+        <!--<tower-container>
           <frost-tower>
             <div>*</div>
             <span>[]</span>
@@ -115,7 +118,7 @@
             <div>.</div>
             <span>{}</span>
           </fire-tower>
-        </tower-container>
+        </tower-container>-->
       </tower-row>
       <road id="road"> </road>
 
@@ -201,7 +204,7 @@
       <div>X</div>
       <div>Y</div>
       <div>Z</div> -->
-
+<div style="height:100px;"></div>
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890?!(%)[#]{@}/&\<-+=>$¥:;,.*
     </div>
   </body>
