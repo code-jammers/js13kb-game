@@ -17,8 +17,8 @@ sdButtonTemplate.innerHTML = html`
       height: 40px;
       line-height: 40px;
       user-select: none;
-      font-family: "Gruppo", cursive;
-      font-size: 2.5vh;
+      font-family: monospace;
+      font-size: 2vh;
       text-transform: uppercase;
     }
 
@@ -86,4 +86,10 @@ class Button extends HTMLElement {
 }
 
 window.customElements.define("sd-button", Button);
-window.dispatchEvent(new CustomEvent('has-connected', {bubbles: true, composed: true, detail: 'sd-button'}));
+window.dispatchEvent(
+  new CustomEvent("has-connected", {
+    bubbles: true,
+    composed: true,
+    detail: "sd-button",
+  })
+);

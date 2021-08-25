@@ -10,7 +10,7 @@ sdLaunchSceneTemplate.innerHTML = html`
     }
 
     h1 {
-      font-family: "Bungee", cursive;
+      font-family: system-ui;
       font-size: 72px;
       line-height: 72px;
       letter-spacing: 5px;
@@ -20,7 +20,7 @@ sdLaunchSceneTemplate.innerHTML = html`
     }
 
     p {
-      font-family: "Quicksand", sans-serif;
+      font-family: monospace;
       padding: 0;
       margin: 24px 0 0 0;
       font-size: 18px;
@@ -89,5 +89,10 @@ class LaunchScene extends HTMLElement {
 }
 
 window.customElements.define("sd-launch-scene", LaunchScene);
-window.dispatchEvent(new CustomEvent('has-connected', {bubbles: true, composed: true, detail: 'sd-launch-scene'}));
-
+window.dispatchEvent(
+  new CustomEvent("has-connected", {
+    bubbles: true,
+    composed: true,
+    detail: "sd-launch-scene",
+  })
+);

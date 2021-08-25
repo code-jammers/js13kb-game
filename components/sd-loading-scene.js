@@ -12,7 +12,7 @@ sdLoadingSceneTemplate.innerHTML = html`
     }
 
     loading-scene > div {
-      font-family: "Quicksand", sans-serif;
+      font-family: monospace;
       font-size: 14px;
       margin-top: 4px;
     }
@@ -35,4 +35,3 @@ class LoadingScene extends HTMLElement {
 }
 
 window.customElements.define("sd-loading-scene", LoadingScene);
-
