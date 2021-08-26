@@ -1,6 +1,6 @@
 const sdLaunchSceneTemplate = document.createElement("template");
 
-sdLaunchSceneTemplate.innerHTML = html`
+sdLaunchSceneTemplate.innerHTML = `
   <style>
     main-content {
       display: flex;

@@ -28,7 +28,7 @@ task("minify-js", function () {
 });
 
 task("minify-js-assets-scripts", function () {
-  return src(["assets/**/*.js"])
+  return src(["assets/scripts/*.js"])
     .pipe(uglify())
     .pipe(dest("dist/assets/scripts"));
 });

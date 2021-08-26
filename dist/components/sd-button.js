@@ -1,4 +1,4 @@
-const sdButtonTemplate=document.createElement("template");sdButtonTemplate.innerHTML=html`
+const sdButtonTemplate=document.createElement("template");sdButtonTemplate.innerHTML=`
   <style>
     :host {
       display: block;

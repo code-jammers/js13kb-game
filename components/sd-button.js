@@ -1,6 +1,6 @@
 const sdButtonTemplate = document.createElement("template");
 
-sdButtonTemplate.innerHTML = html`
+sdButtonTemplate.innerHTML = `
   <style>
     :host {
       display: block;

@@ -1,4 +1,4 @@
-const sdLoadingSceneTemplate=document.createElement("template");sdLoadingSceneTemplate.innerHTML=html`
+const sdLoadingSceneTemplate=document.createElement("template");sdLoadingSceneTemplate.innerHTML=`
   <style>
     loading-scene {
       display: flex;

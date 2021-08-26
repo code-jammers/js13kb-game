@@ -1,4 +1,4 @@
-const sdGameSceneTemplate=document.createElement("template");sdGameSceneTemplate.innerHTML=html`
+const sdGameSceneTemplate=document.createElement("template");sdGameSceneTemplate.innerHTML=`
   <style>
     :host {
       color: #f5f5f5;

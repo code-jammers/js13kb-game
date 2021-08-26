@@ -1,6 +1,6 @@
 const sdGameSceneTemplate = document.createElement("template");
 
-sdGameSceneTemplate.innerHTML = html`
+sdGameSceneTemplate.innerHTML = `
   <style>
     :host {
       color: #f5f5f5;
