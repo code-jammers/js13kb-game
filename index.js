@@ -39,19 +39,30 @@ changeScene(LOADING_SCENE);
 window.addEventListener("scene-change", (e) => {
   changeScene(e.detail);
 });
-let componentsToLoad = document.querySelectorAll("script[defer]").length;
+// let componentsToLoad = document.querySelectorAll("script[defer]").length;
 
-console.log(`Loading ${componentsToLoad} async components`);
+// console.log(`Loading ${componentsToLoad} async components`);
 
-const loadedComponents = [];
-window.addEventListener("has-connected", (e) => {
-  loadedComponents.push(e.detail);
-  console.log(`${e.detail}: loaded`);
-  if (loadedComponents.length === componentsToLoad) {
-    setTimeout(() => {
-      changeScene(LAUNCH_SCENE);
-    }, 1000);
-  }
+// const loadedComponents = [];
+// window.addEventListener("has-connected", (e) => {
+//   loadedComponents.push(e.detail);
+//   console.log(`${e.detail}: loaded`);
+//   if (loadedComponents.length === componentsToLoad) {
+//     setTimeout(() => {
+//       changeScene(LAUNCH_SCENE);
+//     }, 1000);
+//   }
+// });
+
+const components = ["sd-button", "sd-game-scene", "sd-launch-scene"].map(
+  (component) => customElements.whenDefined(component)
+);
+Promise.all(components).then(() => {
+  console.log(`${components.length} async web components defined`);
+  setTimeout(() => {
+    changeScene(LAUNCH_SCENE);
+  }, 1000);
 });
+
 window.addEventListener("show-game", (e) => changeScene(GAME_SCENE));
 window.addEventListener("show-controls", (e) => alert("coming soon"));

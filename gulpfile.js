@@ -5,10 +5,13 @@ var uglifycss = require("gulp-uglifycss");
 var zip = require("gulp-zip");
 var gulpCopy = require("gulp-copy");
 var fontmin = require("gulp-fontmin");
+var del = require("del");
 
-// task("copy", function () {
-//   return src("assets/**").pipe(gulpCopy("dist")).pipe(dest("dist/"));
-// });
+task("copy-images", function () {
+  return src("assets/images/*")
+    .pipe(gulpCopy("dist"))
+    .pipe(dest("assets/images"));
+});
 
 task("minify-fonts", function () {
   return src("assets/fonts/*.ttf")
@@ -21,9 +24,19 @@ task("minify-html", function () {
 });
 
 task("minify-js", function () {
-  return src(["index.js", "assets/**/*.js", "components/**/*.js"])
+  return src(["index.js", "assets/**/*.js"]).pipe(uglify()).pipe(dest("dist/"));
+});
+
+task("minify-js-assets-scripts", function () {
+  return src(["assets/**/*.js"])
     .pipe(uglify())
-    .pipe(dest("dist/"));
+    .pipe(dest("dist/assets/scripts"));
+});
+
+task("minify-web-components", function () {
+  return src(["components/**/*.js"])
+    .pipe(uglify())
+    .pipe(dest("dist/components"));
 });
 
 task("zip", function () {
@@ -41,8 +54,31 @@ task("minify-css", function () {
     .pipe(dest("dist/"));
 });
 
+task("clean", function () {
+  return del(["dist/**", "!dist"]);
+});
+
+task("clean-extra-fonts", function () {
+  return del([
+    "dist/assets/fonts/PaletteMosaic-Regular.css",
+    "dist/assets/fonts/PaletteMosaic-Regular.eot",
+    "dist/assets/fonts/PaletteMosaic-Regular.svg",
+    "dist/assets/fonts/PaletteMosaic-Regular.woff",
+  ]);
+});
+
 task(
   "default",
-  series("minify-html", "minify-js", "minify-css", "minify-fonts")
+  series(
+    "clean",
+    "minify-html",
+    "minify-js",
+    "minify-js-assets-scripts",
+    "minify-web-components",
+    "minify-css",
+    "minify-fonts",
+    "copy-images",
+    "clean-extra-fonts"
+  )
 );
 task("zip", series("zip"));

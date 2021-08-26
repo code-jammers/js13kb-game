@@ -2,9 +2,10 @@
   "name": "js13kb-game",
   "version": "1.0.0",
   "description": "- [X] create the repo \r - [ ] find game mechanics we like in other games\r - [ ] find a unique attribute about our code or game\r - [ ] (korey) research core mechanic options\r - [ ] (kasey) research graphic strategies",
-  "main": "globals.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp && gulp zip"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/code-jammers/js13kb-game#readme",
   "devDependencies": {
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-copy": "^4.0.1",
     "gulp-fontmin": "^0.7.4",
