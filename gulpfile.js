@@ -1,11 +1,12 @@
 const { src, dest, task, series } = require("gulp");
 var uglify = require("gulp-uglify");
-var htmlmin = require("gulp-htmlmin");
+var htmlmin = require("gulp-html-minifier");
 var uglifycss = require("gulp-uglifycss");
 var zip = require("gulp-zip");
 var gulpCopy = require("gulp-copy");
 var fontmin = require("gulp-fontmin");
 var del = require("del");
+const size = require("gulp-size");
 
 task("copy-images", function () {
   return src("assets/images/*")
@@ -20,7 +21,20 @@ task("minify-fonts", function () {
 });
 
 task("minify-html", function () {
-  return src("index.html").pipe(htmlmin()).pipe(dest("dist/"));
+  return src("index.html")
+    .pipe(
+      htmlmin({
+        removeAttributeQuotes: true,
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyJS: true,
+        removeTagWhitespace: true,
+        useShortDoctype: true,
+        collapseBooleanAttributes: true,
+        collapseInlineTagWhitespace: true,
+      })
+    )
+    .pipe(dest("dist/"));
 });
 
 task("minify-js", function () {
@@ -41,6 +55,10 @@ task("minify-web-components", function () {
 
 task("zip", function () {
   return src("dist/**/**").pipe(zip("build.zip")).pipe(dest("./dist"));
+});
+
+task("size", function () {
+  return src("dist/build.zip").pipe(size()).pipe(dest("dist"));
 });
 
 task("minify-css", function () {
@@ -94,3 +112,4 @@ task(
   )
 );
 task("zip", series("zip"));
+task("size", series("size"));

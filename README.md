@@ -10,8 +10,6 @@
 
 ## Build
 ```bash
-npm install -g gulp-cli
 npm install
-gulp
-gulp zip
+npm run build
 ```

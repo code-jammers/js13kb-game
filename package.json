@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp && gulp zip"
+    "build": "gulp && gulp zip && gulp size"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,9 @@
     "gulp": "^4.0.2",
     "gulp-copy": "^4.0.1",
     "gulp-fontmin": "^0.7.4",
+    "gulp-html-minifier": "^0.1.8",
     "gulp-htmlmin": "^5.0.1",
+    "gulp-size": "^4.0.1",
     "gulp-uglify": "^3.0.2",
     "gulp-uglifycss": "^1.1.0",
     "gulp-zip": "^5.1.0"
