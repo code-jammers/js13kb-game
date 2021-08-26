@@ -1,37 +1,14 @@
-const sdLoadingSceneTemplate = document.createElement("template");
+var t4 = document.createElement("template");
 
-sdLoadingSceneTemplate.innerHTML = `
-  <style>
-    loading-scene {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    loading-scene > div {
-      font-family: monospace;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-  </style>
-  <loading-scene>
-    <img src="assets/images/loader.gif" />
-    <div>Loading...</div>
-  </loading-scene>
-`;
+t4.innerHTML = ` <l-s><link href="components/sd-loading-scene.css" rel="stylesheet"> <img src="assets/images/loader.gif" /> <div>Loading...</div></l-s> `;
 
 class LoadingScene extends HTMLElement {
   connectedCallback() {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
-      this.shadowRoot.appendChild(
-        sdLoadingSceneTemplate.content.cloneNode(true)
-      );
+      this.shadowRoot.appendChild(t4.content.cloneNode(true));
     }
   }
 }
 
-window.customElements.define("sd-loading-scene", LoadingScene);
+customElements.define("sd-loading-scene", LoadingScene);

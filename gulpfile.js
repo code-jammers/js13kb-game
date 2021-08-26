@@ -54,6 +54,17 @@ task("minify-css", function () {
     .pipe(dest("dist/"));
 });
 
+task("minify-component-css", function () {
+  return src("components/*.css")
+    .pipe(
+      uglifycss({
+        maxLineLen: 80,
+        uglyComments: true,
+      })
+    )
+    .pipe(dest("dist/components"));
+});
+
 task("clean", function () {
   return del(["dist/**", "!dist"]);
 });
@@ -76,6 +87,7 @@ task(
     "minify-js-assets-scripts",
     "minify-web-components",
     "minify-css",
+    "minify-component-css",
     "minify-fonts",
     "copy-images",
     "clean-extra-fonts"

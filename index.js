@@ -1,14 +1,13 @@
 changeScene = (scene) => {
-  currentScene = GAME_DATA.allScenes.find((s) => s === scene);
-  if (currentScene) {
-    GAME_DATA.currentScene = currentScene;
-    const oldScene = document.querySelector("[in-progress]");
-    if (oldScene) {
-      document.body.removeChild(oldScene);
+  cs = GAME_DATA.allScenes.find((s) => s === scene);
+  if (cs) {
+    GAME_DATA.currentScene = cs;
+    const os = document.querySelector("[in-progress]");
+    if (os) {
+      document.body.removeChild(os);
     }
 
-    let el;
-    switch (currentScene) {
+    switch (cs) {
       case GAME_SCENE:
         renderWebComponent("sd-game-scene");
         break;
@@ -24,11 +23,9 @@ changeScene = (scene) => {
 };
 
 renderWebComponent = (tagname) => {
-  el = document.createElement(tagname);
+  let el = document.createElement(tagname);
   el.setAttribute("in-progress", true);
-  el.style.opacity = "0";
-  el.style.display = "block";
-  el.style.transition = "opacity 0.3s";
+  el.style.cssText = "opacity: 0; display: block; transition: opacity .3s";
   document.body.appendChild(el);
   setTimeout(() => {
     el.style.opacity = "1";
@@ -36,33 +33,20 @@ renderWebComponent = (tagname) => {
 };
 
 changeScene(LOADING_SCENE);
-window.addEventListener("scene-change", (e) => {
+addEventListener("scene-change", (e) => {
   changeScene(e.detail);
 });
-// let componentsToLoad = document.querySelectorAll("script[defer]").length;
 
-// console.log(`Loading ${componentsToLoad} async components`);
-
-// const loadedComponents = [];
-// window.addEventListener("has-connected", (e) => {
-//   loadedComponents.push(e.detail);
-//   console.log(`${e.detail}: loaded`);
-//   if (loadedComponents.length === componentsToLoad) {
-//     setTimeout(() => {
-//       changeScene(LAUNCH_SCENE);
-//     }, 1000);
-//   }
-// });
-
-const components = ["sd-button", "sd-game-scene", "sd-launch-scene"].map(
-  (component) => customElements.whenDefined(component)
-);
-Promise.all(components).then(() => {
-  console.log(`${components.length} async web components defined`);
+Promise.all(
+  ["sd-button", "sd-game-scene", "sd-launch-scene"].map((component) =>
+    customElements.whenDefined(component)
+  )
+).then((p) => {
+  console.log(p.length, `all async web components defined`);
   setTimeout(() => {
     changeScene(LAUNCH_SCENE);
   }, 1000);
 });
 
-window.addEventListener("show-game", (e) => changeScene(GAME_SCENE));
-window.addEventListener("show-controls", (e) => alert("coming soon"));
+addEventListener("show-game", (e) => changeScene(GAME_SCENE));
+addEventListener("show-controls", (e) => alert("coming soon"));

@@ -1,28 +1,14 @@
-const sdGameSceneTemplate = document.createElement("template");
+var t2 = document.createElement("template");
 
-sdGameSceneTemplate.innerHTML = `
-  <style>
-    :host {
-      color: #f5f5f5;
-    }
-  </style>
-  GAME
-`;
+t2.innerHTML = `<link href="components/sd-game-scene.css" rel="stylesheet"> GAME`;
 
 class GameScene extends HTMLElement {
   connectedCallback() {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
-      this.shadowRoot.appendChild(sdGameSceneTemplate.content.cloneNode(true));
+      this.shadowRoot.appendChild(t2.content.cloneNode(true));
     }
   }
 }
 
-window.customElements.define("sd-game-scene", GameScene);
-window.dispatchEvent(
-  new CustomEvent("has-connected", {
-    bubbles: true,
-    composed: true,
-    detail: "sd-game-scene",
-  })
-);
+customElements.define("sd-game-scene", GameScene);
