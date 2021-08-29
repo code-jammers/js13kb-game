@@ -43,8 +43,9 @@ class GameScene extends HTMLElement {
           var tr=document.createElement("tr");
           for (var j=0; j<(cw/100/*5*/); j++) {
               var td=document.createElement("td");
-	      td.innerHTML = "@";
-	      td.style.fontSize = "8px";
+	      td.innerHTML = "{\\?\\}";
+	      td.style.fontSize = "44px";
+	      td.style.textAlign="center";
 	      td.style.border = "1px solid rgba(255,255,200,0.5)";
 	      td.style.width="100px";
 	      td.style.height="100px";
