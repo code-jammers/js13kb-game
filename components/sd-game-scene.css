@@ -31,6 +31,16 @@ s-p {
   border-radius: 50%;
 }
 
+@media (max-width: 768px) {
+  r-w {
+    width: 100px;
+  }
+  s-c {
+    display: grid;
+    grid: "left middle right" / 1fr 100px 1fr;
+  }
+}
+
 table {
   border-spacing: 0;
 }
@@ -75,6 +85,6 @@ div[menu-item] {
 }
 
 div[menu-item]:hover {
-  transition: .1 ease;
+  transition: 0.1 ease;
   background: #ddd;
 }
