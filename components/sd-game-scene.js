@@ -43,7 +43,14 @@ class GameScene extends HTMLElement {
           var tr=document.createElement("tr");
           for (var j=0; j<(cw/100/*5*/); j++) {
               var td=document.createElement("td");
-	      td.innerHTML = "{\\?\\}";
+	      //td.innerHTML = "{\\?\\}";
+
+	      //td.style.transform = "rotate(90deg)";
+              var div=document.createElement("div");
+              div.innerHTML = "{" + GAME_DATA.towers[j] + "}";
+              div.classList.add("tower");
+	      td.appendChild(div);
+	      div.rot=0;
 	      td.style.fontSize = "44px";
 	      td.style.textAlign="center";
 	      td.style.border = "1px solid rgba(255,255,200,0.5)";
@@ -55,6 +62,43 @@ class GameScene extends HTMLElement {
       }
       gc.appendChild(tbl);
       gc2.appendChild(tbl.cloneNode(true));
+
+
+setInterval(()=>{
+      var towers=this.shadowRoot.querySelectorAll(".tower");//document.getElementsByClassName("tower");
+      //console.log(towers.length);
+      //var gc2_left=window.getComputedStyle(gc2).left.replace("px","");
+      //console.log(gc2_left);
+      for (var i=0;i<towers.length;i++) {
+          var t=towers[i];
+	  /*console.log(
+	    t.parentNode//td
+	    .parentNode//tr
+	    .parentNode//tbody
+	    .parentNode//table
+	    .parentNode//l-g or r-g
+	    .tagName
+	    );*/
+	  var tag = t.parentNode//td
+	    .parentNode//tr
+	    .parentNode//tbody
+	    .parentNode//table
+	    .parentNode//l-g or r-g
+	    .tagName;
+	  if (tag == "L-G") {
+              if (t.rot<91){
+	          t.rot += 1;
+		  t.style.transform="rotate("+t.rot+"deg)";
+	      }
+          } else {
+	      if (t.rot === undefined) t.rot=0;
+	      if (t.rot>-91){
+	          t.rot -= 1;
+		  t.style.transform="rotate("+t.rot+"deg)";
+	      }
+	  }
+      }
+      },10);
           },1000);
     }
   }
