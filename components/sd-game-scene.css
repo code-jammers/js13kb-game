@@ -35,19 +35,46 @@ table {
   border-spacing: 0;
 }
 
+div.tower {
+  pointer-events: none;
+}
+
 td {
   font-size: 44px;
   text-align: center;
   border: 1px solid #333;
   width: 100px;
   height: 100px;
-  opacity: .8;
   cursor: pointer;
   user-select: none;
+  position: relative;
 }
 
 td:hover {
-  opacity: 1;
-  transition: .1s ease;
+  transition: 0.1s ease;
   background: #212121;
+}
+
+div[menu] {
+  width: 100px;
+  height: 100px;
+  top: 0;
+  background: #f5f5f5;
+  position: absolute;
+}
+
+div[menu-item] {
+  font-family: monospace;
+  font-size: 11px;
+  color: #333;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+div[menu-item]:hover {
+  transition: .1 ease;
+  background: #ddd;
 }
