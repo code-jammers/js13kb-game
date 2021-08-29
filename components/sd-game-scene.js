@@ -56,6 +56,9 @@ class GameScene extends HTMLElement {
 	      td.style.border = "1px solid rgba(255,255,200,0.5)";
 	      td.style.width="100px";
 	      td.style.height="100px";
+
+//	      td.innerHTML = "{\\?\\}";
+
 	      tr.appendChild(td);
           }
           tbd.appendChild(tr);

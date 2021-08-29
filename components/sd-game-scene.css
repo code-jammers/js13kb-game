@@ -30,3 +30,24 @@ s-p {
   background: #731a05;
   border-radius: 50%;
 }
+
+table {
+  border-spacing: 0;
+}
+
+td {
+  font-size: 44px;
+  text-align: center;
+  border: 1px solid #333;
+  width: 100px;
+  height: 100px;
+  opacity: .8;
+  cursor: pointer;
+  user-select: none;
+}
+
+td:hover {
+  opacity: 1;
+  transition: .1s ease;
+  background: #212121;
+}
