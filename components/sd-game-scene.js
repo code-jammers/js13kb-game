@@ -13,11 +13,10 @@ t2.innerHTML = html`
 `;
 
 class GameScene extends HTMLElement {
-  buildTable() {
-    const gc = this.shadowRoot.querySelector("l-g");
-    const gc2 = this.shadowRoot.querySelector("r-g");
+  buildTable(query, side, ctx) {
+    const gc = ctx.shadowRoot.querySelector(query);
     var tbl = document.createElement("table");
-    tbl.setAttribute("contextmenu", "build");
+
     var tbd = document.createElement("tbody");
     tbl.appendChild(tbd);
     var cw = gc.clientWidth;
@@ -39,22 +38,21 @@ class GameScene extends HTMLElement {
       var tr = document.createElement("tr");
       for (var j = 0; j < cw / 100 /*5*/; j++) {
         var td = document.createElement("td");
-        //td.innerHTML = "{\\?\\}";
-
-        //td.style.transform = "rotate(90deg)";
         var div = document.createElement("div");
         div.innerHTML = "{" + GAME_DATA.towers[j] + "}";
         div.classList.add("tower");
         td.appendChild(div);
         div.rot = 0;
-
-        //	      td.innerHTML = "{\\?\\}";
+        td.setAttribute(
+          "cost",
+          side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
+        );
         tr.appendChild(td);
       }
       tbd.appendChild(tr);
     }
     gc.appendChild(tbl);
-    gc2.appendChild(tbl.cloneNode(true));
+    return ctx.buildTable;
   }
 
   buildMenu() {
@@ -70,7 +68,7 @@ class GameScene extends HTMLElement {
         menu.setAttribute("menu", true);
         GAME_DATA.towers.split("").forEach((tower) => {
           const menuItem = document.createElement("div");
-          menuItem.innerText = `${tower} tower $200`;
+          menuItem.innerText = `${tower} tower ${td.getAttribute("cost")}`;
           menuItem.setAttribute("menu-item", true);
           menu.appendChild(menuItem);
         });
@@ -116,7 +114,7 @@ t.parentNode//td
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
       window.setTimeout(() => {
-        this.buildTable();
+        this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
         setInterval(() => {
           this.rotateTowers();
