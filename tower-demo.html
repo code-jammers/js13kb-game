@@ -3,12 +3,6 @@
     <title>Tower Demo</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Palette+Mosaic&display=swap"
-      rel="stylesheet"
-    />
     <script src="./assets/scripts/game-data.js"></script>
     <script src="./assets/scripts/tower-decode.js"></script>
     <script src="tower-demo.js"></script>
@@ -17,7 +11,7 @@
   <body>
     <style>
       #alphabet {
-        font-family: "Palette Mosaic", cursive;
+        font-family: monospace;
         font-size: 32px;
         --tower-size: 32px;
       }
@@ -32,22 +26,22 @@
         width: var(--tower-size);
         height: var(--tower-size);
         margin-left: 8px;
-        padding-bottom:35px;
+        padding-bottom: 35px;
       }
 
       frost-tower div {
         display: block;
-        position: relative;//absolute;
+        position: relative; /* absolute */
         line-height: calc(var(--tower-size) * 2);
-        //left: calc(50% - 6px);
+        /*left: calc(50% - 6px);*/
         color: #8fc2f0;
       }
 
       fire-tower div {
         display: block;
-        position: relative;//absolute;
+        position: relative; /*absolute*/
         line-height: calc(var(--tower-size) - 6px);
-        //left: calc(50% - 9px);
+        /*left: calc(50% - 9px);*/
         color: #df5151;
       }
 
@@ -129,7 +123,7 @@
             <div id="tower2">{0}</div>
           </frost-tower>-->
         </tower-container>
-<!--
+        <!--
         <tower-container>
           <ember-orb> @ </ember-orb>
           <tower-base> ¥ </tower-base>
@@ -204,7 +198,7 @@
       <div>X</div>
       <div>Y</div>
       <div>Z</div> -->
-<div style="height:100px;"></div>
+      <div style="height: 100px"></div>
       ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890?!(%)[#]{@}/&\<-+=>$¥:;,.*
     </div>
   </body>
