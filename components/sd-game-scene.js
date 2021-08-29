@@ -2,6 +2,10 @@ var t2 = document.createElement("template");
 
 t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
+  <t-b>
+    <div></div>
+    <div money></div>
+  </t-b>
   <s-c>
     <l-g></l-g>
     <m-g>
@@ -38,11 +42,6 @@ class GameScene extends HTMLElement {
       var tr = document.createElement("tr");
       for (var j = 0; j < cw / 100 /*5*/; j++) {
         var td = document.createElement("td");
-        var div = document.createElement("div");
-        div.innerHTML = "{" + GAME_DATA.towers[j] + "}";
-        div.classList.add("tower");
-        td.appendChild(div);
-        div.rot = 0;
         td.setAttribute(
           "cost",
           side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
@@ -55,19 +54,37 @@ class GameScene extends HTMLElement {
     return ctx.buildTable;
   }
 
+  closeMenu() {
+    const previousMenu = this.shadowRoot.querySelector("div[menu]");
+    const previousMenuParent = previousMenu?.parentElement;
+    if (previousMenu && previousMenuParent) {
+      previousMenuParent.removeChild(previousMenu);
+    }
+  }
+
   buildMenu() {
     this.shadowRoot.querySelectorAll("td").forEach((td) => {
       td.addEventListener("click", (e) => {
-        const previousMenu = this.shadowRoot.querySelector("div[menu]");
-        const previousMenuParent = previousMenu?.parentElement;
-        if (previousMenu && previousMenuParent) {
-          previousMenuParent.removeChild(previousMenu);
-        }
+        this.closeMenu();
         const el = e.srcElement;
         const menu = document.createElement("div");
         menu.setAttribute("menu", true);
         GAME_DATA.towers.split("").forEach((tower) => {
           const menuItem = document.createElement("div");
+          menuItem.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const amt = this.money - Number(td.getAttribute("cost"));
+            this.setMoney(amt);
+            var div = document.createElement("div");
+            div.classList.add("tower");
+            td.appendChild(div);
+            div.rot = 0;
+            div.innerHTML = `{${tower}}`;
+            this.closeMenu();
+            setInterval(() => {
+              this.rotateTowers([div]);
+            }, 10);
+          });
           menuItem.innerText = `${tower} tower ${td.getAttribute("cost")}`;
           menuItem.setAttribute("menu-item", true);
           menu.appendChild(menuItem);
@@ -77,8 +94,7 @@ class GameScene extends HTMLElement {
     });
   }
 
-  rotateTowers() {
-    var towers = this.shadowRoot.querySelectorAll(".tower"); //document.getElementsByClassName("tower");
+  rotateTowers(towers) {
     //console.log(towers.length);
     //var gc2_left=window.getComputedStyle(gc2).left.replace("px","");
     //console.log(gc2_left);
@@ -109,16 +125,21 @@ t.parentNode//td
     }
   }
 
+  setMoney(amt) {
+    this.money = amt;
+    const moneyEl = this.shadowRoot.querySelector("div[money]");
+    moneyEl.innerText = amt;
+  }
+
   connectedCallback() {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
+      this.setMoney(5000);
+
       window.setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
-        setInterval(() => {
-          this.rotateTowers();
-        }, 10);
       }, 1000);
     }
   }
