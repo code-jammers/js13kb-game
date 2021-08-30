@@ -3,7 +3,17 @@ var t2 = document.createElement("template");
 t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
   <t-b>
-    <div></div>
+    <div legend>
+      <div fire>
+        Fire 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+      <div frost>
+        Frost 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+      <div shadow>
+        Shadow 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+    </div>
     <div money></div>
   </t-b>
   <s-c>
