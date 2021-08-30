@@ -4,23 +4,42 @@ t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
   <t-b>
     <div legend>
-    <div blaster title="Single target turret. Standard space defense engineer issue.">
+      <div
+        blaster
+        title="Single target turret. Standard space defense engineer issue."
+      >
         Blaster 1<span one></span> 2<span two></span> 3<span three></span>
       </div>
-      <div thermal title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies.">
-        Thermal Detonator 1<span one></span> 2<span two></span> 3<span three></span>
+      <div
+        thermal
+        title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies."
+      >
+        Thermal Detonator 1<span one></span> 2<span two></span> 3<span
+          three
+        ></span>
       </div>
-      <div phaser title="Lazer turret that blasts enemies in a line and disintegrates them.">
+      <div
+        phaser
+        title="Lazer turret that blasts enemies in a line and disintegrates them."
+      >
         Phaser 1<span one></span> 2<span two></span> 3<span three></span>
       </div>
       <div particle title="Zoom. Increases the fire rate of attached turrets.">
-        Particle Accelerator 1<span one></span> 2<span two></span> 3<span three></span>
+        Particle Accelerator 1<span one></span> 2<span two></span> 3<span
+          three
+        ></span>
       </div>
-      <div satellite title="Avanced intel gathering machine that increases the range of attached turrets.">
+      <div
+        satellite
+        title="Avanced intel gathering machine that increases the range of attached turrets."
+      >
         Satellite 1<span one></span> 2<span two></span> 3<span three></span>
       </div>
-      <div quantum title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets.">
-      Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span>
+      <div
+        quantum
+        title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."
+      >
+        Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span>
       </div>
     </div>
     <div money></div>
@@ -60,7 +79,8 @@ class GameScene extends HTMLElement {
     } else {
       tbl.style.right = lead + "px";
     }
-    tbl.style.top = leadY + "px";
+    tbl.style.top = leadY / 2 + "px";
+    tbl.style.bottom = leadY / 2 + "px";
     for (var i = 0; i < ch / 100 /*5*/; i++) {
       var tr = document.createElement("tr");
       for (var j = 0; j < cw / 100 /*5*/; j++) {
