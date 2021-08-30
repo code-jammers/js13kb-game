@@ -9,7 +9,7 @@ ALL_SCENES = [
 ];
 
 GAME_DATA = {
-  towers: "*@MODu",//"*@M0OADY",
+  towers: "*@MODus",//"*@M0OADY",
   allScenes : [...ALL_SCENES],
   currentScene: LOADING_SCENE,
 };

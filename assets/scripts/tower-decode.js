@@ -6,7 +6,6 @@ function tower_decode(tower_char) {
 
 function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   var tower_types = ['blaster','thermal','phaser','particle','satellite','quantum'];
-  var levels=["one","two","three"];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
   var type = "fire-tower";
@@ -15,9 +14,9 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   span.style.borderRadius="50%";
   span.style.boxShadow="0px 2px gray";
   tow.appendChild(span);
-  var li=tss.split(ascii_char).length - 1 - 1;//level index
-  if (li>2)li=2;
-  span.setAttribute(levels[li],"");
+  //var li=tss.split(ascii_char).length - 1 - 1;//level index
+  //if (li>2)li=2;
+  span.setAttribute("one","");//levels[li],"");
   if (tss.length == 1) {
     span.style.width="75px";
     span.style.height="65px";

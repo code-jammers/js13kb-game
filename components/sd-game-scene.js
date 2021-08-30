@@ -119,23 +119,27 @@ class GameScene extends HTMLElement {
             const amt = this.money - Number(td.getAttribute("cost"));
             this.setMoney(amt);
             if (td.towers == null) td.towers = "";
-            td.towers += tower;
+            if (td.towers.includes(tower)) {
+                //upgrade
+                for (var i=0;i<td.childNodes.length;i++) {
+		    var cn=td.childNodes[i];//child node
+                    if (cn.towerId === tower){
+		        cn.childNodes[0].removeAttribute("one");
+			cn.childNodes[0].removeAttribute("two");
+			if (cn.level === undefined) cn.level=1;
+			cn.level += 1;
+			var levels=["zero","one","two","three"];
+			cn.childNodes[0].setAttribute(levels[cn.level],"");
+		        break;
+		    }
+                }
+		this.closeMenu();
+		return;
+	    } else td.towers += tower;
 
-            /*if (td.towers.length > 1){  
-	    setInterval(()=>{
-		for (var i=0; i<td.childNodes.length; i++) {
-		    var n=td.childNodes[i];
-		    if (n.rot===undefined || n.rot == 0) continue;
-		    if (n.rot > 0) td.childNodes[i].rot -= 1;
-		    if (n.rot<0) td.childNodes[i].rot += 1;
-		    console.log(n.rot);
-		    
-                    n.style.transform = "rotate("+n.rot+"deg)";
-		}
-	    }, 100);
-	    }*/
             //setTimeout(()=>{
             var div = create_tower(tower, tower_decode(tower), td.towers); //document.createElement("div");
+	    div.towerId=tower;
             div.classList.add("tower");
             td.appendChild(div);
             td.style.position = "relative";
