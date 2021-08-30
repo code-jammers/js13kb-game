@@ -1,75 +1,73 @@
 function tower_decode(tower_char) {
-    var tc=tower_char;
-    var bit_str=tc.charCodeAt(0).toString(2).padStart(8,'0');
-    return bit_str;
+  var tc = tower_char;
+  var bit_str = tc.charCodeAt(0).toString(2).padStart(8, "0");
+  return bit_str;
 }
 
-function create_tower(ascii_char, attrs, tss/*tower set string*/) {
-    var coords = [[], [0,100], [0,0], [100,0],  [100,100] ];
-    var fs=44;//font-size
-    var type="fire-tower";
-    var tow=document.createElement("div");
-    if (tss.length==1) {
-	tow.innerHTML = "{"+ascii_char+"}";
-	tow.style.zIndex="1";
+function create_tower(ascii_char, attrs, tss /*tower set string*/) {
+  var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
+  var fs = 44; //font-size
+  var type = "fire-tower";
+  var tow = document.createElement("div");
+  if (tss.length == 1) {
+    tow.innerHTML = "{" + ascii_char + "}";
+    tow.style.zIndex = "1";
+  } else {
+    fs = 14;
+    tow.innerHTML = ascii_char;
+    tow.style.textShadow = "gray 1px 1px";
+    var coord = coords[tss.length - 1];
+    var l = coord[0] == 0 ? 40 : coord[0] * 0.57;
+    var t = coord[1] == 0 ? 40 : coord[1] * 0.57;
+    tow.style.left = l + "px";
+    tow.style.top = t + "px";
+    tow.style.position = "absolute";
+    tow.style.margin = "20px;";
+    tow.style.fontWeight = "bold";
+    tow.style.zIndex = "2";
+  }
+  tow.style.fontSize = fs + "px";
+  tow.rot = 0;
+  var special_tower = attrs[7] == "1";
+  if (special_tower) {
+    var frost_tower = attrs[6] == "1" || attrs[5] == "1";
+    if (frost_tower) {
+      tow.style.color = "lightblue";
+    } else {
+      tow.style.color = "red";
+      //fire tower
     }
-    else {
-        fs=14;
-	tow.innerHTML = ascii_char;
-	tow.style.textShadow ="gray 1px 1px";
-	var coord = coords[tss.length-1];
-        var l=(coord[0] == 0) ? 40 : coord[0]*.57;
-	var t=(coord[1] == 0) ? 40 : coord[1]*.57;
-	tow.style.left=l + "px";
-	tow.style.top=t + "px";
-	tow.style.position="absolute";
-	tow.style.margin="20px;";
-	tow.style.fontWeight="bold";
-	tow.style.zIndex="2";
-    }
-    tow.style.fontSize = fs+"px";
-    tow.rot = 0;
-    var special_tower = (attrs[7]=='1');
-    if (special_tower) {
-	var frost_tower = (attrs[6] == '1' || attrs[5]=='1');
-	if (frost_tower) {
-	    tow.style.color = "lightblue";
-	}
-	else {
-	    tow.style.color = "red";
-	    //fire tower
-	}
-    }
-    //tow.frost = (attrs[7] == '1');
-    //if (tow.frost) {
-    //    type="frost-tower";
-    //}
-    //var tow_cont=document.createElement(type);
-    //tow_cont.appendChild(tow);
-    //container.appendChild(tow_cont);
+  }
+  //tow.frost = (attrs[7] == '1');
+  //if (tow.frost) {
+  //    type="frost-tower";
+  //}
+  //var tow_cont=document.createElement(type);
+  //tow_cont.appendChild(tow);
+  //container.appendChild(tow_cont);
 
+  setTimeout(() => {
+    //bullet
+    var b = document.createElement("div");
 
-    setTimeout(()=>{
-	//bullet
-        var b=document.createElement("div");
-        
-        b.innerHTML="*";
-	b.style.color = tow.style.color;
-	b.style.textShadow ="yellow 1px 1px";
-	b.style.fontSize = tow.style.fontSize;
-	b.style.position="absolute";
-        b.style.zIndex ="0";
-        b.style.left=tow.parentNode.offsetLeft +28 + "px";
-        b.style.top=tow.parentNode.offsetTop +36 + "px";
-        b.x=tow.parentNode.offsetLeft +28;
-        document.body.appendChild(b);
+    b.innerHTML = "*";
+    console.log(tow.parentNode);
+    b.style.color = tow.style.color;
+    b.style.textShadow = "yellow 1px 1px";
+    b.style.fontSize = tow.style.fontSize;
+    b.style.position = "absolute";
+    b.style.zIndex = "0";
+    b.style.left = tow.parentNode.offsetLeft + 28 + "px";
+    b.style.top = tow.parentNode.offsetTop + 36 + "px";
+    b.x = tow.parentNode.offsetLeft + 28;
+    document.body.appendChild(b);
 
-    setInterval(()=>{
-        b.x -=1;
-        b.style.left = b.x + "px";
+    setInterval(() => {
+      b.x -= 1;
+      b.style.left = b.x + "px";
     }, 10);
-    },900/*10 rotateTowers interval * 90 degree turn*/);
-    return tow;
+  }, 900 /*10 rotateTowers interval * 90 degree turn*/);
+  return tow;
 }
 
 /*document.addEventListener('DOMContentLoaded', function() {
@@ -143,7 +141,6 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
 //     var coord = coords[(_sid+1)%4];
 //     t.style.left = coord.x+"px";
 //     t.style.top = coord.y + "px";
-
 
 //     _sid += 1;
 //     //var t=document.getElementById("tower"+_sid);

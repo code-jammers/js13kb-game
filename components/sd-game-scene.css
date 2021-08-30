@@ -131,7 +131,8 @@ div[legend] span {
   display: block;
   margin: 0 6px;
 }
-
+div[blaster],
+div[particle],
 div[frost],
 div[shadow],
 div[fire] {
@@ -167,4 +168,24 @@ div[shadow] span[two] {
 }
 div[shadow] span[three] {
   background: rgba(180, 32, 238, 1);
+}
+
+div[particle] span[one] {
+  background: rgba(251, 221, 51, 0.4);
+}
+div[particle] span[two] {
+  background: rgba(251, 221, 51, 0.6);
+}
+div[particle] span[three] {
+  background: rgba(251, 221, 51, 1);
+}
+
+div[blaster] span[one] {
+  background: rgba(255, 255, 255, 0.2);
+}
+div[blaster] span[two] {
+  background: rgba(255, 255, 255, 0.6);
+}
+div[blaster] span[three] {
+  background: rgba(255, 255, 255, 1);
 }
