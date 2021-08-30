@@ -4,7 +4,7 @@ var htmlmin = require("gulp-html-minifier");
 var uglifycss = require("gulp-uglifycss");
 var zip = require("gulp-zip");
 var gulpCopy = require("gulp-copy");
-var fontmin = require("gulp-fontmin");
+// var fontmin = require("gulp-fontmin");
 var del = require("del");
 const size = require("gulp-size");
 
@@ -14,11 +14,11 @@ task("copy-images", function () {
     .pipe(dest("assets/images"));
 });
 
-task("minify-fonts", function () {
-  return src("assets/fonts/*.ttf")
-    .pipe(fontmin({ text: "{}@#" }))
-    .pipe(dest("dist/assets/fonts"));
-});
+// task("minify-fonts", function () {
+//   return src("assets/fonts/*.ttf")
+//     .pipe(fontmin({ text: "{}@#" }))
+//     .pipe(dest("dist/assets/fonts"));
+// });
 
 task("minify-html", function () {
   return src("index.html")
@@ -87,14 +87,14 @@ task("clean", function () {
   return del(["dist/**", "!dist"]);
 });
 
-task("clean-extra-fonts", function () {
-  return del([
-    "dist/assets/fonts/PaletteMosaic-Regular.css",
-    "dist/assets/fonts/PaletteMosaic-Regular.eot",
-    "dist/assets/fonts/PaletteMosaic-Regular.svg",
-    "dist/assets/fonts/PaletteMosaic-Regular.woff",
-  ]);
-});
+// task("clean-extra-fonts", function () {
+//   return del([
+//     "dist/assets/fonts/PaletteMosaic-Regular.css",
+//     "dist/assets/fonts/PaletteMosaic-Regular.eot",
+//     "dist/assets/fonts/PaletteMosaic-Regular.svg",
+//     "dist/assets/fonts/PaletteMosaic-Regular.woff",
+//   ]);
+// });
 
 task(
   "default",
@@ -106,9 +106,9 @@ task(
     "minify-web-components",
     "minify-css",
     "minify-component-css",
-    "minify-fonts",
+    // "minify-fonts",
     "copy-images",
-    "clean-extra-fonts"
+    // "clean-extra-fonts"
   )
 );
 task("zip", series("zip"));
