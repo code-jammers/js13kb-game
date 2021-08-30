@@ -11,10 +11,12 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
     var tow=document.createElement("div");
     if (tss.length==1) {
 	tow.innerHTML = "{"+ascii_char+"}";
+	tow.style.zIndex="1";
     }
     else {
 	tow.innerHTML = ascii_char;
-	tow.style.fontSize = "12px";
+	tow.style.fontSize = "14px";
+	tow.style.textShadow ="gray 1px 1px";
 	var coord = coords[tss.length-1];
         var l=(coord[0] == 0) ? 40 : coord[0]*.57;
 	var t=(coord[1] == 0) ? 40 : coord[1]*.57;
@@ -22,6 +24,8 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
 	tow.style.top=t + "px";
 	tow.style.position="absolute";
 	tow.style.margin="20px;";
+	tow.style.fontWeight="bold";
+	tow.style.zIndex="2";
     }
     tow.rot = 0;
     var special_tower = (attrs[7]=='1');
