@@ -75,15 +75,33 @@ class GameScene extends HTMLElement {
             e.stopPropagation();
             const amt = this.money - Number(td.getAttribute("cost"));
             this.setMoney(amt);
-            var div = document.createElement("div");
-            div.classList.add("tower");
-            td.appendChild(div);
-            div.rot = 0;
-            div.innerHTML = `{${tower}}`;
-            this.closeMenu();
-            setInterval(() => {
-              this.rotateTowers([div]);
-            }, 10);
+            if (td.towers == null) td.towers="";
+            td.towers += tower;
+
+	    /*if (td.towers.length > 1){  
+	    setInterval(()=>{
+		for (var i=0; i<td.childNodes.length; i++) {
+		    var n=td.childNodes[i];
+		    if (n.rot===undefined || n.rot == 0) continue;
+		    if (n.rot > 0) td.childNodes[i].rot -= 1;
+		    if (n.rot<0) td.childNodes[i].rot += 1;
+		    console.log(n.rot);
+		    
+                    n.style.transform = "rotate("+n.rot+"deg)";
+		}
+	    }, 100);
+	    }*/
+	    //setTimeout(()=>{
+              var div = create_tower(tower, tower_decode(tower), td.towers);//document.createElement("div");
+              div.classList.add("tower");
+              td.appendChild(div);
+	      td.style.position="relative";
+              //div.innerHTML = `{${tower}}`;
+              this.closeMenu();
+              setInterval(() => {
+                this.rotateTowers([div]);
+              }, 10);
+            //}, 2000);
           });
           menuItem.innerText = `${tower} tower ${td.getAttribute("cost")}`;
           menuItem.setAttribute("menu-item", true);
