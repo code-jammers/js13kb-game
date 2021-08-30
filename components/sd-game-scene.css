@@ -5,7 +5,7 @@
 }
 
 t-b {
-  height: 40px;
+  height: 65px;
   display: flex;
   justify-content: space-between;
   background: #212121;
@@ -17,7 +17,7 @@ t-b {
 s-c {
   display: grid;
   grid: "left middle right" / 1fr 200px 1fr;
-  height: calc(100vh - 40px);
+  height: calc(100vh - 65px);
 }
 
 m-g {
@@ -30,16 +30,16 @@ m-g {
 r-w {
   display: flex;
   width: 200px;
-  height: calc(75vh - 40px);
+  height: calc(75vh - 148px);
   background-color: #212121;
-  filter: blur(5px);
-  border: 5px solid #424242;
+  background-color: #212121;
+  filter: blur(16px);
 }
 
 s-p {
-  height: calc(20vh - 40px);
-  width: calc(20vh - 40px);
-  margin-top: 24px;
+  height: calc(20vh - 65px);
+  width: calc(20vh - 65px);
+  margin-top: 48px;
   background: #731a05;
   border-radius: 50%;
 }
@@ -51,7 +51,7 @@ r-g {
 
 @media (max-width: 768px) {
   r-w {
-    width: 100px;
+    width: 65px;
   }
   s-c {
     display: grid;
@@ -77,6 +77,8 @@ td {
   cursor: pointer;
   user-select: none;
   position: relative;
+  z-index: 1;
+  background: #000;
 }
 
 td:hover {
@@ -121,7 +123,12 @@ div[money] {
 div[legend] {
   font-family: monospace;
   font-size: 13px;
+  text-transform: uppercase;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 45px;
+  overflow-y: auto;
 }
 
 div[legend] span {
