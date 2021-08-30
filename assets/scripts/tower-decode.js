@@ -6,7 +6,7 @@ function tower_decode(tower_char) {
 
 function create_tower(ascii_char, attrs, tss/*tower set string*/) {
     var coords = [[], [0,100], [0,0], [100,0],  [100,100] ];
-    
+    var fs=44;//font-size
     var type="fire-tower";
     var tow=document.createElement("div");
     if (tss.length==1) {
@@ -14,8 +14,8 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
 	tow.style.zIndex="1";
     }
     else {
+        fs=14;
 	tow.innerHTML = ascii_char;
-	tow.style.fontSize = "14px";
 	tow.style.textShadow ="gray 1px 1px";
 	var coord = coords[tss.length-1];
         var l=(coord[0] == 0) ? 40 : coord[0]*.57;
@@ -27,6 +27,7 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
 	tow.style.fontWeight="bold";
 	tow.style.zIndex="2";
     }
+    tow.style.fontSize = fs+"px";
     tow.rot = 0;
     var special_tower = (attrs[7]=='1');
     if (special_tower) {
@@ -46,6 +47,28 @@ function create_tower(ascii_char, attrs, tss/*tower set string*/) {
     //var tow_cont=document.createElement(type);
     //tow_cont.appendChild(tow);
     //container.appendChild(tow_cont);
+
+
+    setTimeout(()=>{
+	//bullet
+        var b=document.createElement("div");
+        
+        b.innerHTML="*";
+	b.style.color = tow.style.color;
+	b.style.textShadow ="yellow 1px 1px";
+	b.style.fontSize = tow.style.fontSize;
+	b.style.position="absolute";
+        b.style.zIndex ="0";
+        b.style.left=tow.parentNode.offsetLeft +28 + "px";
+        b.style.top=tow.parentNode.offsetTop +36 + "px";
+        b.x=tow.parentNode.offsetLeft +28;
+        document.body.appendChild(b);
+
+    setInterval(()=>{
+        b.x -=1;
+        b.style.left = b.x + "px";
+    }, 10);
+    },900/*10 rotateTowers interval * 90 degree turn*/);
     return tow;
 }
 
