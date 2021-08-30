@@ -5,20 +5,33 @@ function tower_decode(tower_char) {
 }
 
 function create_tower(ascii_char, attrs, tss /*tower set string*/) {
+  var tower_types = ['blaster','thermal','phaser','particle','satellite','quantum'];
+  var levels=["one","two","three"];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
   var type = "fire-tower";
   var tow = document.createElement("div");
+  var span=document.createElement("span");
+  span.style.borderRadius="50%";
+  span.style.boxShadow="0px 2px gray";
+  tow.appendChild(span);
+  var li=tss.split(ascii_char).length - 1 - 1;//level index
+  if (li>2)li=2;
+  span.setAttribute(levels[li],"");
   if (tss.length == 1) {
-    tow.innerHTML = "{" + ascii_char + "}";
+    span.style.width="75px";
+    span.style.height="65px";
+    span.innerHTML = "&nbsp;";//"{" + ascii_char + "}";
     tow.style.zIndex = "1";
   } else {
+    span.style.width="25px";
+    span.style.height="15px";
     fs = 14;
-    tow.innerHTML = ascii_char;
+    span.innerHTML = "&nbsp;";//ascii_char;
     tow.style.textShadow = "gray 1px 1px";
     var coord = coords[tss.length - 1];
-    var l = coord[0] == 0 ? 40 : coord[0] * 0.57;
-    var t = coord[1] == 0 ? 40 : coord[1] * 0.57;
+    var l = coord[0] == 0 ? 15 : coord[0] * 0.40;
+    var t = coord[1] == 0 ? 26 : coord[1] * 0.56;
     tow.style.left = l + "px";
     tow.style.top = t + "px";
     tow.style.position = "absolute";
@@ -28,7 +41,9 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   }
   tow.style.fontSize = fs + "px";
   tow.rot = 0;
-  var special_tower = attrs[7] == "1";
+  var typidx = parseInt(attrs[5] +""+ attrs[6] +""+ attrs[7], 2) % tower_types.length;
+  tow.setAttribute(tower_types[typidx],"");
+  /*var special_tower = attrs[7] == "1";
   if (special_tower) {
     var frost_tower = attrs[6] == "1" || attrs[5] == "1";
     if (frost_tower) {
@@ -37,7 +52,7 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
       tow.style.color = "red";
       //fire tower
     }
-  }
+  }*/
   //tow.frost = (attrs[7] == '1');
   //if (tow.frost) {
   //    type="frost-tower";
