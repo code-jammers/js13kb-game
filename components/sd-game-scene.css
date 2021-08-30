@@ -38,10 +38,10 @@ r-w {
 s-p {
   height: calc(17vh - 65px);
   width: calc(17vh - 65px);
-  background: #731a05;
+  background: #b86006;
   border-radius: 50%;
-  filter: blur(5px);
-  border: 5px solid red;
+  filter: blur(10px);
+  border: 6px solid #ffb700;
 }
 
 l-g,
@@ -71,7 +71,7 @@ div.tower {
 td {
   font-size: 44px;
   text-align: center;
-  border: 1px solid #333;
+  border: 1px solid #212121;
   width: 100px;
   height: 100px;
   cursor: pointer;
@@ -82,17 +82,19 @@ td {
 }
 
 td:hover {
-  transition: 0.1s ease;
-  background: #212121;
+  transition: 0.1s ease-out;
+  background: #111;
+  border-color: rgb(238, 150, 34);
 }
 
 div[menu] {
-  width: 100px;
-  height: 100px;
+  width: 95px;
+  height: 95px;
   bottom: 100%;
   overflow-y: auto;
   top: 0;
-  background: #f5f5f5;
+  background: #000;
+  color: #f5f5f5;
   position: absolute;
   z-index: 2;
 }
@@ -100,7 +102,7 @@ div[menu] {
 div[menu-item] {
   font-family: monospace;
   font-size: 11px;
-  color: #333;
+  color: #f5f5f5;
   height: 25px;
   display: flex;
   flex-direction: column;
@@ -108,9 +110,17 @@ div[menu-item] {
   align-items: center;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}
+
 div[menu-item]:hover {
-  transition: 0.1 ease;
-  background: #ddd;
+  transition: 0.1 ease-out;
+  background: #333;
+}
+div[menu-item]:hover td {
+  border-color: #000 !important;
 }
 
 div[money] {
