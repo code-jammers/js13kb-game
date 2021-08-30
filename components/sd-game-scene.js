@@ -36,7 +36,11 @@ class GameScene extends HTMLElement {
       ch -= 1;
       leadY += 1;
     }
-    tbl.style.left = lead + "px";
+    if(side === "left") {
+      tbl.style.left = lead + "px";
+    } else {
+      tbl.style.right = lead + "px";
+    }
     tbl.style.top = leadY + "px";
     for (var i = 0; i < ch / 100 /*5*/; i++) {
       var tr = document.createElement("tr");

@@ -43,6 +43,11 @@ s-p {
   border-radius: 50%;
 }
 
+l-g,
+r-g {
+  position: relative;
+}
+
 @media (max-width: 768px) {
   r-w {
     width: 100px;
@@ -55,6 +60,7 @@ s-p {
 
 table {
   border-spacing: 0;
+  position: absolute;
 }
 
 div.tower {
