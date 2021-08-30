@@ -36,7 +36,11 @@ class GameScene extends HTMLElement {
       ch -= 1;
       leadY += 1;
     }
-    tbl.style.left = lead + "px";
+    if (side === "left") {
+      tbl.style.left = lead + "px";
+    } else {
+      tbl.style.right = lead + "px";
+    }
     tbl.style.top = leadY + "px";
     for (var i = 0; i < ch / 100 /*5*/; i++) {
       var tr = document.createElement("tr");
@@ -75,10 +79,10 @@ class GameScene extends HTMLElement {
             e.stopPropagation();
             const amt = this.money - Number(td.getAttribute("cost"));
             this.setMoney(amt);
-            if (td.towers == null) td.towers="";
+            if (td.towers == null) td.towers = "";
             td.towers += tower;
 
-	    /*if (td.towers.length > 1){  
+            /*if (td.towers.length > 1){  
 	    setInterval(()=>{
 		for (var i=0; i<td.childNodes.length; i++) {
 		    var n=td.childNodes[i];
@@ -91,16 +95,16 @@ class GameScene extends HTMLElement {
 		}
 	    }, 100);
 	    }*/
-	    //setTimeout(()=>{
-              var div = create_tower(tower, tower_decode(tower), td.towers);//document.createElement("div");
-              div.classList.add("tower");
-              td.appendChild(div);
-	      td.style.position="relative";
-              //div.innerHTML = `{${tower}}`;
-              this.closeMenu();
-              setInterval(() => {
-                this.rotateTowers([div]);
-              }, 10);
+            //setTimeout(()=>{
+            var div = create_tower(tower, tower_decode(tower), td.towers); //document.createElement("div");
+            div.classList.add("tower");
+            td.appendChild(div);
+            td.style.position = "relative";
+            //div.innerHTML = `{${tower}}`;
+            this.closeMenu();
+            setInterval(() => {
+              this.rotateTowers([div]);
+            }, 10);
             //}, 2000);
           });
           menuItem.innerText = `${tower} tower ${td.getAttribute("cost")}`;
@@ -146,7 +150,7 @@ t.parentNode//td
   setMoney(amt) {
     this.money = amt;
     const moneyEl = this.shadowRoot.querySelector("div[money]");
-    moneyEl.innerText = amt;
+    moneyEl.innerText = `$${amt.toFixed(2)}`;
   }
 
   connectedCallback() {

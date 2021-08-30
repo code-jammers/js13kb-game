@@ -11,6 +11,7 @@ t-b {
   background: #212121;
   color: #f5f5f5;
   border-bottom: 1px solid #424242;
+  align-items: center;
 }
 
 s-c {
@@ -43,6 +44,11 @@ s-p {
   border-radius: 50%;
 }
 
+l-g,
+r-g {
+  position: relative;
+}
+
 @media (max-width: 768px) {
   r-w {
     width: 100px;
@@ -55,6 +61,7 @@ s-p {
 
 table {
   border-spacing: 0;
+  position: absolute;
 }
 
 div.tower {
@@ -102,4 +109,11 @@ div[menu-item] {
 div[menu-item]:hover {
   transition: 0.1 ease;
   background: #ddd;
+}
+
+div[money] {
+  font-family: monospace;
+  font-size: 17px;
+  color: #f5f5f5;
+  padding-right: 12px;
 }
