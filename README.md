@@ -16,4 +16,8 @@ npm run build
 
 Thermal Detonator - AOE damage
 Phaser - Single target damage
-Boost Pack - 
+Particle Accelerator - Speed boost
+Sattelite - Range increase
+Quantum Drive - Rotation + Damage boost
+
+ 
