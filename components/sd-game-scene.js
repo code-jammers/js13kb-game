@@ -160,6 +160,13 @@ t.parentNode//td
   setMoney(amt) {
     this.money = amt;
     const moneyEl = this.shadowRoot.querySelector("div[money]");
+    if (amt < 1000) {
+      moneyEl.style.color = "red";
+    } else if (amt < 3000) {
+      moneyEl.style.color = "yellow";
+    } else {
+      moneyEl.style.color = "green";
+    }
     moneyEl.innerText = `$${amt.toFixed(2)}`;
   }
 
