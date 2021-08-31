@@ -6,3 +6,18 @@
 - [ ] find a unique attribute about our code or game
 - [ ] (korey) research core mechanic options
 - [ ] (kasey) research graphic strategies 
+
+
+## Build
+```bash
+npm install
+npm run build
+```
+
+Thermal Detonator - AOE damage
+Phaser - Single target damage
+Particle Accelerator - Speed boost
+Sattelite - Range increase
+Quantum Drive - Rotation + Damage boost
+
+ 
