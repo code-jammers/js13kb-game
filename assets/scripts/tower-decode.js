@@ -64,20 +64,35 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
     //bullet
     var b = document.createElement("div");
 
-    b.innerHTML = "*";
-    console.log(tow.parentNode);
-    b.style.color = tow.style.color;
-    b.style.textShadow = "yellow 1px 1px";
+    b.innerHTML = "&nbsp;";
+    //console.log();
+    //b.style.color = tow.style.color;
+    b.style.width="10px";
+    b.style.height="20px";
+    //b.style.backgroundColor="red";
+    b.style.borderRadius="50%";
     b.style.fontSize = tow.style.fontSize;
     b.style.position = "absolute";
     b.style.zIndex = "0";
-    b.style.left = tow.parentNode.offsetLeft + 28 + "px";
-    b.style.top = tow.parentNode.offsetTop + 36 + "px";
-    b.x = tow.parentNode.offsetLeft + 28;
+    var rect=tow.getBoundingClientRect();
+    var x = rect.x + rect.width/2.0;
+    var y = rect.y + rect.height/2.0;
+    b.style.left = x+"px";//tow.parentNode.offsetLeft + 28 + "px";
+    b.style.top = y+"px";//tow.parentNode.offsetTop + 36 + "px";
+    b.ox=x;
+    b.x = x;//tow.parentNode.offsetLeft + 28;
     document.body.appendChild(b);
-
+    var mid_x = document.body.getBoundingClientRect().width/2.0;
+    if (b.x>mid_x)b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
+    else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
+    b.style.zIndex = "100000";
     setInterval(() => {
-      b.x -= 1;
+      if (b.x > mid_x)
+          if (b.x < mid_x-3) b.x=b.ox;
+          else b.x -= 1;
+      else
+          if (b.x > mid_x-3) b.x=b.ox;
+	  else b.x += 1;
       b.style.left = b.x + "px";
     }, 10);
   }, 900 /*10 rotateTowers interval * 90 degree turn*/);
