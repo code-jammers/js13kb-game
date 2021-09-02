@@ -10,6 +10,9 @@ ALL_SCENES = [
 
 GAME_DATA = {
   towers: "*@MODus",//"*@M0OADY",
+  waves: ["eA$Y","m|e|d","hard{||}"],
+  wave: 0,
+  bullets: [],
   allScenes : [...ALL_SCENES],
   currentScene: LOADING_SCENE,
 };

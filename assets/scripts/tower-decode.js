@@ -22,7 +22,9 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
     span.style.height="65px";
     span.innerHTML = "&nbsp;";//"{" + ascii_char + "}";
     tow.style.zIndex = "1";
+    tow.mini=false;
   } else {
+    tow.mini=true;
     span.style.width="25px";
     span.style.height="15px";
     fs = 14;
@@ -59,16 +61,15 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   //var tow_cont=document.createElement(type);
   //tow_cont.appendChild(tow);
   //container.appendChild(tow_cont);
-
   setTimeout(() => {
     //bullet
     var b = document.createElement("div");
-
+    GAME_DATA.bullets.push(b);
     b.innerHTML = "&nbsp;";
     //console.log();
     //b.style.color = tow.style.color;
-    b.style.width="10px";
-    b.style.height="20px";
+    b.style.width="10px";if (tow.mini)b.style.width="5px";
+    b.style.height="20px";if (tow.mini)b.style.height="10px";
     //b.style.backgroundColor="red";
     b.style.borderRadius="50%";
     b.style.fontSize = tow.style.fontSize;
