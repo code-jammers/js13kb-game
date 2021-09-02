@@ -12,6 +12,7 @@ GAME_DATA = {
   towers: "*@MODus",//"*@M0OADY",
   waves: ["eA$Y","m|e|d","hard{||}"],
   wave: 0,
+  ei: 0,//enemy index (usage: waves[wave][ei])
   bullets: [],
   allScenes : [...ALL_SCENES],
   currentScene: LOADING_SCENE,

@@ -212,6 +212,46 @@ t.parentNode//td
       window.setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
+	//draw enemy ship/ufo
+	var top=document.createElement("div");
+	top.style.borderRadius="50%";
+	top.style.width="100%";
+	top.style.height="100%";
+	var mid=document.createElement("div");
+	mid.style.width="100%";
+	mid.style.borderRadius="50%";
+        mid.style.top="16px";
+	mid.style.position="relative";
+	mid.style.display="block";
+	mid.style.height="13px";
+	mid.style.innerHTML="&nbsp;";
+	var bot=document.createElement("div");
+	bot.style.width="18px";
+        bot.style.height="15px";
+	bot.style.bottom="-2px";
+	bot.style.left="6px";
+	bot.style.position="relative";
+	bot.style.display="block";
+
+	var enemy=document.createElement("div");
+	enemy.style.height="30px";
+	enemy.style.width="30px";
+	bot.style.borderRadius="50%";
+        bot.style.backgroundColor="rgba(0,0,0,0.3)";//"red";
+	top.style.backgroundColor="lightblue";//"blue";
+	mid.style.backgroundColor="white";//"green";
+	top.appendChild(mid);
+	mid.appendChild(bot);
+	enemy.appendChild(top);
+	enemy.style.position="absolute";
+	var brect=document.body.getBoundingClientRect();
+	enemy.style.left=(brect.width/2.0-15)+"px";
+	enemy.style.top="40px";
+	document.body.appendChild(enemy);
+	// game loop
+	setInterval(()=> {
+	  
+	},10);
       }, 1000);
     }
   }
