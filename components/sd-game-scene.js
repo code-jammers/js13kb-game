@@ -234,11 +234,17 @@ t.parentNode//td
 	bot.style.display="block";
 
 	var enemy=document.createElement("div");
+	enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
+        enemy.style.fontSize="12px";
+        enemy.style.fontWeight="bold";
+        enemy.style.textAlign="center";
+        enemy.style.color="green";
 	enemy.style.height="30px";
 	enemy.style.width="30px";
 	bot.style.borderRadius="50%";
         bot.style.backgroundColor="rgba(0,0,0,0.3)";//"red";
 	top.style.backgroundColor="lightblue";//"blue";
+        //mid.innerHTML = enemy.health;
 	mid.style.backgroundColor="white";//"green";
 	top.appendChild(mid);
 	mid.appendChild(bot);
@@ -247,10 +253,35 @@ t.parentNode//td
 	var brect=document.body.getBoundingClientRect();
 	enemy.style.left=(brect.width/2.0-15)+"px";
 	enemy.style.top="40px";
+        enemy.y=40;
 	document.body.appendChild(enemy);
 	// game loop
 	setInterval(()=> {
-	  
+          if (enemy.y > document.body.getBoundingClientRect().height || enemy.health<=0){
+              GAME_DATA.ei += 1;
+              enemy.y=40;
+              if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){console.log("game over");document.location.href="";/*game over*/}
+              enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
+              if (enemy.health<50) enemy.style.color="red";
+	  }
+	  enemy.y += 1;
+	  enemy.style.top=enemy.y+"px";
+	  var removeidx=-1;
+	  for (var i=0; i<GAME_DATA.bullets.length; i++) {
+              var b = GAME_DATA.bullets[i];
+              var brect = b.getBoundingClientRect();//bullet rect
+              var srect=enemy.getBoundingClientRect();//ship rect
+              if ((brect.left > srect.left && brect.left<srect.left+srect.width)
+                  && (brect.top > srect.top && brect.top<srect.top+srect.height))
+              {
+	          enemy.health -= 20;
+                  removeidx=i;
+                  break;
+              }
+	  }
+          if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);
+	  if (enemy.health<0)enemy.health = 0;
+          mid.innerHTML = enemy.health;
 	},10);
       }, 1000);
     }
