@@ -130,6 +130,11 @@ class GameScene extends HTMLElement {
 			cn.level += 1;
 			var levels=["zero","one","two","three"];
 			cn.childNodes[0].setAttribute(levels[cn.level],"");
+                        //for (var i=1;i<=cn.level;i++) {
+                        //    setTimeout(function(){create_bullet(cn.childNodes[0])},cn.level*500);
+                        //}
+                        var chg = [-999,{x:1,y:1},{x:1,y:-1},{x:2,y:0}][((parseInt(cn.level)+1)%3)+1];
+                        create_bullet(cn, chg.x, chg.y);
 		        break;
 		    }
                 }
@@ -175,7 +180,7 @@ t.parentNode//td
 );*/
       var tag =
         t.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-      if (tag == "L-G") {
+      if (tag.toUpperCase() == "L-G") {
         if (t.rot < 91) {
           t.rot += 1;
           t.style.transform = "rotate(" + t.rot + "deg)";
@@ -271,8 +276,17 @@ t.parentNode//td
               var b = GAME_DATA.bullets[i];
               var brect = b.getBoundingClientRect();//bullet rect
               var srect=enemy.getBoundingClientRect();//ship rect
-              if ((brect.left > srect.left && brect.left<srect.left+srect.width)
-                  && (brect.top > srect.top && brect.top<srect.top+srect.height))
+              var mpx=brect.left+(brect.width/2);//midpoint x
+              var mpy=brect.top+(brect.height/2);
+              var pad=16;
+              if (
+                mpx+pad>=srect.left && mpx-pad<=srect.left+srect.width
+                && mpy+pad>=srect.top && mpy-pad<=srect.top+srect.height
+                /*((brect.left > srect.left && brect.left<srect.left+srect.width)
+                 ||(brect.left+brect.width < srect.left+srect.width && brect.left+brect.width>srect.left))
+                && ((brect.top > srect.top && brect.top<srect.top+srect.height)
+                ||(brect.top+brect.height < srect.top+srect.height && brect.top+brect.height>srect.top))*/ //todo:for better accuracy try instead to check if brect midpoint is within srect
+		)
               {
 	          enemy.health -= 20;
                   removeidx=i;
@@ -282,7 +296,7 @@ t.parentNode//td
           if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);
 	  if (enemy.health<0)enemy.health = 0;
           mid.innerHTML = enemy.health;
-	},10);
+	},14);
       }, 1000);
     }
   }

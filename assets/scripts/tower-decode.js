@@ -3,7 +3,54 @@ function tower_decode(tower_char) {
   var bit_str = tc.charCodeAt(0).toString(2).padStart(8, "0");
   return bit_str;
 }
-
+function create_bullet(tow, chg_x=1, chg_y=0) {
+    var b = document.createElement("div");
+    GAME_DATA.bullets.push(b);
+    b.innerHTML = "&nbsp;";
+    //console.log();
+    //b.style.color = tow.style.color;
+    b.style.width="10px";if (tow.mini)b.style.width="5px";
+    b.style.height="20px";if (tow.mini)b.style.height="10px";
+    //b.style.backgroundColor="red";
+    b.style.borderRadius="50%";
+    b.style.fontSize = tow.style.fontSize;
+    b.style.position = "absolute";
+    b.style.zIndex = "0";
+    var rect=tow.getBoundingClientRect();
+    var x = rect.x + rect.width/2.0;
+    var y = rect.y + rect.height/2.0;
+    b.style.left = x+"px";//tow.parentNode.offsetLeft + 28 + "px";
+    b.style.top = y+"px";//tow.parentNode.offsetTop + 36 + "px";
+    b.ox=x;
+    b.oy=y;
+    b.x = x;//tow.parentNode.offsetLeft + 28;
+    b.y = y;
+    //console.log(tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName);
+    var tag =
+        tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
+    console.log(tag);
+    b.lefttower = (tag.toUpperCase() == "L-G");
+    document.body.appendChild(b);
+    var mid_x = document.body.getBoundingClientRect().width/2.0;
+    if (b.x>mid_x)b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
+    else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
+    b.style.zIndex = "100000";
+    setInterval(() => {
+      if (!b.lefttower && b.x < mid_x-63) {b.x=b.ox;b.y=b.oy}
+      if (!b.lefttower && b.x >= mid_x-63) {b.x -= chg_x;b.y += chg_y}
+      if (b.lefttower && b.x > mid_x+63) {b.x=b.ox;b.y=b.oy}
+      if (b.lefttower && b.x <= mid_x+63) {b.x += chg_x;b.y += chg_y}
+      /*if (b.x > mid_x - 60) {
+          if (!b.lefttower && b.x < mid_x-3-60) {b.x=b.ox;b.y=b.oy}
+          else {b.x -= chg_x;b.y += chg_y}
+      }
+      else
+          if (b.x > mid_x-3) {b.x=b.ox;b.y=b.oy;}
+	  else {b.x += chg_x;b.y += chg_y}*/
+      b.style.left = b.x + "px";
+      b.style.top = b.y + "px";
+    }, 10);
+}
 function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   var tower_types = ['blaster','thermal','phaser','particle','satellite','quantum'];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
@@ -63,39 +110,7 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   //container.appendChild(tow_cont);
   setTimeout(() => {
     //bullet
-    var b = document.createElement("div");
-    GAME_DATA.bullets.push(b);
-    b.innerHTML = "&nbsp;";
-    //console.log();
-    //b.style.color = tow.style.color;
-    b.style.width="10px";if (tow.mini)b.style.width="5px";
-    b.style.height="20px";if (tow.mini)b.style.height="10px";
-    //b.style.backgroundColor="red";
-    b.style.borderRadius="50%";
-    b.style.fontSize = tow.style.fontSize;
-    b.style.position = "absolute";
-    b.style.zIndex = "0";
-    var rect=tow.getBoundingClientRect();
-    var x = rect.x + rect.width/2.0;
-    var y = rect.y + rect.height/2.0;
-    b.style.left = x+"px";//tow.parentNode.offsetLeft + 28 + "px";
-    b.style.top = y+"px";//tow.parentNode.offsetTop + 36 + "px";
-    b.ox=x;
-    b.x = x;//tow.parentNode.offsetLeft + 28;
-    document.body.appendChild(b);
-    var mid_x = document.body.getBoundingClientRect().width/2.0;
-    if (b.x>mid_x)b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
-    else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
-    b.style.zIndex = "100000";
-    setInterval(() => {
-      if (b.x > mid_x)
-          if (b.x < mid_x-3) b.x=b.ox;
-          else b.x -= 1;
-      else
-          if (b.x > mid_x-3) b.x=b.ox;
-	  else b.x += 1;
-      b.style.left = b.x + "px";
-    }, 10);
+    create_bullet(tow);
   }, 900 /*10 rotateTowers interval * 90 degree turn*/);
   return tow;
 }
