@@ -10,7 +10,7 @@ ALL_SCENES = [
 
 GAME_DATA = {
   towers: "*@MODus",//"*@M0OADY",
-  waves: ["eA$Y","m|e|d","hard{||}"],
+  waves: ["eA$Ypeasy","m|e|d","hard{||}"],
   wave: 0,
   ei: 0,//enemy index (usage: waves[wave][ei])
   bullets: [],

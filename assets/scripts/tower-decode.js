@@ -6,6 +6,7 @@ function tower_decode(tower_char) {
 function create_bullet(tow, chg_x=1, chg_y=0) {
     var b = document.createElement("div");
     GAME_DATA.bullets.push(b);
+    b.idx = GAME_DATA.bullets.length - 1;
     b.innerHTML = "&nbsp;";
     //console.log();
     //b.style.color = tow.style.color;
@@ -35,11 +36,25 @@ function create_bullet(tow, chg_x=1, chg_y=0) {
     if (b.x>mid_x)b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
     else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
     b.style.zIndex = "100000";
+    b.phase = tow.getAttribute("phaser")!=null;
+    if (b.phase) {
+        b.damage = 5;
+        b.setback = 8;
+    }
+    else b.damage = 20;
     setInterval(() => {
-      if (!b.lefttower && b.x < mid_x-63) {b.x=b.ox;b.y=b.oy}
+      var reset = false;
+      if (!b.lefttower && b.x < mid_x-63) {b.x=b.ox;b.y=b.oy;reset=true;}
       if (!b.lefttower && b.x >= mid_x-63) {b.x -= chg_x;b.y += chg_y}
-      if (b.lefttower && b.x > mid_x+63) {b.x=b.ox;b.y=b.oy}
+      if (b.lefttower && b.x > mid_x+63) {b.x=b.ox;b.y=b.oy;reset=true;}
       if (b.lefttower && b.x <= mid_x+63) {b.x += chg_x;b.y += chg_y}
+      if (reset && window.enemy.recentHits.includes(b.idx)) {
+          for (var i=0;i<window.enemy.recentHits.length;i++) {
+              if (window.enemy.recentHits[i]==b.idx) {
+                  window.enemy.recentHits[i]=-1;
+              }
+          }
+      }//TODO:clear out recent hits array at end of wave
       /*if (b.x > mid_x - 60) {
           if (!b.lefttower && b.x < mid_x-3-60) {b.x=b.ox;b.y=b.oy}
           else {b.x -= chg_x;b.y += chg_y}
@@ -55,7 +70,7 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   var tower_types = ['blaster','thermal','phaser','particle','satellite','quantum'];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
-  var type = "fire-tower";
+  //var type = "fire-tower";
   var tow = document.createElement("div");
   var span=document.createElement("span");
   span.style.borderRadius="50%";

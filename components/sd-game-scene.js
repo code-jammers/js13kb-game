@@ -138,6 +138,13 @@ class GameScene extends HTMLElement {
 		        break;
 		    }
                 }
+                for (var i=0; i<GAME_DATA.bullets.length; i++) {
+                    var bu = GAME_DATA.bullets[i];//bullet upgrade
+                    bu.damage += 5;
+                    if (bu.phase) {
+                        bu.setback *= 2;
+                    }
+                }
 		this.closeMenu();
 		return;
 	    } else td.towers += tower;
@@ -238,7 +245,7 @@ t.parentNode//td
 	bot.style.position="relative";
 	bot.style.display="block";
 
-	var enemy=document.createElement("div");
+	/*var */window.enemy=document.createElement("div");
 	enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
         enemy.style.fontSize="12px";
         enemy.style.fontWeight="bold";
@@ -259,6 +266,7 @@ t.parentNode//td
 	enemy.style.left=(brect.width/2.0-15)+"px";
 	enemy.style.top="40px";
         enemy.y=40;
+        enemy.recentHits = [];
 	document.body.appendChild(enemy);
 	// game loop
 	setInterval(()=> {
@@ -278,24 +286,34 @@ t.parentNode//td
               var srect=enemy.getBoundingClientRect();//ship rect
               var mpx=brect.left+(brect.width/2);//midpoint x
               var mpy=brect.top+(brect.height/2);
-              var pad=16;
+              var hpad=4;//16;//horiz pad
+              var vpad=4;//18;//vert pad
               if (
-                mpx+pad>=srect.left && mpx-pad<=srect.left+srect.width
-                && mpy+pad>=srect.top && mpy-pad<=srect.top+srect.height
+                mpx+hpad>=srect.left && mpx-hpad<=srect.left+srect.width
+                && mpy+vpad>=srect.top && mpy-vpad<=srect.top+srect.height
                 /*((brect.left > srect.left && brect.left<srect.left+srect.width)
                  ||(brect.left+brect.width < srect.left+srect.width && brect.left+brect.width>srect.left))
                 && ((brect.top > srect.top && brect.top<srect.top+srect.height)
                 ||(brect.top+brect.height < srect.top+srect.height && brect.top+brect.height>srect.top))*/ //todo:for better accuracy try instead to check if brect midpoint is within srect
 		)
               {
-	          enemy.health -= 20;
+                  if (enemy.recentHits.includes(i)) continue;
+                  if (b.phase) {enemy.y -= 8;}
+	          enemy.health -= b.damage;//20;
                   removeidx=i;
                   break;
               }
 	  }
-          if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);
+          if (removeidx>-1 && !enemy.recentHits.includes(removeidx)) {
+              enemy.recentHits.push(removeidx);
+          }
+/*          enemy.recentHits = removeidx;
+          setTimeout(function(){enemy.recentHit=-1},1200);*/
+          /*var removed = GAME_DATA.bullets[removeidx];
+          if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);*/
 	  if (enemy.health<0)enemy.health = 0;
           mid.innerHTML = enemy.health;
+          /*setTimeout(function(){GAME_DATA.bullets.push(removed)},1000);*/
 	},14);
       }, 1000);
     }
