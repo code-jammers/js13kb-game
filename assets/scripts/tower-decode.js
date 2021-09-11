@@ -87,9 +87,9 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   setInterval(() => {
     var reset = false;
     if (rect.y > b.y) {
-      b.style.transform = "rotate(-45deg)";
+      b.style.transform = b.lefttower ? "rotate(-45deg)" : "rotate(45deg)";
     } else if (rect.y < b.y - 50) {
-      b.style.transform = "rotate(45deg)";
+      b.style.transform = b.lefttower ? "rotate(45deg)" : "rotate(-45deg)";
     }
     if (!b.lefttower && b.x < mid_x - 63) {
       b.x = b.ox;
