@@ -252,12 +252,12 @@ t.parentNode//td
         top.style.height = "100%";
         var mid = document.createElement("div");
         mid.style.width = "100%";
-        mid.style.borderRadius = "50%";
-        mid.style.top = "16px";
+        mid.style.top = "32px";
         mid.style.position = "relative";
         mid.style.display = "block";
-        mid.style.height = "13px";
-        mid.style.innerHTML = "&nbsp;";
+        mid.style.height = "6px";
+        mid.style.backgroundColor = "green";
+
         var bot = document.createElement("div");
         bot.style.width = "18px";
         bot.style.height = "15px";
@@ -269,17 +269,17 @@ t.parentNode//td
         /*var */ window.enemy = document.createElement("div");
         enemy.health =
           GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
-        enemy.style.fontSize = "12px";
-        enemy.style.fontWeight = "bold";
-        enemy.style.textAlign = "center";
-        enemy.style.color = "green";
+        top.style.backgroundImage = "url(assets/images/rocket.png)";
+        top.style.backgroundRepeat = "no-repeat";
+        top.style.backgroundSize = "cover";
+        top.style.transform = "rotate(180deg)";
         enemy.style.height = "30px";
         enemy.style.width = "30px";
         enemy.width = 30;
         enemy.height = 30;
         bot.style.borderRadius = "50%";
         bot.style.backgroundColor = "rgba(0,0,0,0.3)"; //"red";
-        top.origBg = "lightblue";
+        top.origBg = "transparent";
         top.currBg = top.origBg;
         top.style.backgroundColor = top.origBg;
         //mid.innerHTML = enemy.health;
@@ -414,6 +414,16 @@ t.parentNode//td
           if (enemy.health < 50) enemy.style.color = "red";
           else enemy.style.color = "green";
 
+          if (enemy.health > 80) {
+            mid.style.backgroundColor = "green";
+          } else if (enemy.health > 50) {
+            mid.style.backgroundColor = "yellow";
+          } else {
+            mid.style.backgroundColor = "red";
+          }
+          mid.style.width = enemy.health / 2;
+          mid.style.right = `${enemy.health / 2 - 42}`;
+
           enemy.y += 1;
           enemy.style.top = enemy.y + "px";
           var removeidx = -1;
@@ -493,7 +503,7 @@ t.parentNode//td
           /*var removed = GAME_DATA.bullets[removeidx];
           if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);*/
           if (enemy.health < 0) enemy.health = 0;
-          mid.innerHTML = enemy.health;
+          // mid.innerHTML = enemy.health;
           /*setTimeout(function(){GAME_DATA.bullets.push(removed)},1000);*/
           GAME_DATA.waveTimeMs += gmLpIntMs;
         }, gmLpIntMs);
