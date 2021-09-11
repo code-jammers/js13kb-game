@@ -288,7 +288,7 @@ t.parentNode//td
         var gmLpIntMs = 14; // game loop interval in milliseconds
         var blnkIt = 15;//blink iterations
         enemy.lastHitMs=-1 - (gmLpIntMs*blnkIt);
-	setInterval(()=> {
+	var gmLpId = setInterval(()=> {
           if (GAME_DATA.gameOver)return;
           if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - (gmLpIntMs*blnkIt)) {
             /*if (top.currBg!="red") top.currBg = "red";
@@ -302,8 +302,9 @@ t.parentNode//td
               enemy.y=40;
               if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){
                 //game over
+                clearInterval(gmLpId);
                 GAME_DATA.gameOver=true;
-                document.location.href="?wave="+(GAME_DATA.wave+1%GAME_DATA.waves.length);
+                document.location.href="?wave="+((GAME_DATA.wave+1)%GAME_DATA.waves.length);
                 return;
               }
               enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
