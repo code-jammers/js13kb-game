@@ -255,7 +255,9 @@ t.parentNode//td
 	enemy.style.width="30px";
 	bot.style.borderRadius="50%";
         bot.style.backgroundColor="rgba(0,0,0,0.3)";//"red";
-	top.style.backgroundColor="lightblue";//"blue";
+        top.origBg="lightblue";
+        top.currBg=top.origBg;
+	top.style.backgroundColor=top.origBg;
         //mid.innerHTML = enemy.health;
 	mid.style.backgroundColor="white";//"green";
 	top.appendChild(mid);
@@ -269,14 +271,26 @@ t.parentNode//td
         enemy.recentHits = [];
 	document.body.appendChild(enemy);
 	// game loop
+        var gmLpIntMs = 14; // game loop interval in milliseconds
+        var blnkIt = 15;//blink iterations
+        enemy.lastHitMs=-1 - (gmLpIntMs*blnkIt);
 	setInterval(()=> {
+          if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - (gmLpIntMs*blnkIt)) {
+            /*if (top.currBg!="red") top.currBg = "red";
+            else top.currBg = top.origBg;*/
+            //instead of toggling just keep it red during the blnkIt time frame:
+            top.currBg = "red";
+          } else top.currBg = top.origBg;
+          top.style.backgroundColor = top.currBg;
           if (enemy.y > document.body.getBoundingClientRect().height || enemy.health<=0){
               GAME_DATA.ei += 1;
               enemy.y=40;
               if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){console.log("game over");document.location.href="";/*game over*/}
               enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
-              if (enemy.health<50) enemy.style.color="red";
 	  }
+          if (enemy.health<50) enemy.style.color="red";
+          else enemy.style.color="green";
+
 	  enemy.y += 1;
 	  enemy.style.top=enemy.y+"px";
 	  var removeidx=-1;
@@ -301,6 +315,8 @@ t.parentNode//td
                   if (b.phase) {enemy.y -= 8;}
 	          enemy.health -= b.damage;//20;
                   removeidx=i;
+                  //hit
+                  enemy.lastHitMs=GAME_DATA.waveTimeMs;
                   break;
               }
 	  }
@@ -314,7 +330,8 @@ t.parentNode//td
 	  if (enemy.health<0)enemy.health = 0;
           mid.innerHTML = enemy.health;
           /*setTimeout(function(){GAME_DATA.bullets.push(removed)},1000);*/
-	},14);
+          GAME_DATA.waveTimeMs += gmLpIntMs;
+	},gmLpIntMs);
       }, 1000);
     }
   }
