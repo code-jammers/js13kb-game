@@ -3,101 +3,154 @@ function tower_decode(tower_char) {
   var bit_str = tc.charCodeAt(0).toString(2).padStart(8, "0");
   return bit_str;
 }
-function create_bullet(tow, chg_x=1, chg_y=0) {
-    var b = document.createElement("div");
-    GAME_DATA.bullets.push(b);
-    b.idx = GAME_DATA.bullets.length - 1;
-    b.innerHTML = "&nbsp;";
-    //console.log();
-    //b.style.color = tow.style.color;
-    b.style.width="10px";if (tow.mini)b.style.width="5px";
-    b.style.height="20px";if (tow.mini)b.style.height="10px";
-    //b.style.backgroundColor="red";
-    b.style.borderRadius="50%";
-    b.style.fontSize = tow.style.fontSize;
-    b.style.position = "absolute";
-    b.style.zIndex = "0";
-    var rect=tow.getBoundingClientRect();
-    var x = rect.x + rect.width/2.0;
-    var y = rect.y + rect.height/2.0;
-    b.style.left = x+"px";//tow.parentNode.offsetLeft + 28 + "px";
-    b.style.top = y+"px";//tow.parentNode.offsetTop + 36 + "px";
-    b.ox=x;
-    b.oy=y;
-    b.x = x;//tow.parentNode.offsetLeft + 28;
-    b.y = y;
-    //console.log(tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName);
-    var tag =
-        tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-    console.log(tag);
-    b.lefttower = (tag.toUpperCase() == "L-G");
-    document.body.appendChild(b);
-    var mid_x = document.body.getBoundingClientRect().width/2.0;
-    if (b.x>mid_x)b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
-    else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
-    b.style.zIndex = "100000";
-    b.phase = tow.getAttribute("phaser")!=null;
-    if (b.phase) {
-        b.damage = 5;
-        b.setback = 8;
+function create_bullet(tow, chg_x = 1, chg_y = 0) {
+  console.log(tow.getAttribute("blaster"));
+  var b = document.createElement("div");
+  GAME_DATA.bullets.push(b);
+  b.idx = GAME_DATA.bullets.length - 1;
+  b.innerHTML = "&nbsp;";
+  //console.log();
+  //b.style.color = tow.style.color;
+  b.style.width = "10px";
+  if (tow.mini) b.style.width = "5px";
+  b.style.height = "20px";
+  if (tow.mini) b.style.height = "10px";
+  //b.style.backgroundColor="red";
+  b.style.borderRadius = "50%";
+  b.style.fontSize = tow.style.fontSize;
+  b.style.position = "absolute";
+  b.style.zIndex = "0";
+
+  // bullet defaults
+  b.damage = 20;
+
+  if (tow.getAttribute("quantum") !== null) {
+    // higher damage for quantum towers
+    // bullet rotation (ai aim assist)
+    b.style.width = "50px";
+  }
+
+  if (tow.getAttribute("phaser") !== null) {
+    // laser beam straight line for phaser towers
+    b.style.width = "30px";
+    b.style.height = "5px";
+    b.style.border = "1px solid rgb(132, 255, 255)";
+    b.style.background = "rgba(132, 255, 255, .5)";
+    b.style.borderRadius = "0px";
+    b.damage = 5;
+    b.setback = 8;
+  }
+
+  if (tow.getAttribute("thermal") !== null) {
+    // aoe attack but lower damage for thermal towers
+    b.style.width = "50px";
+    b.style.height = "50px";
+    b.style.border = "1px solid rgb(255, 73, 49)";
+    b.style.filter = "blur(2px)";
+    b.style.background = "rgba(255, 73, 49, .3)";
+    b.damage = 3;
+    b.setback = 8;
+  }
+
+  var rect = tow.getBoundingClientRect();
+  var x = rect.x + rect.width / 2.0;
+  var y = rect.y + rect.height / 2.0;
+  b.style.left = x + "px"; //tow.parentNode.offsetLeft + 28 + "px";
+  b.style.top = y + "px"; //tow.parentNode.offsetTop + 36 + "px";
+  b.ox = x;
+  b.oy = y;
+  b.x = x; //tow.parentNode.offsetLeft + 28;
+  b.y = y;
+  //console.log(tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName);
+  var tag = tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
+  console.log(tag);
+  b.lefttower = tag.toUpperCase() == "L-G";
+  document.body.appendChild(b);
+  var mid_x = document.body.getBoundingClientRect().width / 2.0;
+  // if (b.x > mid_x)
+  //   b.style.boxShadow = window.getComputedStyle(tow).color + "-2px -1px";
+  // else b.style.boxShadow = window.getComputedStyle(tow).color + "2px 1px";
+  b.style.zIndex = "100000";
+  setInterval(() => {
+    var reset = false;
+    if (!b.lefttower && b.x < mid_x - 63) {
+      b.x = b.ox;
+      b.y = b.oy;
+      reset = true;
     }
-    else b.damage = 20;
-    setInterval(() => {
-      var reset = false;
-      if (!b.lefttower && b.x < mid_x-63) {b.x=b.ox;b.y=b.oy;reset=true;}
-      if (!b.lefttower && b.x >= mid_x-63) {b.x -= chg_x;b.y += chg_y}
-      if (b.lefttower && b.x > mid_x+63) {b.x=b.ox;b.y=b.oy;reset=true;}
-      if (b.lefttower && b.x <= mid_x+63) {b.x += chg_x;b.y += chg_y}
-      if ((reset||b.reset) && window.enemy.recentHits.includes(b.idx)) {
-          if (b.reset)console.log("b reset");
-          b.reset=false;
-          b.x=b.ox;
-          b.y=b.oy;
-          for (var i=0;i<window.enemy.recentHits.length;i++) {
-              if (window.enemy.recentHits[i]==b.idx) {
-                  window.enemy.recentHits[i]=-1;
-              }
-          }
-      }//TODO:clear out recent hits array at end of wave
-      /*if (b.x > mid_x - 60) {
+    if (!b.lefttower && b.x >= mid_x - 63) {
+      b.x -= chg_x;
+      b.y += chg_y;
+    }
+    if (b.lefttower && b.x > mid_x + 63) {
+      b.x = b.ox;
+      b.y = b.oy;
+      reset = true;
+    }
+    if (b.lefttower && b.x <= mid_x + 63) {
+      b.x += chg_x;
+      b.y += chg_y;
+    }
+    if ((reset || b.reset) && window.enemy.recentHits.includes(b.idx)) {
+      if (b.reset) console.log("b reset");
+      b.reset = false;
+      b.x = b.ox;
+      b.y = b.oy;
+      for (var i = 0; i < window.enemy.recentHits.length; i++) {
+        if (window.enemy.recentHits[i] == b.idx) {
+          window.enemy.recentHits[i] = -1;
+        }
+      }
+    } //TODO:clear out recent hits array at end of wave
+    /*if (b.x > mid_x - 60) {
           if (!b.lefttower && b.x < mid_x-3-60) {b.x=b.ox;b.y=b.oy}
           else {b.x -= chg_x;b.y += chg_y}
       }
       else
           if (b.x > mid_x-3) {b.x=b.ox;b.y=b.oy;}
 	  else {b.x += chg_x;b.y += chg_y}*/
-      b.style.left = b.x + "px";
-      b.style.top = b.y + "px";
-    }, 10);
+    b.style.left = b.x + "px";
+    b.style.top = b.y + "px";
+  }, 10);
 }
 function create_tower(ascii_char, attrs, tss /*tower set string*/) {
-  var tower_types = ['blaster','thermal','phaser','particle','satellite','quantum'];
+  var tower_types = [
+    "blaster",
+    "thermal",
+    "phaser",
+    "particle",
+    "satellite",
+    "quantum",
+  ];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
   //var type = "fire-tower";
   var tow = document.createElement("div");
-  var span=document.createElement("span");
-  span.style.borderRadius="50%";
-  span.style.boxShadow="0px 2px gray";
+  var span = document.createElement("span");
+  span.style.borderRadius = "50%";
+  span.style.boxShadow = "0px 2px gray";
   tow.appendChild(span);
   //var li=tss.split(ascii_char).length - 1 - 1;//level index
   //if (li>2)li=2;
-  span.setAttribute("one","");//levels[li],"");
+  span.setAttribute("one", ""); //levels[li],"");
   if (tss.length == 1) {
-    span.style.width="75px";
-    span.style.height="65px";
-    span.innerHTML = "&nbsp;";//"{" + ascii_char + "}";
+    span.style.width = "65px";
+    span.style.height = "65px";
+    span.style.backgroundImage = "url('assets/images/sat.png')";
+    span.style.backgroundRepeat = "no-repeat";
+    span.style.backgroundPosition = "14px 11px";
+    span.innerHTML = "&nbsp;"; //"{" + ascii_char + "}";
     tow.style.zIndex = "1";
-    tow.mini=false;
+    tow.mini = false;
   } else {
-    tow.mini=true;
-    span.style.width="25px";
-    span.style.height="15px";
+    tow.mini = true;
+    span.style.width = "15px";
+    span.style.height = "15px";
     fs = 14;
-    span.innerHTML = "&nbsp;";//ascii_char;
+    span.innerHTML = "&nbsp;"; //ascii_char;
     tow.style.textShadow = "gray 1px 1px";
     var coord = coords[tss.length - 1];
-    var l = coord[0] == 0 ? 15 : coord[0] * 0.40;
+    var l = coord[0] == 0 ? 15 : coord[0] * 0.4;
     var t = coord[1] == 0 ? 26 : coord[1] * 0.56;
     tow.style.left = l + "px";
     tow.style.top = t + "px";
@@ -108,8 +161,9 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   }
   tow.style.fontSize = fs + "px";
   tow.rot = 0;
-  var typidx = parseInt(attrs[5] +""+ attrs[6] +""+ attrs[7], 2) % tower_types.length;
-  tow.setAttribute(tower_types[typidx],"");
+  var typidx =
+    parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) % tower_types.length;
+  tow.setAttribute(tower_types[typidx], "");
   /*var special_tower = attrs[7] == "1";
   if (special_tower) {
     var frost_tower = attrs[6] == "1" || attrs[5] == "1";

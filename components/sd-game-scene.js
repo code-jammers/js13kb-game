@@ -278,7 +278,7 @@ t.parentNode//td
         enemy.width = 30;
         enemy.height = 30;
         bot.style.borderRadius = "50%";
-        bot.style.backgroundColor = "rgba(0,0,0,0.3)"; //"red";
+        // bot.style.backgroundColor = "rgba(0,0,0,0.3)"; //"red";
         top.origBg = "transparent";
         top.currBg = top.origBg;
         top.style.backgroundColor = top.origBg;
@@ -305,7 +305,7 @@ t.parentNode//td
             /*if (top.currBg!="red") top.currBg = "red";
             else top.currBg = top.origBg;*/
             //instead of toggling just keep it red during the blnkIt time frame:
-            top.currBg = "red";
+            // top.currBg = "red";
           } else top.currBg = top.origBg;
           top.style.backgroundColor = top.currBg;
           if (
