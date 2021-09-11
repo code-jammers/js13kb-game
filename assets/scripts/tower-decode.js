@@ -127,14 +127,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   }, 10);
 }
 function create_tower(ascii_char, attrs, tss /*tower set string*/) {
-  var tower_types = [
-    "blaster",
-    "thermal",
-    "phaser",
-    "particle",
-    "satellite",
-    "quantum",
-  ];
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
   //var type = "fire-tower";
@@ -175,8 +167,9 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
   tow.style.fontSize = fs + "px";
   tow.rot = 0;
   var typidx =
-    parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) % tower_types.length;
-  tow.setAttribute(tower_types[typidx], "");
+    parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) %
+    GAME_DATA.tower_types.length;
+  tow.setAttribute(GAME_DATA.tower_types[typidx], "");
   /*var special_tower = attrs[7] == "1";
   if (special_tower) {
     var frost_tower = attrs[6] == "1" || attrs[5] == "1";

@@ -130,6 +130,20 @@ class GameScene extends HTMLElement {
         menu.setAttribute("menu", true);
         GAME_DATA.towers.split("").forEach((tower) => {
           const menuItem = document.createElement("div");
+          var decodedTower = tower_decode(tower);
+          var typidx =
+            parseInt(
+              decodedTower[5] + "" + decodedTower[6] + "" + decodedTower[7],
+              2
+            ) % GAME_DATA.tower_types.length;
+          var type = GAME_DATA.tower_types[typidx];
+
+          menuItem.setAttribute(type, "");
+          menuItem.setAttribute("legend", "");
+          menuItem.innerHTML = `<span three></span> ${td.getAttribute(
+            "cost"
+          )}`;
+          menuItem.setAttribute("menu-item", true);
           menuItem.addEventListener("click", (e) => {
             e.stopPropagation();
             const amt = this.money - Number(td.getAttribute("cost"));
@@ -183,8 +197,6 @@ class GameScene extends HTMLElement {
             }, 10);
             //}, 2000);
           });
-          menuItem.innerText = `${tower} tower ${td.getAttribute("cost")}`;
-          menuItem.setAttribute("menu-item", true);
           menu.appendChild(menuItem);
         });
         el.appendChild(menu);

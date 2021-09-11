@@ -17,6 +17,14 @@ GAME_DATA = {
   bullets: [],
   allScenes : [...ALL_SCENES],
   currentScene: LOADING_SCENE,
-  gameOver: false
+  gameOver: false,
+  tower_types : [
+    "blaster",
+    "thermal",
+    "phaser",
+    "particle",
+    "satellite",
+    "quantum",
+  ]
 };
 
