@@ -4,30 +4,32 @@ function tower_decode(tower_char) {
   return bit_str;
 }
 function create_bullet(tow, chg_x = 1, chg_y = 0) {
-  console.log(tow.getAttribute("blaster"));
   var b = document.createElement("div");
   GAME_DATA.bullets.push(b);
-  b.idx = GAME_DATA.bullets.length - 1;
-  b.innerHTML = "&nbsp;";
-  //console.log();
-  //b.style.color = tow.style.color;
-  b.style.width = "10px";
-  if (tow.mini) b.style.width = "5px";
-  b.style.height = "20px";
-  if (tow.mini) b.style.height = "10px";
-  //b.style.backgroundColor="red";
-  b.style.borderRadius = "50%";
-  b.style.fontSize = tow.style.fontSize;
-  b.style.position = "absolute";
-  b.style.zIndex = "0";
 
   // bullet defaults
+  b.idx = GAME_DATA.bullets.length - 1;
+  b.style.position = "absolute";
+  b.style.zIndex = "0";
   b.damage = 20;
+  b.style.width = "10px";
+  b.style.height = "20px";
+
+  // mini bullet defaults
+  if (tow.mini) {
+    b.style.width = "5px";
+    b.style.height = "10px";
+  }
 
   if (tow.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
     // bullet rotation (ai aim assist)
-    b.style.width = "50px";
+    b.style.width = "6px";
+    b.style.height = "3px";
+    b.style.border = "1px solid rgb(248, 190, 28)";
+    b.style.background = "rgba(248, 190, 28, .5)";
+    b.damage = 10;
+    b.setback = 12;
   }
 
   if (tow.getAttribute("phaser") !== null) {
@@ -37,6 +39,7 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.border = "1px solid rgb(132, 255, 255)";
     b.style.background = "rgba(132, 255, 255, .5)";
     b.style.borderRadius = "0px";
+    b.style.filter = "blur(4px)";
     b.damage = 5;
     b.setback = 8;
   }
@@ -47,7 +50,17 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.height = "50px";
     b.style.border = "1px solid rgb(255, 73, 49)";
     b.style.filter = "blur(2px)";
-    b.style.background = "rgba(255, 73, 49, .3)";
+    b.style.background = "rgba(255, 73, 49, .2)";
+    b.style.borderRadius = "50%";
+    b.damage = 3;
+    b.setback = 8;
+  }
+
+  if (tow.getAttribute("blaster") !== null) {
+    b.style.width = "6px";
+    b.style.height = "3px";
+    b.style.border = "1px solid rgb(255, 255, 255)";
+    b.style.background = "rgba(255, 255, 255, .3)";
     b.damage = 3;
     b.setback = 8;
   }
