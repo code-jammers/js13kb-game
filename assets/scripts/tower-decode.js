@@ -48,7 +48,11 @@ function create_bullet(tow, chg_x=1, chg_y=0) {
       if (!b.lefttower && b.x >= mid_x-63) {b.x -= chg_x;b.y += chg_y}
       if (b.lefttower && b.x > mid_x+63) {b.x=b.ox;b.y=b.oy;reset=true;}
       if (b.lefttower && b.x <= mid_x+63) {b.x += chg_x;b.y += chg_y}
-      if (reset && window.enemy.recentHits.includes(b.idx)) {
+      if ((reset||b.reset) && window.enemy.recentHits.includes(b.idx)) {
+          if (b.reset)console.log("b reset");
+          b.reset=false;
+          b.x=b.ox;
+          b.y=b.oy;
           for (var i=0;i<window.enemy.recentHits.length;i++) {
               if (window.enemy.recentHits[i]==b.idx) {
                   window.enemy.recentHits[i]=-1;

@@ -267,6 +267,8 @@ t.parentNode//td
         enemy.style.color="green";
 	enemy.style.height="30px";
 	enemy.style.width="30px";
+        enemy.width=30;
+        enemy.height=30;
 	bot.style.borderRadius="50%";
         bot.style.backgroundColor="rgba(0,0,0,0.3)";//"red";
         top.origBg="lightblue";
@@ -282,6 +284,7 @@ t.parentNode//td
 	enemy.style.left=(brect.width/2.0-15)+"px";
 	enemy.style.top="40px";
         enemy.y=40;
+        enemy.x=(brect.width/2.0-15);
         enemy.recentHits = [];
 	document.body.appendChild(enemy);
 	// game loop
@@ -300,6 +303,7 @@ t.parentNode//td
           if (enemy.y > document.body.getBoundingClientRect().height || enemy.health<=0){
               GAME_DATA.ei += 1;
               enemy.y=40;
+              enemy.recentHits=[];
               if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){
                 //game over
                 clearInterval(gmLpId);
@@ -309,6 +313,63 @@ t.parentNode//td
               }
               enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
 	  }
+
+          //draw henchmen ships
+          function drawHenchmenShips() {
+              function createHench(){
+                  var h = document.createElement("div");
+                  h.innerHTML=" ";
+                  h.style.position="absolute";
+                  h.style.borderRadius="50%";
+                  h.style.width="12px";
+                  h.style.height="12px";
+                  h.width=12;h.height=12;
+                  h.style.border="1px solid white";
+                  document.body.appendChild(h);
+                  h.deg=0;//0-360
+                  return h;
+              }
+              function renderHench(h, i, active) {
+                  if (enemy.y<=50)h.dead=null;
+                  if (active && h.dead==null) h.style.visibility="visible"; else h.style.visibility="hidden";
+                  var offsets = [[-15,0],[-15,-15],[0,-15],[15,-15],[15,0],[15,15],[0,15],[-15,15]];
+                  var ai=i;// adjusted-i
+                  if (i>4) {
+                      var moves=h.deg%360;
+                      h.deg = moves + 0.07;
+                      moves = Math.floor(moves);
+                      while (moves > 0) {
+                          ai = (ai+1)%offsets.length;
+                          moves -= 1;
+                      }
+                  }
+                  var xs = offsets[ai][0] >= 0 ? 1 : -1 ;//x-sign
+                  var ys = offsets[ai][1] >= 0 ? 1 : -1 ;//y-sign
+                  var cxo = (xs*(enemy.width/2.0))+(xs*(h.width/2.0));//characters x offsets
+                  var cyo = (ys*(enemy.height/2.0))+(ys*(h.height/2.0));//characters y offsets
+                  var x = enemy.x+cxo+xs*offsets[ai][0];
+                  var y = enemy.y+cyo+ys*offsets[ai][1];
+                  h.x=x;h.y=y;
+                  h.style.left=x +"px"; h.style.top=y+"px";
+                  h.style.backgroundColor=(i<4)?"red":"rgba(12, 160, 218, 1)";
+              }
+              var bits=tower_decode(GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei]);
+              var orbHenchCnt=0;
+              var stcHenchCnt=0;
+              for (var i=0;i<4;i++){if (bits[i]=='1'){orbHenchCnt+=1;}}
+              for (var i=4;i<8;i++){if (bits[i]=='1'){stcHenchCnt+=1;}}
+              if (window.stcHench==null)window.stcHench=[];
+              if (window.orbHench==null)window.orbHench=[];
+              while (window.stcHench.length<4) {window.stcHench.push(createHench())}
+              while (window.orbHench.length<4) {window.orbHench.push(createHench())}
+              for (var i=0;i<8;i++) {
+                  var h=i<4?window.stcHench[i]:window.orbHench[(i%4)];
+                  var active=i<4?stcHenchCnt>=i+1:orbHenchCnt>=(i%4)+1;
+                  renderHench(h, i, active);
+              }
+          }
+          drawHenchmenShips();
+
           if (enemy.health<50) enemy.style.color="red";
           else enemy.style.color="green";
 
@@ -323,6 +384,29 @@ t.parentNode//td
               var mpy=brect.top+(brect.height/2);
               var hpad=4;//16;//horiz pad
               var vpad=4;//18;//vert pad
+
+              for (var j=0;j<orbHench.length;j++) {
+                  var h = orbHench[j]; if (h.dead)continue;
+                  var bmx=brect.left+(brect.width/2.0);//bullet mid x
+                  var bmy=brect.top+(brect.height/2.0);//bullet mid y
+                  //console.log (bmx,bmy,h.x,h.y);asdfjk;
+	          if ((bmx-hpad>h.x&&bmx<h.x+hpad+h.width)&&(bmy>h.y-vpad&&bmy<h.y+h.height+vpad)) {
+                      removeidx=i;
+                      h.dead={};
+                      break;
+                  }
+              }
+              for (var j=0;j<stcHench.length;j++) {
+                  var h = stcHench[j];if (h.dead)continue;
+                  var bmx=brect.left+(brect.width/2.0);//bullet mid x
+                  var bmy=brect.top+(brect.height/2.0);//bullet mid y
+	          if (bmx>h.x&&bmx<h.x+h.width&&bmy>h.y&&bmy<h.y+h.height) {
+                      removeidx=i;
+                      h.dead={};
+                      break;
+                  }
+              }
+              if (removeidx>-1){break;b.reset=true;};
               if (
                 mpx+hpad>=srect.left && mpx-hpad<=srect.left+srect.width
                 && mpy+vpad>=srect.top && mpy-vpad<=srect.top+srect.height
@@ -335,7 +419,7 @@ t.parentNode//td
                   if (enemy.recentHits.includes(i)) continue;
                   if (b.phase) {enemy.y -= 8;}
 	          enemy.health -= b.damage;//20;
-                  removeidx=i;
+                  removeidx=i;b.reset=true;
                   //hit
                   enemy.lastHitMs=GAME_DATA.waveTimeMs;
                   break;
