@@ -17,5 +17,6 @@ GAME_DATA = {
   bullets: [],
   allScenes : [...ALL_SCENES],
   currentScene: LOADING_SCENE,
+  gameOver: false
 };
 

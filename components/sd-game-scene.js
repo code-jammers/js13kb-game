@@ -56,6 +56,20 @@ t2.innerHTML = html`
 
 class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
+    var skipToWave=new URL(location.href).searchParams.get("wave");
+    if (skipToWave!=null)GAME_DATA.wave = parseInt(skipToWave);
+    var waveNotification = document.createElement("a");
+    waveNotification.innerHTML = "WAVE "+(GAME_DATA.wave+1);
+    waveNotification.style.fontSize="88px";
+    waveNotification.style.color = "green";
+    waveNotification.style.zIndex = "1000000";
+    waveNotification.style.width="100%";
+    waveNotification.style.position="absolute";
+    waveNotification.style.left="0px";
+    waveNotification.style.top="40px";
+    waveNotification.style.textAlign="center";
+    document.body.appendChild(waveNotification);
+    setTimeout(function(){waveNotification.remove();},6000);
     const gc = ctx.shadowRoot.querySelector(query);
     var tbl = document.createElement("table");
 
@@ -275,6 +289,7 @@ t.parentNode//td
         var blnkIt = 15;//blink iterations
         enemy.lastHitMs=-1 - (gmLpIntMs*blnkIt);
 	setInterval(()=> {
+          if (GAME_DATA.gameOver)return;
           if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - (gmLpIntMs*blnkIt)) {
             /*if (top.currBg!="red") top.currBg = "red";
             else top.currBg = top.origBg;*/
@@ -285,7 +300,12 @@ t.parentNode//td
           if (enemy.y > document.body.getBoundingClientRect().height || enemy.health<=0){
               GAME_DATA.ei += 1;
               enemy.y=40;
-              if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){console.log("game over");document.location.href="";/*game over*/}
+              if (GAME_DATA.ei>=GAME_DATA.waves[GAME_DATA.wave].length){
+                //game over
+                GAME_DATA.gameOver=true;
+                document.location.href="?wave="+(GAME_DATA.wave+1%GAME_DATA.waves.length);
+                return;
+              }
               enemy.health = GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
 	  }
           if (enemy.health<50) enemy.style.color="red";
