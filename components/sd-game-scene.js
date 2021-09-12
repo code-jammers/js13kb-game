@@ -23,46 +23,7 @@ getTowerType = (tower) => {
 };
 
 t2.innerHTML = html`
-  <link href="components/sd-game-scene.css" rel="stylesheet" />
-  <t-b>
-    <div legend>
-      <div
-        blaster
-        title="Single target turret. Standard space defense engineer issue."
-      >
-        Blaster 1<span one></span> 2<span two></span> 3<span three></span>
-      </div>
-      <div
-        thermal
-        title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies."
-      >
-        Thermal Detonator 1<span one></span> 2<span two></span> 3<span
-          three
-        ></span>
-      </div>
-      <div
-        phaser
-        title="Lazer turret that blasts enemies in a line and disintegrates them."
-      >
-        Phaser 1<span one></span> 2<span two></span> 3<span three></span>
-      </div>
-      <div
-        quantum
-        title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."
-      >
-        Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span>
-      </div>
-    </div>
-    <div money></div>
-  </t-b>
-  <s-c>
-    <l-g></l-g>
-    <m-g>
-      <r-w></r-w>
-      <s-p></s-p>
-    </m-g>
-    <r-g></r-g>
-  </s-c>
+<link href="components/sd-game-scene.css" rel="stylesheet" /><t-b><div legend><div blaster title="Single target turret. Standard space defense engineer issue."> Blaster 1<span one></span> 2<span two></span> 3<span three></span></div><div thermal title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies."> Thermal Detonator 1<span one></span> 2<span two></span> 3<span   three ></span></div><div phaser title="Lazer turret that blasts enemies in a line and disintegrates them."> Phaser 1<span one></span> 2<span two></span> 3<span three></span></div><div quantum title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."> Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span></div></div><div money></div></t-b><s-c><l-g></l-g><m-g><r-w></r-w><s-p></s-p></m-g><r-g></r-g></s-c>
 `;
 
 class GameScene extends HTMLElement {
