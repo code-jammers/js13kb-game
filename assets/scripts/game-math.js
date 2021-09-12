@@ -1,12 +1,5 @@
 function inside_rect(ir/*inside rect*/,or/*outside rect*/) {
-    /*inside rect:
-     A---B
-     |   |
-     C---D
-    */
     function inside(x,y) {
-        //if(or.left==null||or.top==null||or.width==null||or.height==null)console.log("wtf");
-        //if(ir.left==null||ir.top==null||ir.width==null||ir.height==null)console.log("wtf");
         return x > or.left && x < or.left+or.width
         && y>or.top&&y<or.top+or.height;
     }
@@ -23,16 +16,6 @@ function inside_rect(ir/*inside rect*/,or/*outside rect*/) {
         ) || (
             y_within && x_surrounds
     );
-/*
- ___
- \  \
---------
-|_\  \_|
-   \__\
-
-*/
-    //return x1>or.left && x2.left+x2.width<or.left+or.width
-    
 }
 function rects_collide(r1,r2) {
     return inside_rect(r1,r2)||inside_rect(r2,r1);

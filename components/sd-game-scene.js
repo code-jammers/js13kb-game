@@ -437,15 +437,6 @@ t.parentNode//td
                 [-15, 15],
               ];
               var ai = i; // adjusted-i
-              /*if (i > 4) {
-                var moves = h.deg % 360;
-                h.deg = moves + 0.07;
-                moves = Math.floor(moves);
-                while (moves > 0) {
-                  ai = (ai + 1) % offsets.length;
-                  moves -= 1;
-                }
-              }*/
               var xs = offsets[ai][0] >= 0 ? 1 : -1; //x-sign
               var ys = offsets[ai][1] >= 0 ? 1 : -1; //y-sign
               var cxo = xs * (enemy.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
@@ -456,7 +447,6 @@ t.parentNode//td
               h.y = y;
               h.style.left = x + "px";
               h.style.top = y + "px";
-              //h.style.backgroundColor = i < 4 ? "red" : "rgba(12, 160, 218, 1)";
             }
             var bits = tower_decode(
               GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei]
@@ -511,8 +501,6 @@ t.parentNode//td
           for (var i = 0; i < GAME_DATA.bullets.length; i++) {
             var b = GAME_DATA.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
-            /*debug:*/
-                //console.log(brect);
             var srect = enemy.getBoundingClientRect(); //ship rect
             var mpx = brect.left + brect.width / 2; //midpoint x
             var mpy = brect.top + brect.height / 2;
@@ -524,14 +512,8 @@ t.parentNode//td
               if (h.dead) continue;
               var bmx = brect.left + brect.width / 2.0; //bullet mid x
               var bmy = brect.top + brect.height / 2.0; //bullet mid y
-              //console.log (bmx,bmy,h.x,h.y);asdfjk;
-              //corner check
               if (
-                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)/*
-                bmx - hpad > h.x &&
-                bmx < h.x + hpad + h.width &&
-                bmy > h.y - vpad &&
-                bmy < h.y + h.height + vpad*/
+                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
               ) {
                 removeidx = i;
                 h.dead = true;
@@ -544,11 +526,7 @@ t.parentNode//td
               var bmx = brect.left + brect.width / 2.0; //bullet mid x
               var bmy = brect.top + brect.height / 2.0; //bullet mid y
               if (
-                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)/*
-                bmx > h.x &&
-                bmx < h.x + h.width &&
-                bmy > h.y &&
-                bmy < h.y + h.height*/
+                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
               ) {
                 removeidx = i;
                 h.dead = true;
@@ -561,23 +539,13 @@ t.parentNode//td
               break;
             }
             if (rects_collide(brect,srect)
-              /*mpx + hpad >= srect.left &&
-              mpx - hpad <= srect.left + srect.width &&
-              mpy + vpad >= srect.top &&
-              mpy - vpad <= srect.top + srect.height*/
-              /*((brect.left > srect.left && brect.left<srect.left+srect.width)
-                 ||(brect.left+brect.width < srect.left+srect.width && brect.left+brect.width>srect.left))
-                && ((brect.top > srect.top && brect.top<srect.top+srect.height)
-                ||(brect.top+brect.height < srect.top+srect.height && brect.top+brect.height>srect.top))*/ //todo:for better accuracy try instead to check if brect midpoint is within srect
             ) {
               if (enemy.recentHits.includes(i)) continue;
               if (b.phase) {
                 enemy.y -= 8;
               }
               enemy.health -= b.damage; //20;
-              removeidx = i;//console.log("HITTWO");
-              //b.style.visibility="hidden";setTimeout(function(){b.style.visibility="visible";},400);console.log(b);
-              //b.reset = true; b.x=b.ox;b.y=b.oy;b.style.left=b.x+"px";b.style.top=b.y+"px";
+              removeidx = i;
               //hit
               enemy.lastHitMs = GAME_DATA.waveTimeMs;
               if (b.slow != null) {
@@ -589,13 +557,7 @@ t.parentNode//td
           if (removeidx > -1 && !enemy.recentHits.includes(removeidx)) {
             enemy.recentHits.push(removeidx);
           }
-          /*          enemy.recentHits = removeidx;
-          setTimeout(function(){enemy.recentHit=-1},1200);*/
-          /*var removed = GAME_DATA.bullets[removeidx];
-          if (removeidx > -1) GAME_DATA.bullets.splice(removeidx,1);*/
           if (enemy.health < 0) enemy.health = 0;
-          // mid.innerHTML = enemy.health;
-          /*setTimeout(function(){GAME_DATA.bullets.push(removed)},1000);*/
           GAME_DATA.waveTimeMs += gmLpIntMs;
         }, gmLpIntMs);
       }, 1000);
