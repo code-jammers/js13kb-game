@@ -114,6 +114,13 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
       b.x += chg_x;
       b.y += chg_y;
     }
+    if (b.reset) {b.reset = false;
+      b.x = b.ox;
+      b.y = b.oy;
+    b.style.left = b.x + "px";
+    b.style.top = b.y + "px";
+    console.log("HIIIIT");
+    }
     if ((reset || b.reset) && window.enemy.recentHits.includes(b.idx)) {
       if (b.reset) console.log("b reset");
       b.reset = false;
