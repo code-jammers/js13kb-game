@@ -41,7 +41,8 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.borderRadius = "0px";
     b.style.filter = "blur(4px)";
     b.damage = 5;
-    b.setback = 8;
+    b.setback = 8;//todo:check if nothing uses then remove this
+    b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
   if (tow.getAttribute("thermal") !== null) {

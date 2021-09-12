@@ -288,6 +288,8 @@ t.parentNode//td
         bot.style.display = "block";
 
         /*var */ window.enemy = document.createElement("div");
+        enemy.velocity = 1;// 1px per game loop iteration
+        enemy.velocityTrack = 1.0;
         enemy.health =
           GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
         top.style.backgroundImage = "url(assets/images/rocket.png)";
@@ -448,7 +450,9 @@ t.parentNode//td
           mid.style.width = enemy.health / 2;
           mid.style.right = `${enemy.health / 2 - 42}`;
 
-          enemy.y += 1;
+          enemy.y += Math.min(Math.floor(enemy.velocityTrack), 1);//1;
+          enemy.velocityTrack += enemy.velocityTrack;
+          enemy.velocityTrack = Math.min(enemy.velocityTrack,1);
           enemy.style.top = enemy.y + "px";
           var removeidx = -1;
           for (var i = 0; i < GAME_DATA.bullets.length; i++) {
@@ -516,6 +520,7 @@ t.parentNode//td
               b.reset = true;
               //hit
               enemy.lastHitMs = GAME_DATA.waveTimeMs;
+              if (b.slow!=null){enemy.velocityTrack=b.slow;}
               break;
             }
           }
