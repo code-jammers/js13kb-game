@@ -2,10 +2,10 @@ var t2 = document.createElement("template");
 
 setNotification = (text, timeout) => {
   try {
-    var n = document.createElement("a");
+    var n = dcr("a");
     n.id="not";
     n.innerHTML = text;
-    document.body.appendChild(n);
+    dba(n);
     setTimeout(() => {
       n.remove();
     }, timeout);
@@ -95,9 +95,9 @@ class GameScene extends HTMLElement {
     tbl.style.top = leadY / 2 + "px";
     tbl.style.bottom = leadY / 2 + "px";
     for (var i = 0; i < ch / 100; i++) {
-      var tr = document.createElement("tr");
+      var tr = dcr("tr",document);
       for (var j = 0; j < cw / 100; j++) {
-        var td = document.createElement("td");
+        var td = dcr("td",document);
         td.setAttribute(
           "cost",
           side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
@@ -123,7 +123,7 @@ class GameScene extends HTMLElement {
       td.addEventListener("click", (e) => {
         this.closeMenu();
         const el = e.srcElement;
-        const menu = document.createElement("div");
+        const menu = dcr("div");
         menu.setAttribute("menu", true);
         console.log(td?.towers);
         let towers = GAME_DATA.towers.split("");
@@ -151,7 +151,7 @@ class GameScene extends HTMLElement {
         }
 
         towers.forEach((tower) => {
-          const menuItem = document.createElement("div");
+          const menuItem = dcr("div");
           var type = getTowerType(tower);
           menuItem.setAttribute(type, "");
           menuItem.setAttribute("legend", "");
@@ -205,7 +205,7 @@ class GameScene extends HTMLElement {
               return;
             } else td.towers += tower;
 
-            var div = create_tower(tower_decode(tower), td.towers); //document.createElement("div");
+            var div = create_tower(tower_decode(tower), td.towers); //dcr("div");
             div.towerId = tower;
             div.classList.add("tower");
             td.appendChild(div);
@@ -217,7 +217,7 @@ class GameScene extends HTMLElement {
 
         if (isUpgrading) {
           const cost = Number(td.getAttribute("cost")) - 100;
-          const menuItem = document.createElement("div");
+          const menuItem = dcr("div");
           menuItem.setAttribute("blaster", "");
           menuItem.setAttribute("legend", "");
           menuItem.innerHTML = `<span sell></span> sell ${cost}`;
@@ -277,48 +277,48 @@ class GameScene extends HTMLElement {
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
       this.setMoney(10000);
 
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
-        //draw enemy ship/ufo
-        var top = document.createElement("div");
+        //draw ene ship/ufo
+        var top = dcr("div");
         top.id="sst";
 
-        var mid = document.createElement("div");
+        var mid = dcr("div");
         mid.id="ssm";
 
-        var bot = document.createElement("div");
+        var bot = dcr("div");
         bot.id="ssb";
 
-        /*var */ window.enemy = document.createElement("div");
-        enemy.velocity = 1; // 1px per game loop iteration
-        enemy.velocityTrack = 1.0;
-        enemy.health =
+        /*var */ window.ene = dcr("div");
+        ene.velocity = 1; // 1px per game loop iteration
+        ene.velocityTrack = 1.0;
+        ene.health =
           GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
-        enemy.id="ene";
-        enemy.width = 30;
-        enemy.height = 30;
+        ene.id="ene";
+        ene.width = 30;
+        ene.height = 30;
         mid.style.backgroundColor = "white"; //"green";
         top.appendChild(mid);
         mid.appendChild(bot);
-        enemy.appendChild(top);
+        ene.appendChild(top);
         var brect = document.body.getBoundingClientRect();
-        enemy.style.left = brect.width / 2.0 - 15 + "px";
-        enemy.style.top = "40px";
-        enemy.y = 40;
-        enemy.x = brect.width / 2.0 - 15;
-        enemy.recentHits = [];
-        document.body.appendChild(enemy);
+        ene.style.left = brect.width / 2.0 - 15 + "px";
+        ene.style.top = "40px";
+        ene.y = 40;
+        ene.x = brect.width / 2.0 - 15;
+        ene.recentHits = [];
+        dba(ene);
         // game loop
         var gmLpId = setInterval(() => {
           if (GAME_DATA.gameOver) return;
           if (
-            enemy.y > document.body.getBoundingClientRect().height ||
-            enemy.health <= 0
+            ene.y > document.body.getBoundingClientRect().height ||
+            ene.health <= 0
           ) {
             GAME_DATA.ei += 1;
-            enemy.y = 40;
-            enemy.recentHits = [];
+            ene.y = 40;
+            ene.recentHits = [];
             if (GAME_DATA.ei >= GAME_DATA.waves[GAME_DATA.wave].length) {
               //game over
               clearInterval(gmLpId);
@@ -327,27 +327,27 @@ class GameScene extends HTMLElement {
                 "?wave=" + ((GAME_DATA.wave + 1) % GAME_DATA.waves.length);
               return;
             }
-            enemy.health =
+            ene.health =
               GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
           }
 
           //draw henchmen ships
           function drawHenchmenShips() {
             function createHench() {
-              var h = document.createElement("div");
+              var h = dcr("div");
               h.classList.add("hen");
-              var img = document.createElement("img");
+              var img = dcr("img");
               img.src = "assets/images/rocket.png";
               img.classList.add("hei");
               h.appendChild(img);
               h.width = 12;
               h.height = 12;
-              document.body.appendChild(h);
+              dba(h);
               h.deg = 0; //0-360
               return h;
             }
             function renderHench(h, i, active) {
-              if (enemy.y <= 50) h.dead = null;
+              if (ene.y <= 50) h.dead = null;
               if (active && h.dead == null) h.style.visibility = "visible";
               else {
                 h.style.visibility = "hidden";
@@ -365,10 +365,10 @@ class GameScene extends HTMLElement {
               ];
               var xs = offsets[i][0] >= 0 ? 1 : -1; //x-sign
               var ys = offsets[i][1] >= 0 ? 1 : -1; //y-sign
-              var cxo = xs * (enemy.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
-              var cyo = ys * (enemy.height / 2.0) + ys * (h.height / 2.0); //characters y offsets
-              var x = enemy.x + cxo + xs * offsets[i][0];
-              var y = enemy.y + cyo + ys * offsets[i][1];
+              var cxo = xs * (ene.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
+              var cyo = ys * (ene.height / 2.0) + ys * (h.height / 2.0); //characters y offsets
+              var x = ene.x + cxo + xs * offsets[i][0];
+              var y = ene.y + cyo + ys * offsets[i][1];
               h.x = x;
               h.y = y;
               h.style.left = x + "px";
@@ -391,14 +391,14 @@ class GameScene extends HTMLElement {
             }
             if (window.stcHench == null) window.stcHench = [];
             if (window.orbHench == null) window.orbHench = [];
-            while (window.stcHench.length < 4) {
-              window.stcHench.push(createHench());
+            while (stcHench.length < 4) {
+              stcHench.push(createHench());
             }
-            while (window.orbHench.length < 4) {
-              window.orbHench.push(createHench());
+            while (orbHench.length < 4) {
+              orbHench.push(createHench());
             }
             for (var i = 0; i < 8; i++) {
-              var h = i < 4 ? window.stcHench[i] : window.orbHench[i % 4];
+              var h = i < 4 ? stcHench[i] : orbHench[i % 4];
               var active =
                 i < 4 ? stcHenchCnt >= i + 1 : orbHenchCnt >= (i % 4) + 1;
               renderHench(h, i, active);
@@ -406,28 +406,28 @@ class GameScene extends HTMLElement {
           }
           drawHenchmenShips();
 
-          if (enemy.health < 50) enemy.style.color = "red";
-          else enemy.style.color = "green";
+          if (ene.health < 50) ene.style.color = "red";
+          else ene.style.color = "green";
 
-          if (enemy.health > 80) {
+          if (ene.health > 80) {
             mid.style.backgroundColor = "green";
-          } else if (enemy.health > 50) {
+          } else if (ene.health > 50) {
             mid.style.backgroundColor = "yellow";
           } else {
             mid.style.backgroundColor = "red";
           }
-          mid.style.width = enemy.health / 2;
-          mid.style.right = `${enemy.health / 2 - 42}`;
+          mid.style.width = ene.health / 2;
+          mid.style.right = `${ene.health / 2 - 42}`;
 
-          enemy.y += Math.min(Math.floor(enemy.velocityTrack), 1); //1;
-          enemy.velocityTrack += enemy.velocityTrack;
-          enemy.velocityTrack = Math.min(enemy.velocityTrack, 1);
-          enemy.style.top = enemy.y + "px";
+          ene.y += Math.min(Math.floor(ene.velocityTrack), 1); //1;
+          ene.velocityTrack += ene.velocityTrack;
+          ene.velocityTrack = Math.min(ene.velocityTrack, 1);
+          ene.style.top = ene.y + "px";
           var removeidx = -1;
           for (var i = 0; i < GAME_DATA.bullets.length; i++) {
             var b = GAME_DATA.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
-            var srect = enemy.getBoundingClientRect(); //ship rect
+            var srect = ene.getBoundingClientRect(); //ship rect
             for (var j = 0; j < 8/*orbHench.length*/; j++) {
               var h = j<4?stcHench[j]:orbHench[j%4];
               if (h.dead) continue;
@@ -446,23 +446,23 @@ class GameScene extends HTMLElement {
             }
             if (rects_collide(brect,srect)
             ) {
-              if (enemy.recentHits.includes(i)) continue;
+              if (ene.recentHits.includes(i)) continue;
               if (b.phase) {
-                enemy.y -= 8;
+                ene.y -= 8;
               }
-              enemy.health -= b.damage; //20;
+              ene.health -= b.damage; //20;
               removeidx = i;
               //hit
               if (b.slow != null) {
-                enemy.velocityTrack = b.slow;
+                ene.velocityTrack = b.slow;
               }
               break;
             }
           }
-          if (removeidx > -1 && !enemy.recentHits.includes(removeidx)) {
-            enemy.recentHits.push(removeidx);
+          if (removeidx > -1 && !ene.recentHits.includes(removeidx)) {
+            ene.recentHits.push(removeidx);
           }
-          if (enemy.health < 0) enemy.health = 0;
+          if (ene.health < 0) ene.health = 0;
         }, 14);
       }, 1000);
     }

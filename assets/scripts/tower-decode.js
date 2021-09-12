@@ -25,7 +25,7 @@ function removeOrphanBullets() {
 }
 
 function create_bullet(tow, chg_x = 1, chg_y = 0) {
-  var b = document.createElement("div");
+  var b = dcr("div");
   b.tower = tow;
   GAME_DATA.bullets.push(b);
   // bullet defaults
@@ -88,7 +88,7 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   b.y = y;
   var tag = tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
   b.lefttower = tag.toUpperCase() == "L-G";
-  document.body.appendChild(b);
+  dba(b);
   var mid_x = document.body.getBoundingClientRect().width / 2.0;
   b.style.zIndex = "100000";
   setInterval(() => {
@@ -122,13 +122,13 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.left = b.x + "px";
     b.style.top = b.y + "px";
     }
-    if ((reset || b.reset) && window.enemy.recentHits.includes(b.idx)) {
+    if ((reset || b.reset) && ene.recentHits.includes(b.idx)) {
       b.reset = false;
       b.x = b.ox;
       b.y = b.oy;
-      for (var i = 0; i < window.enemy.recentHits.length; i++) {
-        if (window.enemy.recentHits[i] == b.idx) {
-          window.enemy.recentHits[i] = -1;
+      for (var i = 0; i < ene.recentHits.length; i++) {
+        if (ene.recentHits[i] == b.idx) {
+          ene.recentHits[i] = -1;
         }
       }
     }
@@ -139,8 +139,8 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
 function create_tower(attrs, tss /*tower set string*/) {
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
-  var tow = document.createElement("div");
-  var span = document.createElement("span");
+  var tow = dcr("div");
+  var span = dcr("span");
   span.style.borderRadius = "50%";
   tow.appendChild(span);
   span.setAttribute("one", ""); //levels[li],"");
