@@ -9,7 +9,7 @@ ALL_SCENES = [
 ];
 
 GAME_DATA = {
-  towers: "*@MODus",//"*@M0OADY",
+  towers: "*@MO",//"*@M0OADY",
   waves: ["eA$Ypeasy","m|e|d","hard{||}"],
   wave: 0,
   waveTimeMs: 0,

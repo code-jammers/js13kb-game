@@ -24,17 +24,6 @@ t2.innerHTML = html`
       >
         Phaser 1<span one></span> 2<span two></span> 3<span three></span>
       </div>
-      <div particle title="Zoom. Increases the fire rate of attached turrets.">
-        Particle Accelerator 1<span one></span> 2<span two></span> 3<span
-          three
-        ></span>
-      </div>
-      <div
-        satellite
-        title="Avanced intel gathering machine that increases the range of attached turrets."
-      >
-        Satellite 1<span one></span> 2<span two></span> 3<span three></span>
-      </div>
       <div
         quantum
         title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."
