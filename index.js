@@ -26,7 +26,7 @@ renderWebComponent = (tagname) => {
   let el = document.createElement(tagname);
   el.setAttribute("in-progress", true);
   el.style.cssText = "opacity: 0; display: block; transition: opacity .3s";
-  dba(el);
+  dba(el,document);
   setTimeout(() => {
     el.style.opacity = "1";
   }, 200);
