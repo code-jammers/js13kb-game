@@ -44,7 +44,6 @@ Promise.all(
 ).then((p) => {
   console.log(p.length, `all async web components defined`);
   setTimeout(() => {
-    // changeScene(LAUNCH_SCENE);
     changeScene(GAME_SCENE);
   }, 1000);
 });
