@@ -3,15 +3,8 @@ var t2 = document.createElement("template");
 setNotification = (text, timeout) => {
   try {
     var n = document.createElement("a");
+    n.id="not";
     n.innerHTML = text;
-    n.style.fontSize = "48px";
-    n.style.fontFamily = "system-ui";
-    n.style.color = "rgb(238, 56, 32, 1)";
-    n.style.zIndex = "1000000";
-    n.style.width = "100%";
-    n.style.position = "absolute";
-    n.style.top = "12px";
-    n.style.textAlign = "center";
     document.body.appendChild(n);
     setTimeout(() => {
       n.remove();
@@ -317,39 +310,22 @@ t.parentNode//td
         this.buildMenu();
         //draw enemy ship/ufo
         var top = document.createElement("div");
-        top.style.borderRadius = "50%";
-        top.style.width = "100%";
-        top.style.height = "100%";
+        top.id="sst";
+
         var mid = document.createElement("div");
-        mid.style.width = "100%";
-        mid.style.top = "32px";
-        mid.style.position = "relative";
-        mid.style.display = "block";
-        mid.style.height = "6px";
-        mid.style.backgroundColor = "green";
+        mid.id="ssm";
 
         var bot = document.createElement("div");
-        bot.style.width = "18px";
-        bot.style.height = "15px";
-        bot.style.bottom = "-2px";
-        bot.style.left = "6px";
-        bot.style.position = "relative";
-        bot.style.display = "block";
+        bot.id="ssb";
 
         /*var */ window.enemy = document.createElement("div");
         enemy.velocity = 1; // 1px per game loop iteration
         enemy.velocityTrack = 1.0;
         enemy.health =
           GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
-        top.style.backgroundImage = "url(assets/images/rocket.png)";
-        top.style.backgroundRepeat = "no-repeat";
-        top.style.backgroundSize = "cover";
-        top.style.transform = "rotate(180deg)";
-        enemy.style.height = "30px";
-        enemy.style.width = "30px";
+        enemy.id="ene";
         enemy.width = 30;
         enemy.height = 30;
-        bot.style.borderRadius = "50%";
         // bot.style.backgroundColor = "rgba(0,0,0,0.3)"; //"red";
         top.origBg = "transparent";
         top.currBg = top.origBg;
@@ -359,7 +335,6 @@ t.parentNode//td
         top.appendChild(mid);
         mid.appendChild(bot);
         enemy.appendChild(top);
-        enemy.style.position = "absolute";
         var brect = document.body.getBoundingClientRect();
         enemy.style.left = brect.width / 2.0 - 15 + "px";
         enemy.style.top = "40px";
@@ -373,13 +348,13 @@ t.parentNode//td
         enemy.lastHitMs = -1 - gmLpIntMs * blnkIt;
         var gmLpId = setInterval(() => {
           if (GAME_DATA.gameOver) return;
-          if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - gmLpIntMs * blnkIt) {
-            /*if (top.currBg!="red") top.currBg = "red";
-            else top.currBg = top.origBg;*/
-            //instead of toggling just keep it red during the blnkIt time frame:
-            // top.currBg = "red";
-          } else top.currBg = top.origBg;
-          top.style.backgroundColor = top.currBg;
+          // if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - gmLpIntMs * blnkIt) {
+          //   /*if (top.currBg!="red") top.currBg = "red";
+          //   else top.currBg = top.origBg;*/
+          //   //instead of toggling just keep it red during the blnkIt time frame:
+          //   // top.currBg = "red";
+          // } else top.currBg = top.origBg;
+          // top.style.backgroundColor = top.currBg;
           if (
             enemy.y > document.body.getBoundingClientRect().height ||
             enemy.health <= 0
@@ -403,21 +378,13 @@ t.parentNode//td
           function drawHenchmenShips() {
             function createHench() {
               var h = document.createElement("div");
+              h.classList.add("hen");
               var img = document.createElement("img");
               img.src = "assets/images/rocket.png";
-              img.style.width = "100%";
-              img.style.height = "100%";
-              img.style.transform = "rotate(180deg)";
+              img.classList.add("hei");
               h.appendChild(img);
-              //h.innerHTML = " ";
-              //h.src="assets/images/rocket.png";
-              h.style.position = "absolute";
-              //h.style.borderRadius = "50%";
-              h.style.width = "12px";
-              h.style.height = "12px";
               h.width = 12;
               h.height = 12;
-              //h.style.border = "1px solid white";
               document.body.appendChild(h);
               h.deg = 0; //0-360
               return h;
@@ -513,8 +480,6 @@ t.parentNode//td
             for (var j = 0; j < orbHench.length; j++) {
               var h = orbHench[j];
               if (h.dead) continue;
-              var bmx = brect.left + brect.width / 2.0; //bullet mid x
-              var bmy = brect.top + brect.height / 2.0; //bullet mid y
               if (
                 rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
               ) {
@@ -526,8 +491,6 @@ t.parentNode//td
             for (var j = 0; j < stcHench.length; j++) {
               var h = stcHench[j];
               if (h.dead) continue;
-              var bmx = brect.left + brect.width / 2.0; //bullet mid x
-              var bmy = brect.top + brect.height / 2.0; //bullet mid y
               if (
                 rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
               ) {
@@ -537,7 +500,7 @@ t.parentNode//td
               }
             }
             if (removeidx > -1) {
-              b.reset = true;console.log("HITONE");
+              b.reset = true;
               b.x=b.ox;b.y=b.oy;b.style.left=b.x+"px";b.style.top=b.y+"px";
               break;
             }
