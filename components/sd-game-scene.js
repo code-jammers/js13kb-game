@@ -246,9 +246,12 @@ class GameScene extends HTMLElement {
             e.stopPropagation();
             const amt = this.money + cost;
             this.setMoney(amt);
-            const tr = td.parentNode;
-            const table = tr.parentNode;
-            table.removeChild(tr);
+            //const tr = td.parentNode;
+            //const table = tr.parentNode;
+            td.towers="";
+            //console.log(td.children[0]);
+            td.children[0].remove();
+            //table.removeChild(tr);
             removeOrphanBullets();
             this.closeMenu();
           });

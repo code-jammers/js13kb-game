@@ -4,13 +4,26 @@ function tower_decode(tower_char) {
   return bit_str;
 }
 function removeOrphanBullets() {
+  var rmidx=-1;
   GAME_DATA.bullets.forEach((bullet, i) => {
-    console.log(bullet);
     if (!bullet.tower.isConnected) {
-      GAME_DATA.bullets.splice(i, 1);
-      document.body.removeChild(bullet);
+      rmidx=i;
     }
   });
+
+  while (rmidx>-1) {
+    var b=GAME_DATA.bullets[rmidx];
+    GAME_DATA.bullets.splice(rmidx, 1);
+    //console.log(b);
+    //console.log(b.parentNode);
+    document.body.removeChild(b);
+    rmidx=-1;
+    GAME_DATA.bullets.forEach((bullet, i) => {
+      if (!bullet.tower.isConnected) {
+        rmidx=i;
+      }
+    });
+  }
 }
 
 function create_bullet(tow, chg_x = 1, chg_y = 0) {
