@@ -458,6 +458,8 @@ t.parentNode//td
           for (var i = 0; i < GAME_DATA.bullets.length; i++) {
             var b = GAME_DATA.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
+            /*debug:*/
+                //console.log(brect);
             var srect = enemy.getBoundingClientRect(); //ship rect
             var mpx = brect.left + brect.width / 2; //midpoint x
             var mpy = brect.top + brect.height / 2;
@@ -470,14 +472,16 @@ t.parentNode//td
               var bmx = brect.left + brect.width / 2.0; //bullet mid x
               var bmy = brect.top + brect.height / 2.0; //bullet mid y
               //console.log (bmx,bmy,h.x,h.y);asdfjk;
+              //corner check
               if (
+                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)/*
                 bmx - hpad > h.x &&
                 bmx < h.x + hpad + h.width &&
                 bmy > h.y - vpad &&
-                bmy < h.y + h.height + vpad
+                bmy < h.y + h.height + vpad*/
               ) {
                 removeidx = i;
-                h.dead = {};
+                h.dead = true;
                 break;
               }
             }
@@ -487,25 +491,27 @@ t.parentNode//td
               var bmx = brect.left + brect.width / 2.0; //bullet mid x
               var bmy = brect.top + brect.height / 2.0; //bullet mid y
               if (
+                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)/*
                 bmx > h.x &&
                 bmx < h.x + h.width &&
                 bmy > h.y &&
-                bmy < h.y + h.height
+                bmy < h.y + h.height*/
               ) {
                 removeidx = i;
-                h.dead = {};
+                h.dead = true;
                 break;
               }
             }
             if (removeidx > -1) {
+              b.reset = true;console.log("HITONE");
+              b.x=b.ox;b.y=b.oy;b.style.left=b.x+"px";b.style.top=b.y+"px";
               break;
-              b.reset = true;
             }
-            if (
-              mpx + hpad >= srect.left &&
+            if (rects_collide(brect,srect)
+              /*mpx + hpad >= srect.left &&
               mpx - hpad <= srect.left + srect.width &&
               mpy + vpad >= srect.top &&
-              mpy - vpad <= srect.top + srect.height
+              mpy - vpad <= srect.top + srect.height*/
               /*((brect.left > srect.left && brect.left<srect.left+srect.width)
                  ||(brect.left+brect.width < srect.left+srect.width && brect.left+brect.width>srect.left))
                 && ((brect.top > srect.top && brect.top<srect.top+srect.height)
@@ -516,8 +522,9 @@ t.parentNode//td
                 enemy.y -= 8;
               }
               enemy.health -= b.damage; //20;
-              removeidx = i;
-              b.reset = true;
+              removeidx = i;//console.log("HITTWO");
+              //b.style.visibility="hidden";setTimeout(function(){b.style.visibility="visible";},400);console.log(b);
+              //b.reset = true; b.x=b.ox;b.y=b.oy;b.style.left=b.x+"px";b.style.top=b.y+"px";
               //hit
               enemy.lastHitMs = GAME_DATA.waveTimeMs;
               if (b.slow!=null){enemy.velocityTrack=b.slow;}
