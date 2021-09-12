@@ -33,8 +33,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   b.style.position = "absolute";
   b.style.zIndex = "0";
   b.damage = 20;
-  b.style.width = "10px";
-  b.style.height = "20px";
 
   if (tow.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
