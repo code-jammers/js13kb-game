@@ -1,5 +1,26 @@
 var t2 = document.createElement("template");
 
+setNotification = (text, timeout) => {
+  try {
+    var n = document.createElement("a");
+    n.innerHTML = text;
+    n.style.fontSize = "48px";
+    n.style.fontFamily = "system-ui";
+    n.style.color = "rgb(238, 56, 32, 1)";
+    n.style.zIndex = "1000000";
+    n.style.width = "100%";
+    n.style.position = "absolute";
+    n.style.top = "12px";
+    n.style.textAlign = "center";
+    document.body.appendChild(n);
+    setTimeout(() => {
+      n.remove();
+    }, timeout);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
   <t-b>
@@ -47,20 +68,7 @@ class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
     var skipToWave = new URL(location.href).searchParams.get("wave");
     if (skipToWave != null) GAME_DATA.wave = parseInt(skipToWave);
-    var waveNotification = document.createElement("a");
-    waveNotification.innerHTML = "WAVE " + (GAME_DATA.wave + 1);
-    waveNotification.style.fontSize = "88px";
-    waveNotification.style.color = "green";
-    waveNotification.style.zIndex = "1000000";
-    waveNotification.style.width = "100%";
-    waveNotification.style.position = "absolute";
-    waveNotification.style.left = "0px";
-    waveNotification.style.top = "40px";
-    waveNotification.style.textAlign = "center";
-    document.body.appendChild(waveNotification);
-    setTimeout(function () {
-      waveNotification.remove();
-    }, 6000);
+    setNotification(`Level ${GAME_DATA.wave + 1}`, 4000);
     const gc = ctx.shadowRoot.querySelector(query);
     var tbl = document.createElement("table");
 
@@ -129,13 +137,25 @@ class GameScene extends HTMLElement {
 
           menuItem.setAttribute(type, "");
           menuItem.setAttribute("legend", "");
-          menuItem.innerHTML = `<span three></span> ${td.getAttribute(
-            "cost"
-          )}`;
+          const tpCost = Number(td.getAttribute("cost"));
+          const cost =
+            type === "blaster"
+              ? tpCost
+              : type === "thermal"
+              ? tpCost * 1.5
+              : type === "phaser"
+              ? tpCost * 2
+              : tpCost * 2.5;
+          menuItem.innerHTML = `<span one></span> ${cost}`;
           menuItem.setAttribute("menu-item", true);
           menuItem.addEventListener("click", (e) => {
             e.stopPropagation();
-            const amt = this.money - Number(td.getAttribute("cost"));
+            if (cost > this.money) {
+              setNotification(`Insufficient Funds`, 4000);
+              this.closeMenu();
+              return;
+            };
+            const amt = this.money - cost;
             this.setMoney(amt);
             if (td.towers == null) td.towers = "";
             if (td.towers.includes(tower)) {
@@ -241,7 +261,7 @@ t.parentNode//td
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney(5000);
+      this.setMoney(10000);
 
       window.setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);

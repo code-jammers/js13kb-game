@@ -9,7 +9,7 @@ ALL_SCENES = [
 ];
 
 GAME_DATA = {
-  towers: "*@MO",//"*@M0OADY",
+  towers: "@M*O",//"*@M0OADY",
   waves: ["eA$Ypeasy","m|e|d","hard{||}"],
   wave: 0,
   waveTimeMs: 0,
@@ -22,8 +22,6 @@ GAME_DATA = {
     "blaster",
     "thermal",
     "phaser",
-    "particle",
-    "satellite",
     "quantum",
   ]
 };

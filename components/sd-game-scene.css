@@ -39,9 +39,8 @@ s-p {
   height: calc(17vh - 65px);
   width: calc(17vh - 65px);
   border-radius: 50%;
-  filter: blur(1px);
-  border: 2px solid #674423;
-  background: radial-gradient(circle at 57px 55px, #f89133, #2a1603);
+  filter: blur(5px);
+  background: #f89133a6;
 }
 
 l-g,
