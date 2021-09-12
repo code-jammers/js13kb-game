@@ -18,8 +18,8 @@ getTowerType = (tower) => {
   var decodedTower = tower_decode(tower);
   var typidx =
     parseInt(decodedTower[5] + "" + decodedTower[6] + "" + decodedTower[7], 2) %
-    GAME_DATA.tower_types.length;
-  return GAME_DATA.tower_types[typidx];
+    G.tower_types.length;
+  return G.tower_types[typidx];
 };
 
 t2.innerHTML = html`
@@ -68,8 +68,8 @@ t2.innerHTML = html`
 class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
     var skipToWave = new URL(location.href).searchParams.get("wave");
-    if (skipToWave != null) GAME_DATA.wave = parseInt(skipToWave);
-    setNotification(`Level ${GAME_DATA.wave + 1}`, 4000);
+    if (skipToWave != null) G.wave = parseInt(skipToWave);
+    setNotification(`Level ${G.wave + 1}`, 4000);
     const gc = ctx.shadowRoot.querySelector(query);
     var tbl = document.createElement("table");
 
@@ -126,7 +126,7 @@ class GameScene extends HTMLElement {
         const menu = dcr("div");
         menu.setAttribute("menu", true);
         console.log(td?.towers);
-        let towers = GAME_DATA.towers.split("");
+        let towers = G.towers.split("");
         let isUpgrading = false;
         let nextLevel =
           td.querySelector("span")?.getAttribute("one") === ""
@@ -197,8 +197,8 @@ class GameScene extends HTMLElement {
                   break;
                 }
               }
-              for (var i = 0; i < GAME_DATA.bullets.length; i++) {
-                var bu = GAME_DATA.bullets[i]; //bullet upgrade
+              for (var i = 0; i < G.bullets.length; i++) {
+                var bu = G.bullets[i]; //bullet upgrade
                 bu.damage += 5;
               }
               this.closeMenu();
@@ -294,7 +294,7 @@ class GameScene extends HTMLElement {
         ene.velocity = 1; // 1px per game loop iteration
         ene.velocityTrack = 1.0;
         ene.health =
-          GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
+          G.waves[G.wave][G.ei].charCodeAt(0);
         ene.id="ene";
         ene.width = 30;
         ene.height = 30;
@@ -311,24 +311,24 @@ class GameScene extends HTMLElement {
         dba(ene);
         // game loop
         var gmLpId = setInterval(() => {
-          if (GAME_DATA.gameOver) return;
+          if (G.gameOver) return;
           if (
             ene.y > document.body.getBoundingClientRect().height ||
             ene.health <= 0
           ) {
-            GAME_DATA.ei += 1;
+            G.ei += 1;
             ene.y = 40;
             ene.recentHits = [];
-            if (GAME_DATA.ei >= GAME_DATA.waves[GAME_DATA.wave].length) {
+            if (G.ei >= G.waves[G.wave].length) {
               //game over
               clearInterval(gmLpId);
-              GAME_DATA.gameOver = true;
+              G.gameOver = true;
               document.location.href =
-                "?wave=" + ((GAME_DATA.wave + 1) % GAME_DATA.waves.length);
+                "?wave=" + ((G.wave + 1) % G.waves.length);
               return;
             }
             ene.health =
-              GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
+              G.waves[G.wave][G.ei].charCodeAt(0);
           }
 
           //draw henchmen ships
@@ -375,7 +375,7 @@ class GameScene extends HTMLElement {
               h.style.top = y + "px";
             }
             var bits = tower_decode(
-              GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei]
+              G.waves[G.wave][G.ei]
             );
             var orbHenchCnt = 0;
             var stcHenchCnt = 0;
@@ -424,8 +424,8 @@ class GameScene extends HTMLElement {
           ene.velocityTrack = Math.min(ene.velocityTrack, 1);
           ene.style.top = ene.y + "px";
           var removeidx = -1;
-          for (var i = 0; i < GAME_DATA.bullets.length; i++) {
-            var b = GAME_DATA.bullets[i];
+          for (var i = 0; i < G.bullets.length; i++) {
+            var b = G.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
             var srect = ene.getBoundingClientRect(); //ship rect
             for (var j = 0; j < 8/*orbHench.length*/; j++) {

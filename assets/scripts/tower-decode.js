@@ -5,18 +5,18 @@ function tower_decode(tower_char) {
 }
 function removeOrphanBullets() {
   var rmidx=-1;
-  GAME_DATA.bullets.forEach((bullet, i) => {
+  G.bullets.forEach((bullet, i) => {
     if (!bullet.tower.isConnected) {
       rmidx=i;
     }
   });
 
   while (rmidx>-1) {
-    var b=GAME_DATA.bullets[rmidx];
-    GAME_DATA.bullets.splice(rmidx, 1);
+    var b=G.bullets[rmidx];
+    G.bullets.splice(rmidx, 1);
     document.body.removeChild(b);
     rmidx=-1;
-    GAME_DATA.bullets.forEach((bullet, i) => {
+    G.bullets.forEach((bullet, i) => {
       if (!bullet.tower.isConnected) {
         rmidx=i;
       }
@@ -27,9 +27,9 @@ function removeOrphanBullets() {
 function create_bullet(tow, chg_x = 1, chg_y = 0) {
   var b = dcr("div");
   b.tower = tow;
-  GAME_DATA.bullets.push(b);
+  G.bullets.push(b);
   // bullet defaults
-  b.idx = GAME_DATA.bullets.length - 1;
+  b.idx = G.bullets.length - 1;
   b.style.position = "absolute";
   b.style.zIndex = "0";
   b.damage = 20;
@@ -156,8 +156,8 @@ function create_tower(attrs, tss /*tower set string*/) {
   tow.rot = 0;
   var typidx =
     parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) %
-    GAME_DATA.tower_types.length;
-  tow.setAttribute(GAME_DATA.tower_types[typidx], "");
+    G.tower_types.length;
+  tow.setAttribute(G.tower_types[typidx], "");
   setTimeout(() => {
     //bullet
     create_bullet(tow);

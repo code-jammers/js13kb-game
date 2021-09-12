@@ -1,7 +1,7 @@
 changeScene = (scene) => {
-  cs = GAME_DATA.allScenes.find((s) => s === scene);
+  cs = G.allScenes.find((s) => s === scene);
   if (cs) {
-    GAME_DATA.currentScene = cs;
+    G.currentScene = cs;
     const os = document.querySelector("[in-progress]");
     if (os) {
       document.body.removeChild(os);
@@ -23,7 +23,7 @@ changeScene = (scene) => {
 };
 
 renderWebComponent = (tagname) => {
-  let el = document.createElement(tagname);
+  let el = dcr(tagname,document);
   el.setAttribute("in-progress", true);
   el.style.cssText = "opacity: 0; display: block; transition: opacity .3s";
   dba(el,document);

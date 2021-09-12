@@ -8,7 +8,7 @@ ALL_SCENES = [
     GAME_SCENE
 ];
 
-GAME_DATA = {
+G/*AME_DATA*/ = {
   towers: "@M*O",//"*@M0OADY",
   waves: ["eA$Ypeasy","m|e|d","hard{||}"],
   wave: 0,
@@ -24,4 +24,5 @@ GAME_DATA = {
     "quantum",
   ]
 };
+
 
