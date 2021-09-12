@@ -11,9 +11,6 @@ changeScene = (scene) => {
       case GAME_SCENE:
         renderWebComponent("sd-game-scene");
         break;
-      case LAUNCH_SCENE:
-        renderWebComponent("sd-launch-scene");
-        break;
       case LOADING_SCENE:
       default:
         renderWebComponent("sd-loading-scene");
@@ -38,7 +35,7 @@ addEventListener("scene-change", (e) => {
 });
 
 Promise.all(
-  ["sd-button", "sd-game-scene", "sd-launch-scene"].map((component) =>
+  ["sd-button", "sd-game-scene"].map((component) =>
     customElements.whenDefined(component)
   )
 ).then((p) => {
