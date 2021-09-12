@@ -39,42 +39,26 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   if (tow.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
     // bullet rotation (ai aim assist)
-    b.style.width = "6px";
-    b.style.height = "3px";
-    b.style.border = "1px solid rgb(248, 190, 28)";
-    b.style.background = "rgba(248, 190, 28, .5)";
+    b.classList.add("b-q");
     b.damage = 10;
   }
 
   if (tow.getAttribute("phaser") !== null) {
     // laser beam straight line for phaser towers
-    b.style.width = "30px";
-    b.style.height = "5px";
-    b.style.border = "1px solid rgb(132, 255, 255)";
-    b.style.background = "rgba(132, 255, 255, .5)";
-    b.style.borderRadius = "0px";
-    b.style.filter = "blur(4px)";
+    b.classList.add("b-p");
     b.damage = 5;
     b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
   if (tow.getAttribute("thermal") !== null) {
     // aoe attack but lower damage for thermal towers
-    b.style.width = "50px";
-    b.style.height = "50px";
-    b.style.border = "1px solid rgb(255, 73, 49)";
-    b.style.filter = "blur(2px)";
-    b.style.background = "rgba(255, 73, 49, .2)";
-    b.style.borderRadius = "50%";
+    b.classList.add("b-t");
     b.damage = 3;
   }
 
   if (tow.getAttribute("blaster") !== null) {
-    b.style.width = "6px";
-    b.style.height = "3px";
-    b.style.border = "1px solid rgb(255, 255, 255)";
-    b.style.background = "rgba(255, 255, 255, .3)";
     b.damage = 3;
+    b.classList.add("b-b");
   }
 
   var rect = tow.getBoundingClientRect();
