@@ -78,13 +78,12 @@ class GameScene extends HTMLElement {
     var cw = gc.clientWidth;
     var ch = gc.clientHeight;
     var lead = 0;
-    //cw = cw % 10;
-    while (/*cw % 10 !=5 &&*/ cw % 100 != 0) {
+    while (cw % 100 != 0) {
       cw -= 1;
       lead += 1;
     }
     var leadY = 0;
-    while (/*ch % 10 !=5 &&*/ ch % 100 != 0) {
+    while (ch % 100 != 0) {
       ch -= 1;
       leadY += 1;
     }
@@ -95,9 +94,9 @@ class GameScene extends HTMLElement {
     }
     tbl.style.top = leadY / 2 + "px";
     tbl.style.bottom = leadY / 2 + "px";
-    for (var i = 0; i < ch / 100 /*5*/; i++) {
+    for (var i = 0; i < ch / 100; i++) {
       var tr = document.createElement("tr");
-      for (var j = 0; j < cw / 100 /*5*/; j++) {
+      for (var j = 0; j < cw / 100; j++) {
         var td = document.createElement("td");
         td.setAttribute(
           "cost",
@@ -188,9 +187,6 @@ class GameScene extends HTMLElement {
                   cn.level += 1;
                   var levels = ["zero", "one", "two", "three"];
                   cn.childNodes[0].setAttribute(levels[cn.level], "");
-                  //for (var i=1;i<=cn.level;i++) {
-                  //    setTimeout(function(){create_bullet(cn.childNodes[0])},cn.level*500);
-                  //}
                   var chg = [
                     -999,
                     { x: 1, y: 1 },
@@ -204,26 +200,17 @@ class GameScene extends HTMLElement {
               for (var i = 0; i < GAME_DATA.bullets.length; i++) {
                 var bu = GAME_DATA.bullets[i]; //bullet upgrade
                 bu.damage += 5;
-                if (bu.phase) {
-                  bu.setback *= 2;
-                }
               }
               this.closeMenu();
               return;
             } else td.towers += tower;
 
-            //setTimeout(()=>{
             var div = create_tower(tower_decode(tower), td.towers); //document.createElement("div");
             div.towerId = tower;
             div.classList.add("tower");
             td.appendChild(div);
             td.style.position = "relative";
-            //div.innerHTML = `{${tower}}`;
             this.closeMenu();
-            // setInterval(() => {
-            //   this.rotateTowers([div]);
-            // }, 10);
-            //}, 2000);
           });
           menu.appendChild(menuItem);
         });
@@ -239,12 +226,8 @@ class GameScene extends HTMLElement {
             e.stopPropagation();
             const amt = this.money + cost;
             this.setMoney(amt);
-            //const tr = td.parentNode;
-            //const table = tr.parentNode;
             td.towers="";
-            //console.log(td.children[0]);
             td.children[0].remove();
-            //table.removeChild(tr);
             removeOrphanBullets();
             this.closeMenu();
           });
@@ -256,19 +239,8 @@ class GameScene extends HTMLElement {
   }
 
   rotateTowers(towers) {
-    //console.log(towers.length);
-    //var gc2_left=window.getComputedStyle(gc2).left.replace("px","");
-    //console.log(gc2_left);
     for (var i = 0; i < towers.length; i++) {
       var t = towers[i];
-      /*console.log(
-t.parentNode//td
-.parentNode//tr
-.parentNode//tbody
-.parentNode//table
-.parentNode//l-g or r-g
-.tagName
-);*/
       var tag =
         t.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
       if (tag.toUpperCase() == "L-G") {
@@ -326,11 +298,6 @@ t.parentNode//td
         enemy.id="ene";
         enemy.width = 30;
         enemy.height = 30;
-        // bot.style.backgroundColor = "rgba(0,0,0,0.3)"; //"red";
-        top.origBg = "transparent";
-        top.currBg = top.origBg;
-        top.style.backgroundColor = top.origBg;
-        //mid.innerHTML = enemy.health;
         mid.style.backgroundColor = "white"; //"green";
         top.appendChild(mid);
         mid.appendChild(bot);
@@ -343,18 +310,8 @@ t.parentNode//td
         enemy.recentHits = [];
         document.body.appendChild(enemy);
         // game loop
-        var gmLpIntMs = 14; // game loop interval in milliseconds
-        var blnkIt = 15; //blink iterations
-        enemy.lastHitMs = -1 - gmLpIntMs * blnkIt;
         var gmLpId = setInterval(() => {
           if (GAME_DATA.gameOver) return;
-          // if (enemy.lastHitMs >= GAME_DATA.waveTimeMs - gmLpIntMs * blnkIt) {
-          //   /*if (top.currBg!="red") top.currBg = "red";
-          //   else top.currBg = top.origBg;*/
-          //   //instead of toggling just keep it red during the blnkIt time frame:
-          //   // top.currBg = "red";
-          // } else top.currBg = top.origBg;
-          // top.style.backgroundColor = top.currBg;
           if (
             enemy.y > document.body.getBoundingClientRect().height ||
             enemy.health <= 0
@@ -406,13 +363,12 @@ t.parentNode//td
                 [0, 15],
                 [-15, 15],
               ];
-              var ai = i; // adjusted-i
-              var xs = offsets[ai][0] >= 0 ? 1 : -1; //x-sign
-              var ys = offsets[ai][1] >= 0 ? 1 : -1; //y-sign
+              var xs = offsets[i][0] >= 0 ? 1 : -1; //x-sign
+              var ys = offsets[i][1] >= 0 ? 1 : -1; //y-sign
               var cxo = xs * (enemy.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
               var cyo = ys * (enemy.height / 2.0) + ys * (h.height / 2.0); //characters y offsets
-              var x = enemy.x + cxo + xs * offsets[ai][0];
-              var y = enemy.y + cyo + ys * offsets[ai][1];
+              var x = enemy.x + cxo + xs * offsets[i][0];
+              var y = enemy.y + cyo + ys * offsets[i][1];
               h.x = x;
               h.y = y;
               h.style.left = x + "px";
@@ -472,24 +428,8 @@ t.parentNode//td
             var b = GAME_DATA.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
             var srect = enemy.getBoundingClientRect(); //ship rect
-            var mpx = brect.left + brect.width / 2; //midpoint x
-            var mpy = brect.top + brect.height / 2;
-            var hpad = 4; //16;//horiz pad
-            var vpad = 4; //18;//vert pad
-
-            for (var j = 0; j < orbHench.length; j++) {
-              var h = orbHench[j];
-              if (h.dead) continue;
-              if (
-                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
-              ) {
-                removeidx = i;
-                h.dead = true;
-                break;
-              }
-            }
-            for (var j = 0; j < stcHench.length; j++) {
-              var h = stcHench[j];
+            for (var j = 0; j < 8/*orbHench.length*/; j++) {
+              var h = j<4?stcHench[j]:orbHench[j%4];
               if (h.dead) continue;
               if (
                 rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
@@ -513,7 +453,6 @@ t.parentNode//td
               enemy.health -= b.damage; //20;
               removeidx = i;
               //hit
-              enemy.lastHitMs = GAME_DATA.waveTimeMs;
               if (b.slow != null) {
                 enemy.velocityTrack = b.slow;
               }
@@ -524,8 +463,7 @@ t.parentNode//td
             enemy.recentHits.push(removeidx);
           }
           if (enemy.health < 0) enemy.health = 0;
-          GAME_DATA.waveTimeMs += gmLpIntMs;
-        }, gmLpIntMs);
+        }, 14);
       }, 1000);
     }
   }

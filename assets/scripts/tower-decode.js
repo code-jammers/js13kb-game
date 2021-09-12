@@ -14,8 +14,6 @@ function removeOrphanBullets() {
   while (rmidx>-1) {
     var b=GAME_DATA.bullets[rmidx];
     GAME_DATA.bullets.splice(rmidx, 1);
-    //console.log(b);
-    //console.log(b.parentNode);
     document.body.removeChild(b);
     rmidx=-1;
     GAME_DATA.bullets.forEach((bullet, i) => {
@@ -46,7 +44,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.border = "1px solid rgb(248, 190, 28)";
     b.style.background = "rgba(248, 190, 28, .5)";
     b.damage = 10;
-    b.setback = 12;
   }
 
   if (tow.getAttribute("phaser") !== null) {
@@ -58,7 +55,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.borderRadius = "0px";
     b.style.filter = "blur(4px)";
     b.damage = 5;
-    b.setback = 8; //todo:check if nothing uses then remove this
     b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
@@ -71,7 +67,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.background = "rgba(255, 73, 49, .2)";
     b.style.borderRadius = "50%";
     b.damage = 3;
-    b.setback = 8;
   }
 
   if (tow.getAttribute("blaster") !== null) {
@@ -80,7 +75,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.border = "1px solid rgb(255, 255, 255)";
     b.style.background = "rgba(255, 255, 255, .3)";
     b.damage = 3;
-    b.setback = 8;
   }
 
   var rect = tow.getBoundingClientRect();
@@ -93,7 +87,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   b.x = x;
   b.y = y;
   var tag = tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-  console.log(tag);
   b.lefttower = tag.toUpperCase() == "L-G";
   document.body.appendChild(b);
   var mid_x = document.body.getBoundingClientRect().width / 2.0;
@@ -128,10 +121,8 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
       b.y = b.oy;
     b.style.left = b.x + "px";
     b.style.top = b.y + "px";
-    console.log("HIIIIT");
     }
     if ((reset || b.reset) && window.enemy.recentHits.includes(b.idx)) {
-      if (b.reset) console.log("b reset");
       b.reset = false;
       b.x = b.ox;
       b.y = b.oy;
