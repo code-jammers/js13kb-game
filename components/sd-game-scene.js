@@ -352,14 +352,17 @@ t.parentNode//td
           function drawHenchmenShips() {
             function createHench() {
               var h = document.createElement("div");
-              h.innerHTML = " ";
+              var img=document.createElement("img");img.src="assets/images/rocket.png";img.style.width="100%";img.style.height="100%";img.style.transform="rotate(180deg)";
+              h.appendChild(img);
+              //h.innerHTML = " ";
+              //h.src="assets/images/rocket.png";
               h.style.position = "absolute";
-              h.style.borderRadius = "50%";
+              //h.style.borderRadius = "50%";
               h.style.width = "12px";
               h.style.height = "12px";
               h.width = 12;
               h.height = 12;
-              h.style.border = "1px solid white";
+              //h.style.border = "1px solid white";
               document.body.appendChild(h);
               h.deg = 0; //0-360
               return h;
@@ -367,7 +370,7 @@ t.parentNode//td
             function renderHench(h, i, active) {
               if (enemy.y <= 50) h.dead = null;
               if (active && h.dead == null) h.style.visibility = "visible";
-              else h.style.visibility = "hidden";
+              else { h.style.visibility = "hidden"; h.dead=true; }
               var offsets = [
                 [-15, 0],
                 [-15, -15],
@@ -379,7 +382,7 @@ t.parentNode//td
                 [-15, 15],
               ];
               var ai = i; // adjusted-i
-              if (i > 4) {
+              /*if (i > 4) {
                 var moves = h.deg % 360;
                 h.deg = moves + 0.07;
                 moves = Math.floor(moves);
@@ -387,7 +390,7 @@ t.parentNode//td
                   ai = (ai + 1) % offsets.length;
                   moves -= 1;
                 }
-              }
+              }*/
               var xs = offsets[ai][0] >= 0 ? 1 : -1; //x-sign
               var ys = offsets[ai][1] >= 0 ? 1 : -1; //y-sign
               var cxo = xs * (enemy.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
@@ -398,7 +401,7 @@ t.parentNode//td
               h.y = y;
               h.style.left = x + "px";
               h.style.top = y + "px";
-              h.style.backgroundColor = i < 4 ? "red" : "rgba(12, 160, 218, 1)";
+              //h.style.backgroundColor = i < 4 ? "red" : "rgba(12, 160, 218, 1)";
             }
             var bits = tower_decode(
               GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei]
