@@ -3,10 +3,20 @@ function tower_decode(tower_char) {
   var bit_str = tc.charCodeAt(0).toString(2).padStart(8, "0");
   return bit_str;
 }
+function removeOrphanBullets() {
+  GAME_DATA.bullets.forEach((bullet, i) => {
+    console.log(bullet);
+    if (!bullet.tower.isConnected) {
+      GAME_DATA.bullets.splice(i, 1);
+      document.body.removeChild(bullet);
+    }
+  });
+}
+
 function create_bullet(tow, chg_x = 1, chg_y = 0) {
   var b = document.createElement("div");
+  b.tower = tow;
   GAME_DATA.bullets.push(b);
-
   // bullet defaults
   b.idx = GAME_DATA.bullets.length - 1;
   b.style.position = "absolute";
@@ -14,12 +24,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   b.damage = 20;
   b.style.width = "10px";
   b.style.height = "20px";
-
-  // mini bullet defaults
-  if (tow.mini) {
-    b.style.width = "5px";
-    b.style.height = "10px";
-  }
 
   if (tow.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
@@ -41,7 +45,7 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.borderRadius = "0px";
     b.style.filter = "blur(4px)";
     b.damage = 5;
-    b.setback = 8;//todo:check if nothing uses then remove this
+    b.setback = 8; //todo:check if nothing uses then remove this
     b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
@@ -132,14 +136,12 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
     b.style.top = b.y + "px";
   }, 10);
 }
-function create_tower(ascii_char, attrs, tss /*tower set string*/) {
+function create_tower(attrs, tss /*tower set string*/) {
   var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
   var fs = 44; //font-size
-  //var type = "fire-tower";
   var tow = document.createElement("div");
   var span = document.createElement("span");
   span.style.borderRadius = "50%";
-  span.style.boxShadow = "0px 2px gray";
   tow.appendChild(span);
   //var li=tss.split(ascii_char).length - 1 - 1;//level index
   //if (li>2)li=2;
@@ -150,25 +152,7 @@ function create_tower(ascii_char, attrs, tss /*tower set string*/) {
     span.style.backgroundImage = "url('assets/images/sat.png')";
     span.style.backgroundRepeat = "no-repeat";
     span.style.backgroundPosition = "14px 11px";
-    span.innerHTML = "&nbsp;"; //"{" + ascii_char + "}";
     tow.style.zIndex = "1";
-    tow.mini = false;
-  } else {
-    tow.mini = true;
-    span.style.width = "15px";
-    span.style.height = "15px";
-    fs = 14;
-    span.innerHTML = "&nbsp;"; //ascii_char;
-    tow.style.textShadow = "gray 1px 1px";
-    var coord = coords[tss.length - 1];
-    var l = coord[0] == 0 ? 15 : coord[0] * 0.4;
-    var t = coord[1] == 0 ? 26 : coord[1] * 0.56;
-    tow.style.left = l + "px";
-    tow.style.top = t + "px";
-    tow.style.position = "absolute";
-    tow.style.margin = "20px;";
-    tow.style.fontWeight = "bold";
-    tow.style.zIndex = "2";
   }
   tow.style.fontSize = fs + "px";
   tow.rot = 0;

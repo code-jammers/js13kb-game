@@ -215,3 +215,7 @@ div[quantum] span[two] {
 div[quantum] span[three] {
   background: rgba(238, 153, 18, 1);
 }
+
+span[sell] {
+  background: rgb(26, 114, 67);
+} 

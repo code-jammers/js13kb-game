@@ -21,6 +21,14 @@ setNotification = (text, timeout) => {
   }
 };
 
+getTowerType = (tower) => {
+  var decodedTower = tower_decode(tower);
+  var typidx =
+    parseInt(decodedTower[5] + "" + decodedTower[6] + "" + decodedTower[7], 2) %
+    GAME_DATA.tower_types.length;
+  return GAME_DATA.tower_types[typidx];
+};
+
 t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
   <t-b>
@@ -125,16 +133,34 @@ class GameScene extends HTMLElement {
         const el = e.srcElement;
         const menu = document.createElement("div");
         menu.setAttribute("menu", true);
-        GAME_DATA.towers.split("").forEach((tower) => {
-          const menuItem = document.createElement("div");
-          var decodedTower = tower_decode(tower);
-          var typidx =
-            parseInt(
-              decodedTower[5] + "" + decodedTower[6] + "" + decodedTower[7],
-              2
-            ) % GAME_DATA.tower_types.length;
-          var type = GAME_DATA.tower_types[typidx];
+        console.log(td?.towers);
+        let towers = GAME_DATA.towers.split("");
+        let isUpgrading = false;
+        let nextLevel =
+          td.querySelector("span")?.getAttribute("one") === ""
+            ? "two"
+            : td.querySelector("span")?.getAttribute("two") === ""
+            ? "three"
+            : td.querySelector("span")?.getAttribute("three") === ""
+            ? "four"
+            : null;
+        if (!nextLevel) {
+          nextLevel = "one";
+        }
+        console.log(nextLevel);
 
+        if (Boolean(td.towers)) {
+          towers = towers.filter((l) => td.towers.includes(l));
+          isUpgrading = true;
+        }
+
+        if (nextLevel === "four") {
+          towers = [];
+        }
+
+        towers.forEach((tower) => {
+          const menuItem = document.createElement("div");
+          var type = getTowerType(tower);
           menuItem.setAttribute(type, "");
           menuItem.setAttribute("legend", "");
           const tpCost = Number(td.getAttribute("cost"));
@@ -146,7 +172,7 @@ class GameScene extends HTMLElement {
               : type === "phaser"
               ? tpCost * 2
               : tpCost * 2.5;
-          menuItem.innerHTML = `<span one></span> ${cost}`;
+          menuItem.innerHTML = `<span ${nextLevel}></span> ${cost}`;
           menuItem.setAttribute("menu-item", true);
           menuItem.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -154,7 +180,7 @@ class GameScene extends HTMLElement {
               setNotification(`Insufficient Funds`, 4000);
               this.closeMenu();
               return;
-            };
+            }
             const amt = this.money - cost;
             this.setMoney(amt);
             if (td.towers == null) td.towers = "";
@@ -194,20 +220,40 @@ class GameScene extends HTMLElement {
             } else td.towers += tower;
 
             //setTimeout(()=>{
-            var div = create_tower(tower, tower_decode(tower), td.towers); //document.createElement("div");
+            var div = create_tower(tower_decode(tower), td.towers); //document.createElement("div");
             div.towerId = tower;
             div.classList.add("tower");
             td.appendChild(div);
             td.style.position = "relative";
             //div.innerHTML = `{${tower}}`;
             this.closeMenu();
-            setInterval(() => {
-              this.rotateTowers([div]);
-            }, 10);
+            // setInterval(() => {
+            //   this.rotateTowers([div]);
+            // }, 10);
             //}, 2000);
           });
           menu.appendChild(menuItem);
         });
+
+        if (isUpgrading) {
+          const cost = Number(td.getAttribute("cost")) - 100;
+          const menuItem = document.createElement("div");
+          menuItem.setAttribute("blaster", "");
+          menuItem.setAttribute("legend", "");
+          menuItem.innerHTML = `<span sell></span> sell ${cost}`;
+          menuItem.setAttribute("menu-item", true);
+          menuItem.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const amt = this.money + cost;
+            this.setMoney(amt);
+            const tr = td.parentNode;
+            const table = tr.parentNode;
+            table.removeChild(tr);
+            removeOrphanBullets();
+            this.closeMenu();
+          });
+          menu.appendChild(menuItem);
+        }
         el.appendChild(menu);
       });
     });
@@ -288,7 +334,7 @@ t.parentNode//td
         bot.style.display = "block";
 
         /*var */ window.enemy = document.createElement("div");
-        enemy.velocity = 1;// 1px per game loop iteration
+        enemy.velocity = 1; // 1px per game loop iteration
         enemy.velocityTrack = 1.0;
         enemy.health =
           GAME_DATA.waves[GAME_DATA.wave][GAME_DATA.ei].charCodeAt(0);
@@ -354,7 +400,11 @@ t.parentNode//td
           function drawHenchmenShips() {
             function createHench() {
               var h = document.createElement("div");
-              var img=document.createElement("img");img.src="assets/images/rocket.png";img.style.width="100%";img.style.height="100%";img.style.transform="rotate(180deg)";
+              var img = document.createElement("img");
+              img.src = "assets/images/rocket.png";
+              img.style.width = "100%";
+              img.style.height = "100%";
+              img.style.transform = "rotate(180deg)";
               h.appendChild(img);
               //h.innerHTML = " ";
               //h.src="assets/images/rocket.png";
@@ -372,7 +422,10 @@ t.parentNode//td
             function renderHench(h, i, active) {
               if (enemy.y <= 50) h.dead = null;
               if (active && h.dead == null) h.style.visibility = "visible";
-              else { h.style.visibility = "hidden"; h.dead=true; }
+              else {
+                h.style.visibility = "hidden";
+                h.dead = true;
+              }
               var offsets = [
                 [-15, 0],
                 [-15, -15],
@@ -450,9 +503,9 @@ t.parentNode//td
           mid.style.width = enemy.health / 2;
           mid.style.right = `${enemy.health / 2 - 42}`;
 
-          enemy.y += Math.min(Math.floor(enemy.velocityTrack), 1);//1;
+          enemy.y += Math.min(Math.floor(enemy.velocityTrack), 1); //1;
           enemy.velocityTrack += enemy.velocityTrack;
-          enemy.velocityTrack = Math.min(enemy.velocityTrack,1);
+          enemy.velocityTrack = Math.min(enemy.velocityTrack, 1);
           enemy.style.top = enemy.y + "px";
           var removeidx = -1;
           for (var i = 0; i < GAME_DATA.bullets.length; i++) {
@@ -520,7 +573,9 @@ t.parentNode//td
               b.reset = true;
               //hit
               enemy.lastHitMs = GAME_DATA.waveTimeMs;
-              if (b.slow!=null){enemy.velocityTrack=b.slow;}
+              if (b.slow != null) {
+                enemy.velocityTrack = b.slow;
+              }
               break;
             }
           }
