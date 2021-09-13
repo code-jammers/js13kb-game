@@ -175,13 +175,13 @@ div[thermal]:not([menu-item]) {
   margin-left: 24px;
 }
 div[thermal] span[one] {
-  background: rgb(255, 73, 49, 1);
+  background: rgb(246, 107, 72);
 }
 div[thermal] span[two] {
-  background: rgb(248, 66, 42, 1);
+  background: rgb(255, 76, 52);
 }
 div[thermal] span[three] {
-  background: rgb(238, 56, 32, 1);
+  background: rgb(236, 51, 27);
 }
 
 div[phaser] span[one] {

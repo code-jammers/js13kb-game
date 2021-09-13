@@ -80,31 +80,33 @@ link,
 }
 
 .b-q {
-  width: 6px;
-  height: 3px;
+  width: 8px;
+  height: 5px;
   border: 1px solid rgb(248, 190, 28);
   background: rgba(248, 190, 28, 0.5);
+  filter: blur(1px);
 } /*bullet quantum*/
 .b-p {
-  width: 30px;
-  height: 5px;
+  width: 36px;
+  height: 7px;
   border: 1px solid rgb(132, 255, 255);
   background: rgba(132, 255, 255, 0.5);
   border-radius: 0px;
-  filter: blur(4px);
+  filter: blur(3px);
 }
 .b-t {
   pointer-events: none;
-  width: 50px;
-  height: 50px;
+  width: 36px;
+  height: 36px;
   border: 1px solid rgb(255, 73, 49);
   filter: blur(2px);
   background: rgba(255, 73, 49, 0.2);
   border-radius: 50%;
 }
 .b-b {
-  width: 6px;
-  height: 3px;
+  width: 8px;
+  height: 5px;
   border: 1px solid rgb(255, 255, 255);
   background: rgba(255, 255, 255, 0.3);
+  filter: blur(1px);
 }

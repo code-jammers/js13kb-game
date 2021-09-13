@@ -105,16 +105,18 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
       b.style.left = b.x + "px";
       b.style.top = b.y + "px";
     }
-    if ((reset || b.reset) && ene.recentHits.includes(b.idx)) {
+
+    if ((reset || b.reset) && window?.ene?.recentHits.includes(b.idx)) {
       b.reset = false;
       b.x = b.ox;
       b.y = b.oy;
-      for (var i = 0; i < ene.recentHits.length; i++) {
-        if (ene.recentHits[i] == b.idx) {
-          ene.recentHits[i] = -1;
+      for (var i = 0; i < window?.ene?.recentHits.length; i++) {
+        if (window?.ene?.recentHits[i] == b.idx) {
+          window.ene.recentHits[i] = -1;
         }
       }
     }
+
     b.style.left = b.x + "px";
     b.style.top = b.y + "px";
   }, 10);

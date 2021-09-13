@@ -79,7 +79,7 @@ t2.innerHTML = html`
 class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
     setNotification(
-      `Level ${G.wave + 1}`,
+      `Attack ${G.wave + 1}`,
       "Build towers to defend this planet from invasion",
       6000,
       "rgba(238, 153, 18, 1)"
@@ -276,7 +276,7 @@ class GameScene extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney((this.clientWidth * 14) / 2);
+      this.setMoney((this.clientWidth * 15) / 2);
 
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
@@ -311,6 +311,11 @@ class GameScene extends HTMLElement {
           // game loop
           var gmLpId = setInterval(() => {
             if (G.gameOver) return;
+            this.shadowRoot.querySelector(
+              "[main-title]"
+            ).innerText = `Space Defense Engineer (level ${Math.floor(wave / 3)}/${
+              G.waves?.[0].length / 3
+            })`;
             if (ene.y > document.body.getBoundingClientRect().height) {
               sPassed += 1;
               const pHP = this.shadowRoot.querySelector("t-a");
@@ -326,18 +331,21 @@ class GameScene extends HTMLElement {
               G.ei += 1;
               ene.y = 40;
               ene.recentHits = [];
-              ene.health = 100 + (wave / 3) * 6;
+              ene.health = 100 + (wave / 3) * 8;
               console.log("HEALTH", ene.health);
-              wave++;
-              if (wave % 3 === 0) {
-                setNotification(
-                  `Level ${wave / 3}`,
-                  `Contract Paid + $${(wave / 3) * 450}`,
-                  3000,
-                  "rgba(238, 153, 18, 1)"
-                );
-                this.setMoney(this.money + (wave / 3) * 450);
+              if (wave < G.waves[0].length) {
+                wave++;
+                if (wave % 3 === 0) {
+                  setNotification(
+                    `Level ${wave / 3}`,
+                    `Contract Paid + $${1250}`,
+                    3000,
+                    "rgba(238, 153, 18, 1)"
+                  );
+                  this.setMoney(this.money + 1250);
+                }
               }
+
               if (G.ei >= G.waves[G.wave].length) {
                 gameOver(true);
               }
