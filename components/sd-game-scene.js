@@ -276,7 +276,7 @@ class GameScene extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney(this.clientWidth * (this.clientWidth > 1200 ? 12 : 10));
+      this.setMoney(this.clientWidth * (this.clientWidth > 1200 ? 12 : 9));
 
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
