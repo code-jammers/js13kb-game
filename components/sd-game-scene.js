@@ -276,7 +276,7 @@ class GameScene extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney((this.clientWidth * 15) / 2);
+      this.setMoney(this.clientWidth * (this.clientWidth > 1200 ? 12 : 10));
 
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
@@ -313,9 +313,9 @@ class GameScene extends HTMLElement {
             if (G.gameOver) return;
             this.shadowRoot.querySelector(
               "[main-title]"
-            ).innerText = `Space Defense Engineer (level ${Math.floor(wave / 3)}/${
-              G.waves?.[0].length / 3
-            })`;
+            ).innerText = `Space Defense Engineer (level ${Math.floor(
+              wave / 3
+            )}/${G.waves?.[0].length / 3})`;
             if (ene.y > document.body.getBoundingClientRect().height) {
               sPassed += 1;
               const pHP = this.shadowRoot.querySelector("t-a");
@@ -338,11 +338,16 @@ class GameScene extends HTMLElement {
                 if (wave % 3 === 0) {
                   setNotification(
                     `Level ${wave / 3}`,
-                    `Contract Paid + $${1250}`,
+                    `Contract Paid + $${
+                      this.clientWidth * (this.clientWidth > 1200 ? 3 : 2)
+                    }`,
                     3000,
                     "rgba(238, 153, 18, 1)"
                   );
-                  this.setMoney(this.money + 1250);
+                  this.setMoney(
+                    this.money +
+                      this.clientWidth * (this.clientWidth > 1200 ? 3 : 2)
+                  );
                 }
               } else {
                 gameOver(true);
@@ -491,7 +496,7 @@ class GameScene extends HTMLElement {
             }
             if (ene.health < 0) ene.health = 0;
           }, 14);
-        }, 5000);
+        }, 6000);
       }, 1000);
     }
   }
