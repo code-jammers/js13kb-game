@@ -332,7 +332,7 @@ class GameScene extends HTMLElement {
               ene.y = 40;
               ene.recentHits = [];
               ene.health = 100 + (wave / 3) * 8;
-              console.log("HEALTH", ene.health);
+
               if (wave < G.waves[0].length) {
                 wave++;
                 if (wave % 3 === 0) {
@@ -344,9 +344,7 @@ class GameScene extends HTMLElement {
                   );
                   this.setMoney(this.money + 1250);
                 }
-              }
-
-              if (G.ei >= G.waves[G.wave].length) {
+              } else {
                 gameOver(true);
               }
             }
