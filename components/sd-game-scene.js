@@ -220,7 +220,7 @@ class GameScene extends HTMLElement {
               }
               for (var i = 0; i < G.bullets.length; i++) {
                 var bu = G.bullets[i]; //bullet upgrade
-                bu.damage += 1.5;
+                bu.damage += 1.3;
               }
               this.closeMenu();
               return;
@@ -237,10 +237,11 @@ class GameScene extends HTMLElement {
         });
 
         if (isUpgrading) {
-          const cost = Number(td.getAttribute("cost")) - 100;
+          const cost = Number(td.getAttribute("cost"));
           const mi = dcr("div");
           mi.setAttribute("blaster", "");
           mi.setAttribute("legend", "");
+          mi.style.color = "red";
           mi.innerHTML = `<span sell></span> sell ${cost}`;
           mi.setAttribute("menu-item", true);
           mi.addEventListener("click", (e) => {
@@ -276,7 +277,7 @@ class GameScene extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney(this.clientWidth * (this.clientWidth > 1200 ? 12 : 9));
+      this.setMoney(this.clientWidth * (this.clientWidth > 1200 ? 8 : 4));
 
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
@@ -319,8 +320,8 @@ class GameScene extends HTMLElement {
             if (ene.y > document.body.getBoundingClientRect().height) {
               sPassed += 1;
               const pHP = this.shadowRoot.querySelector("t-a");
-              pHP.style.width = `${100 - sPassed * 10}%`;
-              if (sPassed >= 10) {
+              pHP.style.width = `${100 - sPassed * 5}%`;
+              if (sPassed >= 20) {
                 gameOver(false);
               }
             }
@@ -331,7 +332,8 @@ class GameScene extends HTMLElement {
               G.ei += 1;
               ene.y = 40;
               ene.recentHits = [];
-              ene.health = 100 + (wave / 3) * 8;
+              ene.health = 100 + (wave / 3) * 15;
+              console.log(ene.health);
 
               if (wave < G.waves[0].length) {
                 wave++;
@@ -339,14 +341,14 @@ class GameScene extends HTMLElement {
                   setNotification(
                     `Level ${wave / 3}`,
                     `Contract Paid + $${
-                      this.clientWidth * (this.clientWidth > 1200 ? 3 : 2)
+                      this.clientWidth * (this.clientWidth > 1200 ? 2 : 1.5)
                     }`,
                     3000,
                     "rgba(238, 153, 18, 1)"
                   );
                   this.setMoney(
                     this.money +
-                      this.clientWidth * (this.clientWidth > 1200 ? 3 : 2)
+                      this.clientWidth * (this.clientWidth > 1200 ? 2 : 1.5)
                   );
                 }
               } else {

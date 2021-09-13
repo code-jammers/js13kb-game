@@ -80,8 +80,8 @@ link,
 }
 
 .b-q {
-  width: 8px;
-  height: 5px;
+  width: 10px;
+  height: 6px;
   border: 1px solid rgb(248, 190, 28);
   background: rgba(248, 190, 28, 0.5);
   filter: blur(1px);
@@ -104,8 +104,8 @@ link,
   border-radius: 50%;
 }
 .b-b {
-  width: 8px;
-  height: 5px;
+  width: 10px;
+  height: 6px;
   border: 1px solid rgb(255, 255, 255);
   background: rgba(255, 255, 255, 0.3);
   filter: blur(1px);
