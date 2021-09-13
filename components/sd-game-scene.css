@@ -4,6 +4,20 @@
   flex-direction: column;
 }
 
+t-a {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  width: 100%;
+  background: green;
+  justify-content: space-between;
+}
+
+t-a > span {
+  padding: 0 12px;
+  position: absolute;
+}
+
 t-b {
   height: 65px;
   display: flex;
@@ -16,7 +30,7 @@ t-b {
 s-c {
   display: grid;
   grid: "left middle right" / 1fr 200px 1fr;
-  height: calc(100vh - 65px);
+  height: calc(100vh - 85px);
 }
 
 m-g {
@@ -29,19 +43,20 @@ m-g {
 r-w {
   display: flex;
   width: 200px;
-  height: calc(85vh - 100px);
+  height: calc(100vh - 85px);
+  filter: blur(38px);
   background-color: #212121;
   background-color: #212121;
-  filter: blur(16px);
 }
 
 s-p {
   height: calc(17vh - 65px);
   width: calc(17vh - 65px);
   border-radius: 50%;
-  filter: blur(1px);
-  border: 2px solid #674423;
-  background: radial-gradient(circle at 57px 55px, #f89133, #2a1603);
+  filter: blur(2px);
+  background: #f89133a6;
+  position: absolute;
+  bottom: 24px;
 }
 
 l-g,
@@ -100,12 +115,10 @@ div[menu] {
 }
 
 div[menu-item] {
-  font-family: monospace;
   font-size: 11px;
   color: #f5f5f5;
   height: 25px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -124,14 +137,17 @@ div[menu-item]:hover td {
 }
 
 div[money] {
-  font-family: monospace;
   font-size: 17px;
   color: #f5f5f5;
   padding-right: 12px;
 }
 
+div[main-title] {
+  padding-right: 12px;
+  color: rgba(238, 153, 18, 1);
+}
+
 div[legend] {
-  font-family: monospace;
   font-size: 13px;
   text-transform: uppercase;
   display: flex;
@@ -148,24 +164,24 @@ div[legend] span {
   display: block;
   margin: 0 6px;
 }
-div[quantum],
-div[blaster],
-div[particle],
-div[phaser],
-div[satellite],
-div[thermal] {
+div[quantum]:not([menu-item]),
+div[blaster]:not([menu-item]),
+div[particle]:not([menu-item]),
+div[phaser]:not([menu-item]),
+div[satellite]:not([menu-item]),
+div[thermal]:not([menu-item]) {
   display: flex;
   align-items: center;
   margin-left: 24px;
 }
 div[thermal] span[one] {
-  background: rgb(255, 73, 49, 1);
+  background: rgb(246, 107, 72);
 }
 div[thermal] span[two] {
-  background: rgb(248, 66, 42, 1);
+  background: rgb(255, 76, 52);
 }
 div[thermal] span[three] {
-  background: rgb(238, 56, 32, 1);
+  background: rgb(236, 51, 27);
 }
 
 div[phaser] span[one] {
@@ -216,4 +232,8 @@ div[quantum] span[two] {
 }
 div[quantum] span[three] {
   background: rgba(238, 153, 18, 1);
+}
+
+span[sell] {
+  background: rgb(26, 114, 67);
 }

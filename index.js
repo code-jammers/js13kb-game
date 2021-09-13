@@ -1,7 +1,7 @@
 changeScene = (scene) => {
-  cs = GAME_DATA.allScenes.find((s) => s === scene);
+  cs = G.allScenes.find((s) => s === scene);
   if (cs) {
-    GAME_DATA.currentScene = cs;
+    G.cs = cs;
     const os = document.querySelector("[in-progress]");
     if (os) {
       document.body.removeChild(os);
@@ -10,9 +10,6 @@ changeScene = (scene) => {
     switch (cs) {
       case GAME_SCENE:
         renderWebComponent("sd-game-scene");
-        break;
-      case LAUNCH_SCENE:
-        renderWebComponent("sd-launch-scene");
         break;
       case LOADING_SCENE:
       default:
@@ -23,10 +20,10 @@ changeScene = (scene) => {
 };
 
 renderWebComponent = (tagname) => {
-  let el = document.createElement(tagname);
+  let el = dcr(tagname,document);
   el.setAttribute("in-progress", true);
   el.style.cssText = "opacity: 0; display: block; transition: opacity .3s";
-  document.body.appendChild(el);
+  dba(el,document);
   setTimeout(() => {
     el.style.opacity = "1";
   }, 200);
@@ -38,13 +35,11 @@ addEventListener("scene-change", (e) => {
 });
 
 Promise.all(
-  ["sd-button", "sd-game-scene", "sd-launch-scene"].map((component) =>
+  ["sd-game-scene"].map((component) =>
     customElements.whenDefined(component)
   )
 ).then((p) => {
-  console.log(p.length, `all async web components defined`);
   setTimeout(() => {
-    // changeScene(LAUNCH_SCENE);
     changeScene(GAME_SCENE);
   }, 1000);
 });
