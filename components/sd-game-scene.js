@@ -1,36 +1,89 @@
 var t2 = document.createElement("template");
 
-setNotification = (text, timeout) => {
+let showingNotification = false;
+let notifications = [];
+setNotification = (text, subtext, timeout, color) => {
+  if (showingNotification) {
+    if (text !== notifications?.[0]?.text) {
+      notifications.push({ text, subtext, timeout, color });
+    }
+    return;
+  }
   try {
+    showingNotification = true;
     var n = dcr("a");
-    n.id="not";
-    n.innerHTML = text;
+    n.id = "not";
+    n.innerHTML = `<div>${text}</div><div sub>${subtext}</div>`;
+    n.style.color = color;
     dba(n);
     setTimeout(() => {
       n.remove();
+      showingNotification = false;
+      if (notifications.length > 0) {
+        setNotification(
+          notifications[0].text,
+          notifications[0].subtext,
+          notifications[0].timeout,
+          notifications[0].color
+        );
+        notifications.shift();
+      }
     }, timeout);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-getTowerType = (tower) => {
-  var decodedTower = tower_decode(tower);
-  var typidx =
-    parseInt(decodedTower[5] + "" + decodedTower[6] + "" + decodedTower[7], 2) %
-    G.tower_types.length;
-  return G.tower_types[typidx];
+  } catch (_) {}
 };
 
 t2.innerHTML = html`
-<link href="components/sd-game-scene.css" rel="stylesheet" /><t-b><div legend><div blaster title="Single target turret. Standard space defense engineer issue."> Blaster 1<span one></span> 2<span two></span> 3<span three></span></div><div thermal title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies."> Thermal Detonator 1<span one></span> 2<span two></span> 3<span   three ></span></div><div phaser title="Lazer turret that blasts enemies in a line and disintegrates them."> Phaser 1<span one></span> 2<span two></span> 3<span three></span></div><div quantum title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."> Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span></div></div><div money></div></t-b><s-c><l-g></l-g><m-g><r-w></r-w><s-p></s-p></m-g><r-g></r-g></s-c>
+  <link href="components/sd-game-scene.css" rel="stylesheet" />
+  <t-a><span>PLANET HEALTH</span>
+</t-b>
+</t-a>
+  <t-b
+    ><div legend>
+      <div
+        blaster
+        title="Single target turret. Standard space defense engineer issue."
+      >
+        Blaster 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+      <div
+        thermal
+        title="Hot. Hot. Hot. High area of effect damage that literally incinerates enemies."
+      >
+        Thermal Detonator 1<span one></span> 2<span two></span> 3<span
+          three
+        ></span>
+      </div>
+      <div
+        phaser
+        title="Lazer turret that blasts enemies in a line and disintegrates them."
+      >
+        Phaser 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+      <div
+        quantum
+        title="Quantum drive that provides a damage boost and well as AI programming for rotation of attached turrets."
+      >
+        Quantum Drive 1<span one></span> 2<span two></span> 3<span three></span>
+      </div>
+    </div>
+    <div>
+    <div main-title>Space Defense Engineer</div>
+    <div money></div>
+</div>
+    </t-b
+  ><s-c
+    ><l-g></l-g><m-g><r-w></r-w><s-p></s-p></m-g><r-g></r-g
+  ></s-c>
 `;
 
 class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
-    var skipToWave = new URL(location.href).searchParams.get("wave");
-    if (skipToWave != null) G.wave = parseInt(skipToWave);
-    setNotification(`Level ${G.wave + 1}`, 4000);
+    setNotification(
+      `Level ${G.wave + 1}`,
+      "Build towers to defend this planet from invasion",
+      6000,
+      "rgba(238, 153, 18, 1)"
+    );
     const gc = ctx.shadowRoot.querySelector(query);
     var tbl = document.createElement("table");
 
@@ -56,9 +109,9 @@ class GameScene extends HTMLElement {
     tbl.style.top = leadY / 2 + "px";
     tbl.style.bottom = leadY / 2 + "px";
     for (var i = 0; i < ch / 100; i++) {
-      var tr = dcr("tr",document);
+      var tr = dcr("tr", document);
       for (var j = 0; j < cw / 100; j++) {
-        var td = dcr("td",document);
+        var td = dcr("td", document);
         td.setAttribute(
           "cost",
           side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
@@ -86,21 +139,20 @@ class GameScene extends HTMLElement {
         const el = e.srcElement;
         const menu = dcr("div");
         menu.setAttribute("menu", true);
-        console.log(td?.towers);
         let towers = G.towers.split("");
         let isUpgrading = false;
+        const s = td.querySelector("span");
         let nextLevel =
-          td.querySelector("span")?.getAttribute("one") === ""
+          s?.getAttribute("one") === ""
             ? "two"
-            : td.querySelector("span")?.getAttribute("two") === ""
+            : s?.getAttribute("two") === ""
             ? "three"
-            : td.querySelector("span")?.getAttribute("three") === ""
+            : s?.getAttribute("three") === ""
             ? "four"
             : null;
         if (!nextLevel) {
           nextLevel = "one";
         }
-        console.log(nextLevel);
 
         if (Boolean(td.towers)) {
           towers = towers.filter((l) => td.towers.includes(l));
@@ -111,11 +163,14 @@ class GameScene extends HTMLElement {
           towers = [];
         }
 
-        towers.forEach((tower) => {
-          const menuItem = dcr("div");
-          var type = getTowerType(tower);
-          menuItem.setAttribute(type, "");
-          menuItem.setAttribute("legend", "");
+        towers.forEach((t) => {
+          const mi = dcr("div");
+          var dt = tower_decode(t);
+          var typidx =
+            parseInt(dt[5] + "" + dt[6] + "" + dt[7], 2) % G.tower_types.length;
+          var type = G.tower_types[typidx];
+          mi.setAttribute(type, "");
+          mi.setAttribute("legend", "");
           const tpCost = Number(td.getAttribute("cost"));
           const cost =
             type === "blaster"
@@ -125,23 +180,28 @@ class GameScene extends HTMLElement {
               : type === "phaser"
               ? tpCost * 2
               : tpCost * 2.5;
-          menuItem.innerHTML = `<span ${nextLevel}></span> ${cost}`;
-          menuItem.setAttribute("menu-item", true);
-          menuItem.addEventListener("click", (e) => {
+          mi.innerHTML = `<span ${nextLevel}></span> ${cost}`;
+          mi.setAttribute("menu-item", true);
+          mi.addEventListener("click", (e) => {
             e.stopPropagation();
             if (cost > this.money) {
-              setNotification(`Insufficient Funds`, 4000);
+              setNotification(
+                `Insufficient Funds`,
+                "Defeating waves will earn you money",
+                4000,
+                "red"
+              );
               this.closeMenu();
               return;
             }
             const amt = this.money - cost;
             this.setMoney(amt);
             if (td.towers == null) td.towers = "";
-            if (td.towers.includes(tower)) {
+            if (td.towers.includes(t)) {
               //upgrade
               for (var i = 0; i < td.childNodes.length; i++) {
                 var cn = td.childNodes[i]; //child node
-                if (cn.towerId === tower) {
+                if (cn.towerId === t) {
                   cn.childNodes[0].removeAttribute("one");
                   cn.childNodes[0].removeAttribute("two");
                   if (cn.level === undefined) cn.level = 1;
@@ -160,63 +220,43 @@ class GameScene extends HTMLElement {
               }
               for (var i = 0; i < G.bullets.length; i++) {
                 var bu = G.bullets[i]; //bullet upgrade
-                bu.damage += 5;
+                // bu.damage += 5;
               }
               this.closeMenu();
               return;
-            } else td.towers += tower;
+            } else td.towers += t;
 
-            var div = create_tower(tower_decode(tower), td.towers); //dcr("div");
-            div.towerId = tower;
+            var div = create_tower(tower_decode(t), td.towers); //dcr("div");
+            div.towerId = t;
             div.classList.add("tower");
             td.appendChild(div);
             td.style.position = "relative";
             this.closeMenu();
           });
-          menu.appendChild(menuItem);
+          menu.appendChild(mi);
         });
 
         if (isUpgrading) {
           const cost = Number(td.getAttribute("cost")) - 100;
-          const menuItem = dcr("div");
-          menuItem.setAttribute("blaster", "");
-          menuItem.setAttribute("legend", "");
-          menuItem.innerHTML = `<span sell></span> sell ${cost}`;
-          menuItem.setAttribute("menu-item", true);
-          menuItem.addEventListener("click", (e) => {
+          const mi = dcr("div");
+          mi.setAttribute("blaster", "");
+          mi.setAttribute("legend", "");
+          mi.innerHTML = `<span sell></span> sell ${cost}`;
+          mi.setAttribute("menu-item", true);
+          mi.addEventListener("click", (e) => {
             e.stopPropagation();
             const amt = this.money + cost;
             this.setMoney(amt);
-            td.towers="";
+            td.towers = "";
             td.children[0].remove();
             removeOrphanBullets();
             this.closeMenu();
           });
-          menu.appendChild(menuItem);
+          menu.appendChild(mi);
         }
         el.appendChild(menu);
       });
     });
-  }
-
-  rotateTowers(towers) {
-    for (var i = 0; i < towers.length; i++) {
-      var t = towers[i];
-      var tag =
-        t.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-      if (tag.toUpperCase() == "L-G") {
-        if (t.rot < 91) {
-          t.rot += 1;
-          t.style.transform = "rotate(" + t.rot + "deg)";
-        }
-      } else {
-        if (t.rot === undefined) t.rot = 0;
-        if (t.rot > -91) {
-          t.rot -= 1;
-          t.style.transform = "rotate(" + t.rot + "deg)";
-        }
-      }
-    }
   }
 
   setMoney(amt) {
@@ -236,27 +276,26 @@ class GameScene extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
-      this.setMoney(10000);
+      this.setMoney((this.clientWidth * 14) / 2);
 
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
         //draw ene ship/ufo
         var top = dcr("div");
-        top.id="sst";
+        top.id = "sst";
 
         var mid = dcr("div");
-        mid.id="ssm";
+        mid.id = "ssm";
 
         var bot = dcr("div");
-        bot.id="ssb";
+        bot.id = "ssb";
 
         /*var */ window.ene = dcr("div");
         ene.velocity = 1; // 1px per game loop iteration
         ene.velocityTrack = 1.0;
-        ene.health =
-          G.waves[G.wave][G.ei].charCodeAt(0);
-        ene.id="ene";
+        ene.health = 100;
+        ene.id = "ene";
         ene.width = 30;
         ene.height = 30;
         mid.style.backgroundColor = "white"; //"green";
@@ -270,9 +309,17 @@ class GameScene extends HTMLElement {
         ene.x = brect.width / 2.0 - 15;
         ene.recentHits = [];
         dba(ene);
+        let wave = 3;
         // game loop
         var gmLpId = setInterval(() => {
           if (G.gameOver) return;
+          if (ene.y > document.body.getBoundingClientRect().height) {
+            const pHP = this.shadowRoot.querySelector("t-a");
+            pHP.style.width = `${100 - (G.ei + 1) * 5}%`;
+            if (pHP.style.width === "0%") {
+              gameOver(false);
+            }
+          }
           if (
             ene.y > document.body.getBoundingClientRect().height ||
             ene.health <= 0
@@ -280,16 +327,33 @@ class GameScene extends HTMLElement {
             G.ei += 1;
             ene.y = 40;
             ene.recentHits = [];
-            if (G.ei >= G.waves[G.wave].length) {
-              //game over
-              clearInterval(gmLpId);
-              G.gameOver = true;
-              document.location.href =
-                "?wave=" + ((G.wave + 1) % G.waves.length);
-              return;
+            ene.health = 100 + (wave / 3) * 3;
+            wave++;
+            if (wave % 3 === 0) {
+              setNotification(
+                `Level ${wave / 3}`,
+                `Contract Paid + $${(wave / 3) * 400}`,
+                3000,
+                "rgba(238, 153, 18, 1)"
+              );
+              this.setMoney(this.money + (wave / 3) * 500);
             }
-            ene.health =
-              G.waves[G.wave][G.ei].charCodeAt(0);
+            if (G.ei >= G.waves[G.wave].length) {
+              gameOver(true);
+            }
+          }
+          function gameOver(win) {
+            clearInterval(gmLpId);
+            G.gameOver = true;
+            setNotification(
+              win ? "Success!" : "Fired!",
+              win
+                ? "You have fulfilled your contract by successfully defending this planet."
+                : "You have failed to defend this planet.",
+              250000,
+              win ? "green" : "red"
+            );
+            return;
           }
 
           //draw henchmen ships
@@ -335,21 +399,8 @@ class GameScene extends HTMLElement {
               h.style.left = x + "px";
               h.style.top = y + "px";
             }
-            var bits = tower_decode(
-              G.waves[G.wave][G.ei]
-            );
-            var orbHenchCnt = 0;
-            var stcHenchCnt = 0;
-            for (var i = 0; i < 4; i++) {
-              if (bits[i] == "1") {
-                orbHenchCnt += 1;
-              }
-            }
-            for (var i = 4; i < 8; i++) {
-              if (bits[i] == "1") {
-                stcHenchCnt += 1;
-              }
-            }
+            var orbHenchCnt = 3;
+            var stcHenchCnt = 3;
             if (window.stcHench == null) window.stcHench = [];
             if (window.orbHench == null) window.orbHench = [];
             while (stcHench.length < 4) {
@@ -377,8 +428,7 @@ class GameScene extends HTMLElement {
           } else {
             mid.style.backgroundColor = "red";
           }
-          mid.style.width = ene.health / 2;
-          mid.style.right = `${ene.health / 2 - 42}`;
+          mid.style.width = ene.health / 4;
 
           ene.y += Math.min(Math.floor(ene.velocityTrack), 1); //1;
           ene.velocityTrack += ene.velocityTrack;
@@ -389,11 +439,19 @@ class GameScene extends HTMLElement {
             var b = G.bullets[i];
             var brect = b.getBoundingClientRect(); //bullet rect
             var srect = ene.getBoundingClientRect(); //ship rect
-            for (var j = 0; j < 8/*orbHench.length*/; j++) {
-              var h = j<4?stcHench[j]:orbHench[j%4];
+            for (var j = 0; j < 8 /*orbHench.length*/; j++) {
+              var h = j < 4 ? stcHench[j] : orbHench[j % 4];
               if (h.dead) continue;
               if (
-                rects_collide({left:h.x, top:h.y+h.height, width:h.width, height:h.height}, brect)
+                rects_collide(
+                  {
+                    left: h.x,
+                    top: h.y + h.height,
+                    width: h.width,
+                    height: h.height,
+                  },
+                  brect
+                )
               ) {
                 removeidx = i;
                 h.dead = true;
@@ -402,11 +460,13 @@ class GameScene extends HTMLElement {
             }
             if (removeidx > -1) {
               b.reset = true;
-              b.x=b.ox;b.y=b.oy;b.style.left=b.x+"px";b.style.top=b.y+"px";
+              b.x = b.ox;
+              b.y = b.oy;
+              b.style.left = b.x + "px";
+              b.style.top = b.y + "px";
               break;
             }
-            if (rects_collide(brect,srect)
-            ) {
+            if (rects_collide(brect, srect)) {
               if (ene.recentHits.includes(i)) continue;
               if (b.phase) {
                 ene.y -= 8;

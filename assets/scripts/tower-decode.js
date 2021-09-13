@@ -4,21 +4,21 @@ function tower_decode(tower_char) {
   return bit_str;
 }
 function removeOrphanBullets() {
-  var rmidx=-1;
+  var rmidx = -1;
   G.bullets.forEach((bullet, i) => {
     if (!bullet.tower.isConnected) {
-      rmidx=i;
+      rmidx = i;
     }
   });
 
-  while (rmidx>-1) {
-    var b=G.bullets[rmidx];
+  while (rmidx > -1) {
+    var b = G.bullets[rmidx];
     G.bullets.splice(rmidx, 1);
     document.body.removeChild(b);
-    rmidx=-1;
+    rmidx = -1;
     G.bullets.forEach((bullet, i) => {
       if (!bullet.tower.isConnected) {
-        rmidx=i;
+        rmidx = i;
       }
     });
   }
@@ -32,30 +32,30 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   b.idx = G.bullets.length - 1;
   b.style.position = "absolute";
   b.style.zIndex = "0";
-  b.damage = 20;
+  b.damage = 3;
 
   if (tow.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
     // bullet rotation (ai aim assist)
     b.classList.add("b-q");
-    b.damage = 10;
+    b.damage = G.qDamage;
   }
 
   if (tow.getAttribute("phaser") !== null) {
     // laser beam straight line for phaser towers
     b.classList.add("b-p");
-    b.damage = 5;
+    b.damage = G.pDamage;
     b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
   if (tow.getAttribute("thermal") !== null) {
     // aoe attack but lower damage for thermal towers
     b.classList.add("b-t");
-    b.damage = 3;
+    b.damage = G.tDamage;
   }
 
   if (tow.getAttribute("blaster") !== null) {
-    b.damage = 3;
+    b.damage = G.bDamage;
     b.classList.add("b-b");
   }
 
@@ -98,11 +98,12 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
       b.x += chg_x;
       b.y += chg_y;
     }
-    if (b.reset) {b.reset = false;
+    if (b.reset) {
+      b.reset = false;
       b.x = b.ox;
       b.y = b.oy;
-    b.style.left = b.x + "px";
-    b.style.top = b.y + "px";
+      b.style.left = b.x + "px";
+      b.style.top = b.y + "px";
     }
     if ((reset || b.reset) && ene.recentHits.includes(b.idx)) {
       b.reset = false;
@@ -119,8 +120,6 @@ function create_bullet(tow, chg_x = 1, chg_y = 0) {
   }, 10);
 }
 function create_tower(attrs, tss /*tower set string*/) {
-  var coords = [[], [0, 100], [0, 0], [100, 0], [100, 100]];
-  var fs = 44; //font-size
   var tow = dcr("div");
   var span = dcr("span");
   span.style.borderRadius = "50%";
@@ -134,16 +133,13 @@ function create_tower(attrs, tss /*tower set string*/) {
     span.style.backgroundPosition = "14px 11px";
     tow.style.zIndex = "1";
   }
-  tow.style.fontSize = fs + "px";
   tow.rot = 0;
   var typidx =
     parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) %
     G.tower_types.length;
   tow.setAttribute(G.tower_types[typidx], "");
   setTimeout(() => {
-    //bullet
     create_bullet(tow);
-  }, 900 /*10 rotateTowers interval * 90 degree turn*/);
+  });
   return tow;
 }
-

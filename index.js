@@ -1,7 +1,7 @@
 changeScene = (scene) => {
   cs = G.allScenes.find((s) => s === scene);
   if (cs) {
-    G.currentScene = cs;
+    G.cs = cs;
     const os = document.querySelector("[in-progress]");
     if (os) {
       document.body.removeChild(os);
@@ -35,11 +35,10 @@ addEventListener("scene-change", (e) => {
 });
 
 Promise.all(
-  ["sd-button", "sd-game-scene"].map((component) =>
+  ["sd-game-scene"].map((component) =>
     customElements.whenDefined(component)
   )
 ).then((p) => {
-  console.log(p.length, `all async web components defined`);
   setTimeout(() => {
     changeScene(GAME_SCENE);
   }, 1000);
