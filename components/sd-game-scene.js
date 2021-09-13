@@ -220,7 +220,7 @@ class GameScene extends HTMLElement {
               }
               for (var i = 0; i < G.bullets.length; i++) {
                 var bu = G.bullets[i]; //bullet upgrade
-                // bu.damage += 5;
+                bu.damage += 1.5;
               }
               this.closeMenu();
               return;
@@ -281,210 +281,211 @@ class GameScene extends HTMLElement {
       setTimeout(() => {
         this.buildTable("l-g", "left", this)("r-g", "right", this);
         this.buildMenu();
-        //draw ene ship/ufo
-        var top = dcr("div");
-        top.id = "sst";
-
-        var mid = dcr("div");
-        mid.id = "ssm";
-
-        var bot = dcr("div");
-        bot.id = "ssb";
-
-        /*var */ window.ene = dcr("div");
-        ene.velocity = 1; // 1px per game loop iteration
-        ene.velocityTrack = 1.0;
-        ene.health = 100;
-        ene.id = "ene";
-        ene.width = 30;
-        ene.height = 30;
-        mid.style.backgroundColor = "white"; //"green";
-        top.appendChild(mid);
-        mid.appendChild(bot);
-        ene.appendChild(top);
-        var brect = document.body.getBoundingClientRect();
-        ene.style.left = brect.width / 2.0 - 15 + "px";
-        ene.style.top = "40px";
-        ene.y = 40;
-        ene.x = brect.width / 2.0 - 15;
-        ene.recentHits = [];
-        dba(ene);
-        let wave = 3;
-        // game loop
-        var gmLpId = setInterval(() => {
-          if (G.gameOver) return;
-          if (ene.y > document.body.getBoundingClientRect().height) {
-            const pHP = this.shadowRoot.querySelector("t-a");
-            pHP.style.width = `${100 - (G.ei + 1) * 5}%`;
-            if (pHP.style.width === "0%") {
-              gameOver(false);
-            }
-          }
-          if (
-            ene.y > document.body.getBoundingClientRect().height ||
-            ene.health <= 0
-          ) {
-            G.ei += 1;
-            ene.y = 40;
-            ene.recentHits = [];
-            ene.health = 100 + (wave / 3) * 3;
-            wave++;
-            if (wave % 3 === 0) {
-              setNotification(
-                `Level ${wave / 3}`,
-                `Contract Paid + $${(wave / 3) * 400}`,
-                3000,
-                "rgba(238, 153, 18, 1)"
-              );
-              this.setMoney(this.money + (wave / 3) * 500);
-            }
-            if (G.ei >= G.waves[G.wave].length) {
-              gameOver(true);
-            }
-          }
-          function gameOver(win) {
-            clearInterval(gmLpId);
-            G.gameOver = true;
-            setNotification(
-              win ? "Success!" : "Fired!",
-              win
-                ? "You have fulfilled your contract by successfully defending this planet."
-                : "You have failed to defend this planet.",
-              250000,
-              win ? "green" : "red"
-            );
-            return;
-          }
-
-          //draw henchmen ships
-          function drawHenchmenShips() {
-            function createHench() {
-              var h = dcr("div");
-              h.classList.add("hen");
-              var img = dcr("img");
-              img.src = "assets/images/rocket.png";
-              img.classList.add("hei");
-              h.appendChild(img);
-              h.width = 12;
-              h.height = 12;
-              dba(h);
-              h.deg = 0; //0-360
-              return h;
-            }
-            function renderHench(h, i, active) {
-              if (ene.y <= 50) h.dead = null;
-              if (active && h.dead == null) h.style.visibility = "visible";
-              else {
-                h.style.visibility = "hidden";
-                h.dead = true;
+        setTimeout(() => {
+          var top = dcr("div");
+          top.id = "sst";
+          var mid = dcr("div");
+          mid.id = "ssm";
+          var bot = dcr("div");
+          bot.id = "ssb";
+          /*var */ window.ene = dcr("div");
+          ene.velocity = 1; // 1px per game loop iteration
+          ene.velocityTrack = 1.0;
+          ene.health = 100;
+          ene.id = "ene";
+          ene.width = 30;
+          ene.height = 30;
+          mid.style.backgroundColor = "white"; //"green";
+          top.appendChild(mid);
+          mid.appendChild(bot);
+          ene.appendChild(top);
+          var brect = document.body.getBoundingClientRect();
+          ene.style.left = brect.width / 2.0 - 15 + "px";
+          ene.style.top = "40px";
+          ene.y = 40;
+          ene.x = brect.width / 2.0 - 15;
+          ene.recentHits = [];
+          dba(ene);
+          let wave = 3;
+          let sPassed = 0;
+          // game loop
+          var gmLpId = setInterval(() => {
+            if (G.gameOver) return;
+            if (ene.y > document.body.getBoundingClientRect().height) {
+              sPassed += 1;
+              const pHP = this.shadowRoot.querySelector("t-a");
+              pHP.style.width = `${100 - sPassed * 10}%`;
+              if (sPassed >= 10) {
+                gameOver(false);
               }
-              var offsets = [
-                [-15, 0],
-                [-15, -15],
-                [0, -15],
-                [15, -15],
-                [15, 0],
-                [15, 15],
-                [0, 15],
-                [-15, 15],
-              ];
-              var xs = offsets[i][0] >= 0 ? 1 : -1; //x-sign
-              var ys = offsets[i][1] >= 0 ? 1 : -1; //y-sign
-              var cxo = xs * (ene.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
-              var cyo = ys * (ene.height / 2.0) + ys * (h.height / 2.0); //characters y offsets
-              var x = ene.x + cxo + xs * offsets[i][0];
-              var y = ene.y + cyo + ys * offsets[i][1];
-              h.x = x;
-              h.y = y;
-              h.style.left = x + "px";
-              h.style.top = y + "px";
             }
-            var orbHenchCnt = 3;
-            var stcHenchCnt = 3;
-            if (window.stcHench == null) window.stcHench = [];
-            if (window.orbHench == null) window.orbHench = [];
-            while (stcHench.length < 4) {
-              stcHench.push(createHench());
+            if (
+              ene.y > document.body.getBoundingClientRect().height ||
+              ene.health <= 0
+            ) {
+              G.ei += 1;
+              ene.y = 40;
+              ene.recentHits = [];
+              ene.health = 100 + (wave / 3) * 6;
+              console.log("HEALTH", ene.health);
+              wave++;
+              if (wave % 3 === 0) {
+                setNotification(
+                  `Level ${wave / 3}`,
+                  `Contract Paid + $${(wave / 3) * 450}`,
+                  3000,
+                  "rgba(238, 153, 18, 1)"
+                );
+                this.setMoney(this.money + (wave / 3) * 450);
+              }
+              if (G.ei >= G.waves[G.wave].length) {
+                gameOver(true);
+              }
             }
-            while (orbHench.length < 4) {
-              orbHench.push(createHench());
+            function gameOver(win) {
+              clearInterval(gmLpId);
+              G.gameOver = true;
+              setNotification(
+                win ? "Success!" : "Fired!",
+                win
+                  ? "You have fulfilled your contract by successfully defending this planet."
+                  : "You have failed to defend this planet.",
+                250000,
+                win ? "green" : "red"
+              );
+              return;
             }
-            for (var i = 0; i < 8; i++) {
-              var h = i < 4 ? stcHench[i] : orbHench[i % 4];
-              var active =
-                i < 4 ? stcHenchCnt >= i + 1 : orbHenchCnt >= (i % 4) + 1;
-              renderHench(h, i, active);
-            }
-          }
-          drawHenchmenShips();
 
-          if (ene.health < 50) ene.style.color = "red";
-          else ene.style.color = "green";
+            //draw henchmen ships
+            function drawHenchmenShips() {
+              function createHench() {
+                var h = dcr("div");
+                h.classList.add("hen");
+                var img = dcr("img");
+                img.src = "assets/images/rocket.png";
+                img.classList.add("hei");
+                h.appendChild(img);
+                h.width = 12;
+                h.height = 12;
+                dba(h);
+                h.deg = 0; //0-360
+                return h;
+              }
+              function renderHench(h, i, active) {
+                if (ene.y <= 50) h.dead = null;
+                if (active && h.dead == null) h.style.visibility = "visible";
+                else {
+                  h.style.visibility = "hidden";
+                  h.dead = true;
+                }
+                var offsets = [
+                  [-15, 0],
+                  [-15, -15],
+                  [0, -15],
+                  [15, -15],
+                  [15, 0],
+                  [15, 15],
+                  [0, 15],
+                  [-15, 15],
+                ];
+                var xs = offsets[i][0] >= 0 ? 1 : -1; //x-sign
+                var ys = offsets[i][1] >= 0 ? 1 : -1; //y-sign
+                var cxo = xs * (ene.width / 2.0) + xs * (h.width / 2.0); //characters x offsets
+                var cyo = ys * (ene.height / 2.0) + ys * (h.height / 2.0); //characters y offsets
+                var x = ene.x + cxo + xs * offsets[i][0];
+                var y = ene.y + cyo + ys * offsets[i][1];
+                h.x = x;
+                h.y = y;
+                h.style.left = x + "px";
+                h.style.top = y + "px";
+              }
+              var orbHenchCnt = 3;
+              var stcHenchCnt = 3;
+              if (window.stcHench == null) window.stcHench = [];
+              if (window.orbHench == null) window.orbHench = [];
+              while (stcHench.length < 4) {
+                stcHench.push(createHench());
+              }
+              while (orbHench.length < 4) {
+                orbHench.push(createHench());
+              }
+              for (var i = 0; i < 8; i++) {
+                var h = i < 4 ? stcHench[i] : orbHench[i % 4];
+                var active =
+                  i < 4 ? stcHenchCnt >= i + 1 : orbHenchCnt >= (i % 4) + 1;
+                renderHench(h, i, active);
+              }
+            }
+            drawHenchmenShips();
 
-          if (ene.health > 80) {
-            mid.style.backgroundColor = "green";
-          } else if (ene.health > 50) {
-            mid.style.backgroundColor = "yellow";
-          } else {
-            mid.style.backgroundColor = "red";
-          }
-          mid.style.width = ene.health / 4;
+            if (ene.health < 50) ene.style.color = "red";
+            else ene.style.color = "green";
 
-          ene.y += Math.min(Math.floor(ene.velocityTrack), 1); //1;
-          ene.velocityTrack += ene.velocityTrack;
-          ene.velocityTrack = Math.min(ene.velocityTrack, 1);
-          ene.style.top = ene.y + "px";
-          var removeidx = -1;
-          for (var i = 0; i < G.bullets.length; i++) {
-            var b = G.bullets[i];
-            var brect = b.getBoundingClientRect(); //bullet rect
-            var srect = ene.getBoundingClientRect(); //ship rect
-            for (var j = 0; j < 8 /*orbHench.length*/; j++) {
-              var h = j < 4 ? stcHench[j] : orbHench[j % 4];
-              if (h.dead) continue;
-              if (
-                rects_collide(
-                  {
-                    left: h.x,
-                    top: h.y + h.height,
-                    width: h.width,
-                    height: h.height,
-                  },
-                  brect
-                )
-              ) {
+            if (ene.health > 80) {
+              mid.style.backgroundColor = "green";
+            } else if (ene.health > 50) {
+              mid.style.backgroundColor = "yellow";
+            } else {
+              mid.style.backgroundColor = "red";
+            }
+            mid.style.width = ene.health / 4;
+
+            ene.y += Math.min(Math.floor(ene.velocityTrack), 1); //1;
+            ene.velocityTrack += ene.velocityTrack;
+            ene.velocityTrack = Math.min(ene.velocityTrack, 1);
+            ene.style.top = ene.y + "px";
+            var removeidx = -1;
+            for (var i = 0; i < G.bullets.length; i++) {
+              var b = G.bullets[i];
+              var brect = b.getBoundingClientRect(); //bullet rect
+              var srect = ene.getBoundingClientRect(); //ship rect
+              for (var j = 0; j < 8 /*orbHench.length*/; j++) {
+                var h = j < 4 ? stcHench[j] : orbHench[j % 4];
+                if (h.dead) continue;
+                if (
+                  rects_collide(
+                    {
+                      left: h.x,
+                      top: h.y + h.height,
+                      width: h.width,
+                      height: h.height,
+                    },
+                    brect
+                  )
+                ) {
+                  removeidx = i;
+                  h.dead = true;
+                  break;
+                }
+              }
+              if (removeidx > -1) {
+                b.reset = true;
+                b.x = b.ox;
+                b.y = b.oy;
+                b.style.left = b.x + "px";
+                b.style.top = b.y + "px";
+                break;
+              }
+              if (rects_collide(brect, srect)) {
+                if (ene.recentHits.includes(i)) continue;
+                if (b.phase) {
+                  ene.y -= 8;
+                }
+                ene.health -= b.damage; //20;
                 removeidx = i;
-                h.dead = true;
+                //hit
+                if (b.slow != null) {
+                  ene.velocityTrack = b.slow;
+                }
                 break;
               }
             }
-            if (removeidx > -1) {
-              b.reset = true;
-              b.x = b.ox;
-              b.y = b.oy;
-              b.style.left = b.x + "px";
-              b.style.top = b.y + "px";
-              break;
+            if (removeidx > -1 && !ene.recentHits.includes(removeidx)) {
+              ene.recentHits.push(removeidx);
             }
-            if (rects_collide(brect, srect)) {
-              if (ene.recentHits.includes(i)) continue;
-              if (b.phase) {
-                ene.y -= 8;
-              }
-              ene.health -= b.damage; //20;
-              removeidx = i;
-              //hit
-              if (b.slow != null) {
-                ene.velocityTrack = b.slow;
-              }
-              break;
-            }
-          }
-          if (removeidx > -1 && !ene.recentHits.includes(removeidx)) {
-            ene.recentHits.push(removeidx);
-          }
-          if (ene.health < 0) ene.health = 0;
-        }, 14);
+            if (ene.health < 0) ene.health = 0;
+          }, 14);
+        }, 5000);
       }, 1000);
     }
   }
