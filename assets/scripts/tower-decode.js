@@ -1,22 +1,17 @@
-function tower_decode(tower_char) {
-  var tc = tower_char;
-  var bit_str = tc.charCodeAt(0).toString(2).padStart(8, "0");
-  return bit_str;
-}
 function removeOrphanBullets() {
   var rmidx = -1;
-  G.bullets.forEach((bullet, i) => {
+  GAME_DATA.bullets.forEach((bullet, i) => {
     if (!bullet.tower.isConnected) {
       rmidx = i;
     }
   });
 
   while (rmidx > -1) {
-    var b = G.bullets[rmidx];
-    G.bullets.splice(rmidx, 1);
+    var b = GAME_DATA.bullets[rmidx];
+    GAME_DATA.bullets.splice(rmidx, 1);
     document.body.removeChild(b);
     rmidx = -1;
-    G.bullets.forEach((bullet, i) => {
+    GAME_DATA.bullets.forEach((bullet, i) => {
       if (!bullet.tower.isConnected) {
         rmidx = i;
       }
@@ -24,122 +19,125 @@ function removeOrphanBullets() {
   }
 }
 
-function create_bullet(tow, chg_x = 1, chg_y = 0) {
-  var b = dcr("div");
-  b.tower = tow;
-  G.bullets.push(b);
+function create_bullet(tower, chg_x = 1, chg_y = 0) {
+  var bullet = document.createElement("div");
+  bullet.tower = tower;
+  GAME_DATA.bullets.push(bullet);
   // bullet defaults
-  b.idx = G.bullets.length - 1;
-  b.style.position = "absolute";
-  b.style.zIndex = "0";
-  b.damage = 3;
+  bullet.idx = GAME_DATA.bullets.length - 1;
+  bullet.style.position = "absolute";
+  bullet.style.zIndex = "0";
+  bullet.damage = 3;
 
-  if (tow.getAttribute("quantum") !== null) {
+  if (tower.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
     // bullet rotation (ai aim assist)
-    b.classList.add("b-q");
-    b.damage = G.qDamage;
+    bullet.classList.add("bullet-quantum");
+    bullet.damage = GAME_DATA.quantumDamage;
   }
 
-  if (tow.getAttribute("phaser") !== null) {
+  if (tower.getAttribute("phaser") !== null) {
     // laser beam straight line for phaser towers
-    b.classList.add("b-p");
-    b.damage = G.pDamage;
-    b.slow = 0.00001; // percent pixel move per game loop iteration
+    bullet.classList.add("bullet-phaser");
+    bullet.damage = GAME_DATA.phaserDamage;
+    bullet.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
-  if (tow.getAttribute("thermal") !== null) {
+  if (tower.getAttribute("thermal") !== null) {
     // aoe attack but lower damage for thermal towers
-    b.classList.add("b-t");
-    b.damage = G.tDamage;
+    bullet.classList.add("bullet-thermal");
+    bullet.damage = GAME_DATA.thermalDamage;
   }
 
-  if (tow.getAttribute("blaster") !== null) {
-    b.damage = G.bDamage;
-    b.classList.add("b-b");
+  if (tower.getAttribute("blaster") !== null) {
+    bullet.damage = GAME_DATA.blasterDamage;
+    bullet.classList.add("bullet-blaster");
   }
 
-  var rect = tow.getBoundingClientRect();
+  var rect = tower.getBoundingClientRect();
   var x = rect.x + rect.width / 2.0;
   var y = rect.y + rect.height / 2.0;
-  b.style.left = x + "px"; //tow.parentNode.offsetLeft + 28 + "px";
-  b.style.top = y + "px"; //tow.parentNode.offsetTop + 36 + "px";
-  b.ox = x;
-  b.oy = y;
-  b.x = x;
-  b.y = y;
-  var tag = tow.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-  b.lefttower = tag.toUpperCase() == "L-G";
-  dba(b);
+  bullet.style.left = x + "px"; //tow.parentNode.offsetLeft + 28 + "px";
+  bullet.style.top = y + "px"; //tow.parentNode.offsetTop + 36 + "px";
+  bullet.ox = x;
+  bullet.oy = y;
+  bullet.x = x;
+  bullet.y = y;
+  var tag =
+    tower.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
+  bullet.lefttower = tag.toUpperCase() == "L-G";
+  dba(bullet);
   var mid_x = document.body.getBoundingClientRect().width / 2.0;
-  b.style.zIndex = "100000";
+  bullet.style.zIndex = "100000";
   setInterval(() => {
     var reset = false;
-    if (rect.y > b.y) {
-      b.style.transform = b.lefttower ? "rotate(-45deg)" : "rotate(45deg)";
-    } else if (rect.y < b.y - 50) {
-      b.style.transform = b.lefttower ? "rotate(45deg)" : "rotate(-45deg)";
+    if (rect.y > bullet.y) {
+      bullet.style.transform = bullet.lefttower
+        ? "rotate(-45deg)"
+        : "rotate(45deg)";
+    } else if (rect.y < bullet.y - 50) {
+      bullet.style.transform = bullet.lefttower
+        ? "rotate(45deg)"
+        : "rotate(-45deg)";
     }
-    if (!b.lefttower && b.x < mid_x - 63) {
-      b.x = b.ox;
-      b.y = b.oy;
+    if (!bullet.lefttower && bullet.x < mid_x - 63) {
+      bullet.x = bullet.ox;
+      bullet.y = bullet.oy;
       reset = true;
     }
-    if (!b.lefttower && b.x >= mid_x - 63) {
-      b.x -= chg_x;
-      b.y += chg_y;
+    if (!bullet.lefttower && bullet.x >= mid_x - 63) {
+      bullet.x -= chg_x;
+      bullet.y += chg_y;
     }
-    if (b.lefttower && b.x > mid_x + 63) {
-      b.x = b.ox;
-      b.y = b.oy;
+    if (bullet.lefttower && bullet.x > mid_x + 63) {
+      bullet.x = bullet.ox;
+      bullet.y = bullet.oy;
       reset = true;
     }
-    if (b.lefttower && b.x <= mid_x + 63) {
-      b.x += chg_x;
-      b.y += chg_y;
+    if (bullet.lefttower && bullet.x <= mid_x + 63) {
+      bullet.x += chg_x;
+      bullet.y += chg_y;
     }
-    if (b.reset) {
-      b.reset = false;
-      b.x = b.ox;
-      b.y = b.oy;
-      b.style.left = b.x + "px";
-      b.style.top = b.y + "px";
+    if (bullet.reset) {
+      bullet.reset = false;
+      bullet.x = bullet.ox;
+      bullet.y = bullet.oy;
+      bullet.style.left = bullet.x + "px";
+      bullet.style.top = bullet.y + "px";
     }
 
-    if ((reset || b.reset) && window?.ene?.recentHits.includes(b.idx)) {
-      b.reset = false;
-      b.x = b.ox;
-      b.y = b.oy;
+    if (
+      (reset || bullet.reset) &&
+      window?.ene?.recentHits.includes(bullet.idx)
+    ) {
+      bullet.reset = false;
+      bullet.x = bullet.ox;
+      bullet.y = bullet.oy;
       for (var i = 0; i < window?.ene?.recentHits.length; i++) {
-        if (window?.ene?.recentHits[i] == b.idx) {
+        if (window?.ene?.recentHits[i] == bullet.idx) {
           window.ene.recentHits[i] = -1;
         }
       }
     }
 
-    b.style.left = b.x + "px";
-    b.style.top = b.y + "px";
+    bullet.style.left = bullet.x + "px";
+    bullet.style.top = bullet.y + "px";
   }, 10);
 }
-function create_tower(attrs, tss /*tower set string*/) {
-  var tow = dcr("div");
-  var span = dcr("span");
-  span.style.borderRadius = "50%";
+function create_tower(tower) {
+  var tow = document.createElement("div");
+  var span = document.createElement("span");
   tow.appendChild(span);
   span.setAttribute("one", ""); //levels[li],"");
-  if (tss.length == 1) {
-    span.style.width = "65px";
-    span.style.height = "65px";
-    span.style.backgroundImage = "url('assets/images/sat.png')";
-    span.style.backgroundRepeat = "no-repeat";
-    span.style.backgroundPosition = "14px 11px";
-    tow.style.zIndex = "1";
-  }
+  span.style.width = "65px";
+  span.style.height = "65px";
+  var img = document.createElement("img");
+  img.src = `assets/images/${tower}.png`;
+  span.appendChild(img);
+  tow.style.zIndex = "1";
   tow.rot = 0;
-  var typidx =
-    parseInt(attrs[5] + "" + attrs[6] + "" + attrs[7], 2) %
-    G.tower_types.length;
-  tow.setAttribute(G.tower_types[typidx], "");
+
+  tow.setAttribute(tower, "");
   setTimeout(() => {
     create_bullet(tow);
   });

@@ -1,5 +1,6 @@
 body {
   background: #000;
+  background: url(assets/images/background1.png);
   color: #f5f5f5;
   overflow: hidden;
   margin: 0;
@@ -15,50 +16,38 @@ link,
   display: none !important;
 }
 #ene {
-  height: 30px;
-  width: 30px;
+  height: 100px;
+  width: 100px;
   position: absolute;
 } /*enemy*/
 #sst {
-  border-radius: 50%;
   width: 100%;
   height: 100%;
-  background-image: url(assets/images/rocket.png);
+  background-image: url(assets/images/ship.png);
   background-repeat: no-repeat;
   background-size: cover;
   transform: rotate(180deg);
   background-color: transparent;
 } /*space ship top*/
 #ssm {
-  width: 100%;
+  width: 100px;
   display: block;
-  background-color: green;
-  left: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
   position: absolute;
-  transform: translate(-50%, -50%);
-  height: 6px;
-  top: 42px;
+  height: 12px;
+  bottom: -24px;
 } /*space ship mid*/
 #ssb {
-  width: 18px;
-  height: 15px;
-  bottom: -2px;
-  left: 6px;
-  position: relative;
-  display: block;
-  border-radius: 50%;
+  width: 100%;
+  height: 12px;
+  background-color: #31b64e;
 }
 .hei {
   width: 100%;
   height: 100%;
   transform: rotate(180deg);
-} /*henchman image*/
-.hen {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-} /*henchman*/
-#not {
+}
+#notification {
   pointer-events: none;
   font-size: 32px;
   font-family: system-ui;
@@ -70,7 +59,7 @@ link,
   text-align: center;
 } /*notification*/
 
-#not div[sub]{
+#notification div[sub] {
   font-family: monospace;
   font-size: 12px;
   color: #fff;
@@ -79,22 +68,24 @@ link,
   text-align: center;
 }
 
-.b-q {
+.bullet-quantum {
+  pointer-events: none;
   width: 10px;
   height: 6px;
   border: 1px solid rgb(248, 190, 28);
   background: rgba(248, 190, 28, 0.5);
   filter: blur(1px);
 } /*bullet quantum*/
-.b-p {
+.bullet-phaser {
+  pointer-events: none;
   width: 36px;
   height: 7px;
-  border: 1px solid rgb(132, 255, 255);
-  background: rgba(132, 255, 255, 0.5);
+  border: 1px solid rgb(132, 255, 179);
+  background: rgba(132, 255, 214, 0.493);
   border-radius: 0px;
   filter: blur(3px);
 }
-.b-t {
+.bullet-thermal {
   pointer-events: none;
   width: 36px;
   height: 36px;
@@ -103,7 +94,8 @@ link,
   background: rgba(255, 73, 49, 0.2);
   border-radius: 50%;
 }
-.b-b {
+.bullet-blaster {
+  pointer-events: none;
   width: 10px;
   height: 6px;
   border: 1px solid rgb(255, 255, 255);

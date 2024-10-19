@@ -1,4 +1,4 @@
-var t4 = dcr("template",document);
+var t4 = document.createElement("template",document);
 
 t4.innerHTML = ` <l-s><link href="components/sd-loading-scene.css" rel="stylesheet"> <img src="assets/images/loader.gif" /> <div>Loading...</div></l-s> `;
 

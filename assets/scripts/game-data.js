@@ -1,30 +1,22 @@
 LOADING_SCENE = "loading-scene";
 GAME_SCENE = "game-scene";
 
-ALL_SCENES = [
-    LOADING_SCENE,
-    GAME_SCENE
-];
+ALL_SCENES = [LOADING_SCENE, GAME_SCENE];
 
-G/*AME_DATA*/ = {
-  towers: "@M*O",//"*@M0OADY",
-  waves: ["111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"],
+GAME_DATA = {
+  towers: "blaster,thermal,phaser,quantum", //"*@M0OADY",
+  waves: [
+    "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+  ],
   wave: 0,
-  ei: 0,//enemy index (usage: waves[wave][ei])
+  ei: 0, //enemy index (usage: waves[wave][ei])
   bullets: [],
-  allScenes : [...ALL_SCENES],
+  allScenes: [...ALL_SCENES],
   cs: LOADING_SCENE,
   gameOver: false,
-  pDamage: 9,
-  bDamage: 10,
-  tDamage: 6,
-  qDamage: 16,
-  tower_types : [
-    "blaster",
-    "thermal",
-    "phaser",
-    "quantum",
-  ]
+  phaserDamage: 8,
+  blasterDamage: 10,
+  thermalDamage: 6,
+  quantumDamage: 14,
+  tower_types: ["blaster", "thermal", "phaser", "quantum"],
 };
-
-

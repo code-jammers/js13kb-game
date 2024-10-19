@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 
-t-a {
+planet-health-bar {
   display: flex;
   align-items: center;
   height: 25px;
@@ -13,12 +13,12 @@ t-a {
   justify-content: space-between;
 }
 
-t-a > span {
+planet-health-bar > span {
   padding: 0 12px;
   position: absolute;
 }
 
-t-b {
+information-panel {
   height: 65px;
   display: flex;
   justify-content: space-between;
@@ -27,7 +27,7 @@ t-b {
   align-items: center;
 }
 
-s-c {
+defense-grid {
   display: grid;
   grid: "left middle right" / 1fr 200px 1fr;
   height: calc(100vh - 85px);
@@ -44,19 +44,6 @@ r-w {
   display: flex;
   width: 200px;
   height: calc(100vh - 85px);
-  filter: blur(38px);
-  background-color: #212121;
-  background-color: #212121;
-}
-
-s-p {
-  height: calc(17vh - 65px);
-  width: calc(17vh - 65px);
-  border-radius: 50%;
-  filter: blur(2px);
-  background: #f89133a6;
-  position: absolute;
-  bottom: 24px;
 }
 
 l-g,
@@ -64,11 +51,15 @@ r-g {
   position: relative;
 }
 
+r-g img{
+  transform: scale3d(-1, 1, 1);
+}
+
 @media (max-width: 768px) {
   r-w {
     width: 65px;
   }
-  s-c {
+  defense-grid {
     display: grid;
     grid: "left middle right" / 1fr 100px 1fr;
   }
@@ -94,10 +85,11 @@ td {
   position: relative;
   z-index: 1;
   background: #000;
+  opacity: 0.7;
 }
 
 td:hover {
-  transition: 0.1s ease-out;
+  transition: 0.5s ease-out;
   background: #111;
   border-color: rgb(238, 150, 34);
 }
@@ -172,49 +164,132 @@ div[satellite]:not([menu-item]),
 div[thermal]:not([menu-item]) {
   display: flex;
   align-items: center;
-  margin-left: 24px;
+  margin-left: 18px;
 }
+
+span > img {
+  object-fit: contain;
+  width: 65px;
+  border: 2px solid #eee;
+  border-radius: 4px;
+}
+
+/* Thermal */
+
+/* Thermal Level 1 */
 div[thermal] span[one] {
   background: rgb(245, 80, 75);
 }
+
+div[thermal] span[one] > img {
+  border-color: rgb(245, 80, 75);
+}
+
+/* Thermal Level 2 */
 div[thermal] span[two] {
   background: rgb(255, 76, 52);
 }
+
+div[thermal] span[two] > img {
+  border-color: rgb(255, 76, 52);
+}
+
+/* Thermal Level 3 */
 div[thermal] span[three] {
   background: rgb(221, 43, 19);
 }
 
-div[phaser] span[one] {
-  background: rgb(142, 246, 246);
-}
-div[phaser] span[two] {
-  background: rgb(82, 230, 288, 1);
-}
-div[phaser] span[three] {
-  background: rgb(27, 166, 221);
+div[thermal] span[three] > img {
+  border-color: rgb(221, 43, 19);
 }
 
+/* Phaser */
+
+/* Phaser Level 1 */
+div[phaser] span[one] {
+  background: rgb(27, 221, 124);
+}
+
+div[phaser] span[one] > img {
+  border-color: rgb(27, 221, 124);
+}
+
+/* Phaser Level 2 */
+div[phaser] span[two] {
+  background: rgb(27, 221, 53);
+}
+
+div[phaser] span[two] > img {
+  border-color: rgb(27, 221, 53);
+}
+
+/* Phaser Level 3 */
+div[phaser] span[three] {
+  background: rgb(27, 221, 27);
+}
+
+div[phaser] span[three] > img {
+  border-color: rgb(27, 221, 27);
+}
+
+/* Blaster */
+
+/* Blaster Level 1 */
 div[blaster] span[one] {
   background: rgba(80, 80, 80, 1);
 }
+
+div[blaster] span[one] > img {
+  border-color: rgba(80, 80, 80, 1);
+}
+
+/* Blaster Level 2 */
 div[blaster] span[two] {
   background: rgb(209, 208, 208);
 }
+
+div[blaster] span[two] > img {
+  border-color: rgb(209, 208, 208);
+}
+
+/* Blaster Level 3 */
 div[blaster] span[three] {
   background: rgba(255, 255, 255, 1);
 }
 
+div[blaster] span[three] > img {
+  border-color: rgba(255, 255, 255, 1);
+}
+
+/* Quantum */
+
+/* Quantum Level 1 */
 div[quantum] span[one] {
   background: rgb(255, 227, 65);
 }
+
+div[quantum] span[one] > img {
+  border-color: rgb(255, 227, 65);
+}
+
+/* Quantum Level 2 */
 div[quantum] span[two] {
   background: rgb(251, 194, 34);
 }
+
+div[quantum] span[two] > img {
+  border-color: rgb(251, 194, 34);
+}
+
+/* Quantum Level 3 */
 div[quantum] span[three] {
   background: rgb(221, 142, 15);
+}
+
+div[quantum] span[three] > img {
+  border-color: rgb(221, 142, 15);
 }
 
 span[sell] {
   background: rgb(26, 114, 67);
 }
-
