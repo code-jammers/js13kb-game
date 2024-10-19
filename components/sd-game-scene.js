@@ -1,37 +1,5 @@
 var t2 = document.createElement("template");
 
-let showingNotification = false;
-let notifications = [];
-setNotification = (text, subtext, timeout, color) => {
-  if (showingNotification) {
-    if (text !== notifications?.[0]?.text) {
-      notifications.push({ text, subtext, timeout, color });
-    }
-    return;
-  }
-  try {
-    showingNotification = true;
-    var n = document.createElement("a");
-    n.id = "notification";
-    n.innerHTML = `<div>${text}</div><div sub>${subtext}</div>`;
-    n.style.color = color;
-    dba(n);
-    setTimeout(() => {
-      n.remove();
-      showingNotification = false;
-      if (notifications.length > 0) {
-        setNotification(
-          notifications[0].text,
-          notifications[0].subtext,
-          notifications[0].timeout,
-          notifications[0].color
-        );
-        notifications.shift();
-      }
-    }, timeout);
-  } catch (_) {}
-};
-
 t2.innerHTML = html`
   <link href="components/sd-game-scene.css" rel="stylesheet" />
   <planet-health-bar>
