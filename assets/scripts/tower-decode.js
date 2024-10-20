@@ -1,31 +1,10 @@
-/*function removeOrphanBullets() {
-  var rmidx = -1;
-  GAME_DATA.bullets.forEach((b, i) => {
-    var bullet = document.querySelector(`#${b.id}`)
-    if (!bullet.tower.isConnected) {
-      rmidx = i;
-    }
-  });
-
-  while (rmidx > -1) {
-    var b = GAME_DATA.bullets[rmidx];
-    GAME_DATA.bullets.splice(rmidx, 1);
-    document.body.removeChild(document.querySelector(`#${b.id}`));
-    rmidx = -1;
-    GAME_DATA.bullets.forEach((b, i) => {
-      var bullet = document.querySelector(`#${b.id}`)
-      if (!bullet.tower.isConnected) {
-        rmidx = i;
-      }
-    });
-  }
-}*/
-
-function createBullet(tower, chg_x = 1, chg_y = 0) {
+function createBullet(tower, chgX = 1, chgY = 0) {
   var bullet = document.createElement("div");
   bullet.id = crypto.randomUUID();
   bullet.tower = tower;
-  var b = { id: bullet.id, towerId: tower.id };
+  let chg_x = chgX;
+  let chg_y = chgY;
+  var b = { id: bullet.id, towerId: tower.id, chgX: chgX, chgY: chgY };
   GAME_DATA.bullets.push(b);
   // bullet defaults
   bullet.idx = GAME_DATA.bullets.length - 1;
@@ -71,62 +50,8 @@ function createBullet(tower, chg_x = 1, chg_y = 0) {
     tower.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
   bullet.lefttower = tag.toUpperCase() == "L-G";
   dba(bullet);
-  var mid_x = document.body.getBoundingClientRect().width / 2.0;
+  // var mid_x = document.body.getBoundingClientRect().width / 2.0;
   bullet.style.zIndex = "100000";
-  setInterval(() => {
-    var reset = false;
-    if (rect.y > bullet.y) {
-      bullet.style.transform = bullet.lefttower
-        ? "rotate(-45deg)"
-        : "rotate(45deg)";
-    } else if (rect.y < bullet.y - 50) {
-      bullet.style.transform = bullet.lefttower
-        ? "rotate(45deg)"
-        : "rotate(-45deg)";
-    }
-    if (!bullet.lefttower && bullet.x < mid_x - 63) {
-      bullet.x = bullet.ox;
-      bullet.y = bullet.oy;
-      reset = true;
-    }
-    if (!bullet.lefttower && bullet.x >= mid_x - 63) {
-      bullet.x -= chg_x;
-      bullet.y += chg_y;
-    }
-    if (bullet.lefttower && bullet.x > mid_x + 63) {
-      bullet.x = bullet.ox;
-      bullet.y = bullet.oy;
-      reset = true;
-    }
-    if (bullet.lefttower && bullet.x <= mid_x + 63) {
-      bullet.x += chg_x;
-      bullet.y += chg_y;
-    }
-    if (bullet.reset) {
-      bullet.reset = false;
-      bullet.x = bullet.ox;
-      bullet.y = bullet.oy;
-      bullet.style.left = bullet.x + "px";
-      bullet.style.top = bullet.y + "px";
-    }
-
-    if (
-      (reset || bullet.reset) &&
-      window?.ene?.recentHits.includes(bullet.idx)
-    ) {
-      bullet.reset = false;
-      bullet.x = bullet.ox;
-      bullet.y = bullet.oy;
-      for (var i = 0; i < window?.ene?.recentHits.length; i++) {
-        if (window?.ene?.recentHits[i] == bullet.idx) {
-          window.ene.recentHits[i] = -1;
-        }
-      }
-    }
-
-    bullet.style.left = bullet.x + "px";
-    bullet.style.top = bullet.y + "px";
-  }, 10);
 }
 function createTower(tower) {
   var towerId = crypto.randomUUID();

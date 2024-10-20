@@ -24,7 +24,7 @@ setNotification = (text, subtext, timeout, color) => {
           notifications[0].text,
           notifications[0].subtext,
           notifications[0].timeout,
-          notifications[0].color
+          notifications[0].color,
         );
         notifications.shift();
       }
@@ -82,7 +82,7 @@ class GameScene extends HTMLElement {
       `Attack ${GAME_DATA.wave + 1}`,
       "Build towers to defend this planet from invasion",
       6000,
-      "rgba(238, 153, 18, 1)"
+      "rgba(238, 153, 18, 1)",
     );
     const gc = ctx.shadowRoot.querySelector(query);
     var table = document.createElement("table");
@@ -114,7 +114,7 @@ class GameScene extends HTMLElement {
         var td = document.createElement("td", document);
         td.setAttribute(
           "cost",
-          side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
+          side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100,
         );
         tr.appendChild(td);
       }
@@ -146,10 +146,10 @@ class GameScene extends HTMLElement {
           s?.getAttribute("one") === ""
             ? "two"
             : s?.getAttribute("two") === ""
-            ? "three"
-            : s?.getAttribute("three") === ""
-            ? "four"
-            : null;
+              ? "three"
+              : s?.getAttribute("three") === ""
+                ? "four"
+                : null;
         if (!nextLevel) {
           nextLevel = "one";
         }
@@ -172,10 +172,10 @@ class GameScene extends HTMLElement {
             tower === "blaster"
               ? tpCost
               : tower === "thermal"
-              ? tpCost * 1.5
-              : tower === "phaser"
-              ? tpCost * 2
-              : tpCost * 2.5;
+                ? tpCost * 1.5
+                : tower === "phaser"
+                  ? tpCost * 2
+                  : tpCost * 2.5;
           mi.innerHTML = `<span ${nextLevel}></span> ${cost}`;
           mi.setAttribute("menu-item", true);
           mi.addEventListener("click", (e) => {
@@ -185,7 +185,7 @@ class GameScene extends HTMLElement {
                 `Insufficient Funds`,
                 "Defeating waves will earn you money",
                 4000,
-                "red"
+                "red",
               );
               this.closeMenu();
               return;
@@ -315,11 +315,10 @@ class GameScene extends HTMLElement {
           // game loop
           var gameLoopInterval = setInterval(() => {
             if (GAME_DATA.gameOver) return;
-            this.shadowRoot.querySelector(
-              "[main-title]"
-            ).innerText = `Space Defense Engineer (level ${Math.floor(
-              wave / 3
-            )}/${GAME_DATA.waves?.[0].length / 3})`;
+            this.shadowRoot.querySelector("[main-title]").innerText =
+              `Space Defense Engineer (level ${Math.floor(
+                wave / 3,
+              )}/${GAME_DATA.waves?.[0].length / 3})`;
             if (ene.y > document.body.getBoundingClientRect().height) {
               sPassed += 1;
               const planetHealthBar =
@@ -355,7 +354,7 @@ class GameScene extends HTMLElement {
                     `Level ${wave / 3}`,
                     `Contract Paid + $${newMoney}`,
                     3000,
-                    "rgba(238, 153, 18, 1)"
+                    "rgba(238, 153, 18, 1)",
                   );
 
                   var enemyImage = document.querySelector("#sst");
@@ -393,7 +392,7 @@ class GameScene extends HTMLElement {
                   ? "You have fulfilled your contract by successfully defending this planet."
                   : "You have failed to defend this planet.",
                 250000,
-                win ? "green" : "red"
+                win ? "green" : "red",
               );
               return;
             }
@@ -407,42 +406,82 @@ class GameScene extends HTMLElement {
 
             var bodyRect = document.body.getBoundingClientRect();
             var gameReferee = new window.GameReferee(bodyRect);
+            var gameElementAnimator = new window.GameElementAnimator(bodyRect);
             var rmIdx = [];
-            for (var i=0; i<GAME_DATA.bullets.length; i++) {
+            var hitIssued = false;
+            for (var i = 0; i < GAME_DATA.bullets.length; i++) {
               var currentBullet = GAME_DATA.bullets[i];
-              var bulletEl = document.querySelector('#'+CSS.escape(currentBullet.id));
+              var bulletEl = document.querySelector(
+                "#" + CSS.escape(currentBullet.id),
+              );
               if (bulletEl == null) continue;
               var bulletBoundingRect = bulletEl.getBoundingClientRect(); //bullet rect
               var enemyBoundingRect = ene.getBoundingClientRect(); //ship rect
-              var bulletEOL = gameReferee.endOfLifeBulletType(bulletBoundingRect, enemyBoundingRect, rects_collide);
-              switch(bulletEOL) {
-                case 'hit':
-                  if (bulletEl.phase) {
-                    ene.y -= 8;
-                  }
-                  var levelModifier = wave * 0.2 + 1;
-                  ene.health -= currentBullet.damage - levelModifier;
-                  if (bulletEl.slow != null) {
-                    ene.velocityTrack = bulletEl.slow;
-                  }
-                  if (ene.health < 0) ene.health = 0;
-                  // fall through
-                case 'miss':
+              var bulletEOL = gameReferee.endOfLifeBulletType(
+                bulletBoundingRect,
+                enemyBoundingRect,
+                rects_collide,
+              );
+              switch (bulletEOL) {
+                case "hit":
+                  var collision = { id: crypto.randomUUID(), ticks: 1 };
+                  GAME_DATA.bulletCollisions.push(collision);
+                  gameElementAnimator.animateBulletHit(
+                    collision,
+                    bulletEl,
+                    ene,
+                  );
+                  var bulletType = bulletEl.className.replace("bullet-", "");
+                  gameReferee.adjustShipFromHit(
+                    ene,
+                    currentBullet,
+                    wave,
+                    bulletType,
+                    bulletEl.slow,
+                    hitIssued,
+                  );
+                  hitIssued ||= true;
+                // fall through
+                case "miss":
                   rmIdx.push(i);
                   break;
                 default:
                   break;
               }
+              gameElementAnimator.animateBulletTick(
+                currentBullet,
+                bulletEl,
+                bulletEl.tower,
+              );
             }
-            rmIdx.sort((a,b)=>(b-a)); // desc order
+            rmIdx.sort((a, b) => b - a); // desc order
             for (let i of rmIdx) {
-              var bId = GAME_DATA.bullets[i].id;
-              var tId = GAME_DATA.bullets[i].towerId;
-              var bulletEl = document.querySelector('#'+CSS.escape(bId));
+              var b = GAME_DATA.bullets[i];
+              var bId = b.id;
+              var tId = b.towerId;
+              var bulletEl = document.querySelector("#" + CSS.escape(bId));
               var towerEl = bulletEl.tower;
-              createBullet(towerEl);
+              createBullet(towerEl, b.chgX, b.chgY);
+              console.log("restarting bullet", bulletEl);
               bulletEl.remove();
               GAME_DATA.bullets.splice(i, 1);
+            }
+
+            for (var i = 0; i < GAME_DATA.bulletCollisions.length; i++) {
+              var collision = GAME_DATA.bulletCollisions[i];
+              collision.ticks += 1;
+              if (collision.ticks >= 80)
+                document
+                  .querySelector(`#${CSS.escape(collision.id)}`)
+                  ?.remove();
+              if (collision.ticks >= 75) {
+                var collisionElement = document.querySelector(
+                  `#${CSS.escape(collision.id)}`,
+                );
+                if (!!collisionElement) {
+                  gameElementAnimator.animateBulletBoom(collisionElement);
+                }
+              }
             }
           }, 10);
         }, 6000);
