@@ -210,7 +210,7 @@ class GameScene extends HTMLElement {
                     { x: 1, y: -1 },
                     { x: 2, y: 0 },
                   ][((parseInt(cn.level) + 1) % 3) + 1];
-                  create_bullet(cn, chg.x, chg.y);
+                  createBullet(cn, chg.x, chg.y);
                   break;
                 }
               }
@@ -222,7 +222,7 @@ class GameScene extends HTMLElement {
               return;
             } else td.towers += tower;
 
-            var div = create_tower(tower, td.towers); //document.createElement("div");
+            var div = createTower(tower, td.towers); //document.createElement("div");
             div.towerId = tower;
             div.classList.add("tower");
             td.appendChild(div);
@@ -246,7 +246,7 @@ class GameScene extends HTMLElement {
             this.setMoney(amt);
             td.towers = "";
             td.children[0].remove();
-            removeOrphanBullets();
+            //removeOrphanBullets();
             this.closeMenu();
           });
           menu.appendChild(mi);
@@ -404,46 +404,46 @@ class GameScene extends HTMLElement {
             ene.velocityTrack += ene.velocityTrack;
             ene.velocityTrack = Math.min(ene.velocityTrack, 1);
             ene.style.top = ene.y + "px";
-            var removeidx = -1;
-            for (var i = 0; i < GAME_DATA.bullets.length; i++) {
-              var currentBullet = GAME_DATA.bullets[i];
-              var bulletBoundingRect = currentBullet.getBoundingClientRect(); //bullet rect
-              var enemyBoundingRect = ene.getBoundingClientRect(); //ship rect
-              if (rects_collide(bulletBoundingRect, enemyBoundingRect)) {
-                if (ene.recentHits.includes(i)) continue;
-                if (currentBullet.phase) {
-                  ene.y -= 8;
-                }
 
-                var levelModifier = wave * 0.2 + 1;
-                console.log("-----------------------------");
-                console.log("Bullet Connection");
-                console.log("Damage: " + Math.round(currentBullet.damage));
-                console.log("Modifier: " + Math.round(levelModifier));
-                console.log(
-                  "Enemy Health:" +
-                    Math.round(ene.health) +
-                    " - " +
-                    Math.round(currentBullet.damage - levelModifier) +
-                    " = " +
-                    Math.round(
-                      ene.health - (currentBullet.damage - levelModifier)
-                    )
-                );
-                console.log("-----------------------------");
-                ene.health -= currentBullet.damage - levelModifier;
-                removeidx = i;
-                //hit
-                if (currentBullet.slow != null) {
-                  ene.velocityTrack = currentBullet.slow;
-                }
-                break;
+            var bodyRect = document.body.getBoundingClientRect();
+            var gameReferee = new window.GameReferee(bodyRect);
+            var rmIdx = [];
+            for (var i=0; i<GAME_DATA.bullets.length; i++) {
+              var currentBullet = GAME_DATA.bullets[i];
+              var bulletEl = document.querySelector('#'+CSS.escape(currentBullet.id));
+              if (bulletEl == null) continue;
+              var bulletBoundingRect = bulletEl.getBoundingClientRect(); //bullet rect
+              var enemyBoundingRect = ene.getBoundingClientRect(); //ship rect
+              var bulletEOL = gameReferee.endOfLifeBulletType(bulletBoundingRect, enemyBoundingRect, rects_collide);
+              switch(bulletEOL) {
+                case 'hit':
+                  if (bulletEl.phase) {
+                    ene.y -= 8;
+                  }
+                  var levelModifier = wave * 0.2 + 1;
+                  ene.health -= currentBullet.damage - levelModifier;
+                  if (bulletEl.slow != null) {
+                    ene.velocityTrack = bulletEl.slow;
+                  }
+                  if (ene.health < 0) ene.health = 0;
+                  // fall through
+                case 'miss':
+                  rmIdx.push(i);
+                  break;
+                default:
+                  break;
               }
             }
-            if (removeidx > -1 && !ene.recentHits.includes(removeidx)) {
-              ene.recentHits.push(removeidx);
+            rmIdx.sort((a,b)=>(b-a)); // desc order
+            for (let i of rmIdx) {
+              var bId = GAME_DATA.bullets[i].id;
+              var tId = GAME_DATA.bullets[i].towerId;
+              var bulletEl = document.querySelector('#'+CSS.escape(bId));
+              var towerEl = bulletEl.tower;
+              createBullet(towerEl);
+              bulletEl.remove();
+              GAME_DATA.bullets.splice(i, 1);
             }
-            if (ene.health < 0) ene.health = 0;
           }, 10);
         }, 6000);
       }, 1000);

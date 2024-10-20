@@ -11,6 +11,7 @@ GAME_DATA = {
   wave: 0,
   ei: 0, //enemy index (usage: waves[wave][ei])
   bullets: [],
+  dtowers: [],
   allScenes: [...ALL_SCENES],
   cs: LOADING_SCENE,
   gameOver: false,

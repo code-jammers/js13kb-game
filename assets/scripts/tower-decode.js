@@ -1,6 +1,7 @@
-function removeOrphanBullets() {
+/*function removeOrphanBullets() {
   var rmidx = -1;
-  GAME_DATA.bullets.forEach((bullet, i) => {
+  GAME_DATA.bullets.forEach((b, i) => {
+    var bullet = document.querySelector(`#${b.id}`)
     if (!bullet.tower.isConnected) {
       rmidx = i;
     }
@@ -9,48 +10,51 @@ function removeOrphanBullets() {
   while (rmidx > -1) {
     var b = GAME_DATA.bullets[rmidx];
     GAME_DATA.bullets.splice(rmidx, 1);
-    document.body.removeChild(b);
+    document.body.removeChild(document.querySelector(`#${b.id}`));
     rmidx = -1;
-    GAME_DATA.bullets.forEach((bullet, i) => {
+    GAME_DATA.bullets.forEach((b, i) => {
+      var bullet = document.querySelector(`#${b.id}`)
       if (!bullet.tower.isConnected) {
         rmidx = i;
       }
     });
   }
-}
+}*/
 
-function create_bullet(tower, chg_x = 1, chg_y = 0) {
+function createBullet(tower, chg_x = 1, chg_y = 0) {
   var bullet = document.createElement("div");
+  bullet.id = crypto.randomUUID();
   bullet.tower = tower;
-  GAME_DATA.bullets.push(bullet);
+  var b = { id: bullet.id, towerId: tower.id };
+  GAME_DATA.bullets.push(b);
   // bullet defaults
   bullet.idx = GAME_DATA.bullets.length - 1;
   bullet.style.position = "absolute";
   bullet.style.zIndex = "0";
-  bullet.damage = 3;
+  b.damage = 3;
 
   if (tower.getAttribute("quantum") !== null) {
     // higher damage for quantum towers
     // bullet rotation (ai aim assist)
     bullet.classList.add("bullet-quantum");
-    bullet.damage = GAME_DATA.quantumDamage;
+    b.damage = GAME_DATA.quantumDamage;
   }
 
   if (tower.getAttribute("phaser") !== null) {
     // laser beam straight line for phaser towers
     bullet.classList.add("bullet-phaser");
-    bullet.damage = GAME_DATA.phaserDamage;
-    bullet.slow = 0.00001; // percent pixel move per game loop iteration
+    b.damage = GAME_DATA.phaserDamage;
+    b.slow = 0.00001; // percent pixel move per game loop iteration
   }
 
   if (tower.getAttribute("thermal") !== null) {
     // aoe attack but lower damage for thermal towers
     bullet.classList.add("bullet-thermal");
-    bullet.damage = GAME_DATA.thermalDamage;
+    b.damage = GAME_DATA.thermalDamage;
   }
 
   if (tower.getAttribute("blaster") !== null) {
-    bullet.damage = GAME_DATA.blasterDamage;
+    b.damage = GAME_DATA.blasterDamage;
     bullet.classList.add("bullet-blaster");
   }
 
@@ -124,8 +128,10 @@ function create_bullet(tower, chg_x = 1, chg_y = 0) {
     bullet.style.top = bullet.y + "px";
   }, 10);
 }
-function create_tower(tower) {
+function createTower(tower) {
+  var towerId = crypto.randomUUID();
   var tow = document.createElement("div");
+  GAME_DATA.dtowers.push({ id: towerId });
   var span = document.createElement("span");
   tow.appendChild(span);
   span.setAttribute("one", ""); //levels[li],"");
@@ -139,7 +145,8 @@ function create_tower(tower) {
 
   tow.setAttribute(tower, "");
   setTimeout(() => {
-    create_bullet(tow);
+    tow.id = towerId;
+    createBullet(tow);
   });
   return tow;
 }
