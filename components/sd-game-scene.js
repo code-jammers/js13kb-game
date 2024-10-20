@@ -1,3 +1,5 @@
+const notificationManager = new NotificationManager();
+
 var t2 = document.createElement("template");
 
 t2.innerHTML = html`
@@ -46,7 +48,7 @@ t2.innerHTML = html`
 
 class GameScene extends HTMLElement {
   buildTable(query, side, ctx) {
-    setNotification(
+    notificationManager.sendNotification(
       `Attack ${GAME_DATA.wave + 1}`,
       "Build towers to defend this planet from invasion",
       6000,
@@ -149,7 +151,7 @@ class GameScene extends HTMLElement {
           mi.addEventListener("click", (e) => {
             e.stopPropagation();
             if (cost > this.money) {
-              setNotification(
+              notificationManager.sendNotification(
                 `Insufficient Funds`,
                 "Defeating waves will earn you money",
                 4000,
@@ -319,7 +321,7 @@ class GameScene extends HTMLElement {
                     this.setMoney(this.money + newMoney);
                   }
 
-                  setNotification(
+                  notificationManager.sendNotification(
                     `Level ${wave / 3}`,
                     `Contract Paid + $${newMoney}`,
                     3000,
@@ -355,7 +357,7 @@ class GameScene extends HTMLElement {
             function gameOver(win) {
               clearInterval(gameLoopInterval);
               GAME_DATA.gameOver = true;
-              setNotification(
+              notificationManager.sendNotification(
                 win ? "Success!" : "Fired!",
                 win
                   ? "You have fulfilled your contract by successfully defending this planet."

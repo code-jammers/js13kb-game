@@ -1,38 +1,52 @@
-let showingNotification = false;
-let notifications = [];
-
-setNotification = (text, subtext, timeout, color) => {
-  if (showingNotification) {
-    if (text !== notifications?.[0]?.text) {
-      notifications.push({ text, subtext, timeout, color });
-    }
-    return;
+class NotificationManager {
+  constructor(context) {
+    this.notificationsQueue = []; 
+    this.currentNotification = null;
+    this.showingNotification = false;
+    this.context = context || document.body;
   }
-  try {
-    showingNotification = true;
-    var notification = document.createElement("sd-notification");
-    notification.id = "notification";
+
+  #createNotification({ text, subtext, color }) {
+    const notification = document.createElement("sd-notification");
     notification.setAttribute("header", text);
     notification.setAttribute("text", subtext);
     notification.setAttribute("show", true);
     notification.setAttribute("color", color);
-    document.body.appendChild(notification);
-    setTimeout(() => {
-      notification.removeAttribute("show");
-      setTimeout(() => {
-        notification.remove();
-        showingNotification = false;
 
-        if (notifications.length > 0) {
-          setNotification(
-            notifications[0].text,
-            notifications[0].subtext,
-            notifications[0].timeout,
-            notifications[0].color
-          );
-          notifications.shift();
-        }
-      }, 1000);
+    return notification;
+  }
+
+  sendNotification(text, subtext, timeout = 3000, color = "default") {
+    // Prevent duplicate notifications if the same one is still showing
+    if (this.showingNotification) {
+      const isDuplicate = this.notificationsQueue.some(
+        (n) => n.text === text && n.subtext === subtext
+      );
+      if (!isDuplicate) {
+        this.notificationsQueue.push({ text, subtext, timeout, color });
+      }
+      return;
+    }
+
+    // Create the notification and show it
+    const notification = this.#createNotification({ text, subtext, color });
+    this.showingNotification = true;
+    this.context.appendChild(notification);
+
+    // Remove the notification after the timeout and show the next one if present
+    setTimeout(() => {
+      notification.remove();
+      this.showingNotification = false;
+
+      if (this.notificationsQueue.length > 0) {
+        const nextNotification = this.notificationsQueue.shift();
+        this.sendNotification(
+          nextNotification.text,
+          nextNotification.subtext,
+          nextNotification.timeout,
+          nextNotification.color
+        );
+      }
     }, timeout);
-  } catch (_) {}
-};
+  }
+}
