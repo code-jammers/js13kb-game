@@ -47,27 +47,6 @@ link,
   height: 100%;
   transform: rotate(180deg);
 }
-#notification {
-  pointer-events: none;
-  font-size: 32px;
-  font-family: system-ui;
-  color: rgb(238, 56, 32, 1);
-  z-index: 1000000;
-  width: 100%;
-  position: absolute;
-  top: 10%;
-  text-align: center;
-} /*notification*/
-
-#notification div[sub] {
-  font-family: monospace;
-  font-size: 12px;
-  color: #fff;
-  max-width: 300px;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .bullet-quantum {
   pointer-events: none;
   width: 10px;
