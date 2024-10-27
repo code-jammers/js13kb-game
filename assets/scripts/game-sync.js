@@ -1,8 +1,8 @@
-window.removeArrayIndices = function(array, indices, cb) {
+window.removeArrayIndices = function (array, indices, cb) {
   indices.sort((a, b) => b - a); // desc order
   for (let i of indices) {
-    cb(i);               // callback must happen before the splice, so caller
-    array.splice(i, 1);  // can use the array data before it is removed
+    cb(i); // callback must happen before the splice, so caller
+    array.splice(i, 1); // can use the array data before it is removed
   }
   while (indices.length > 0) {
     indices.splice(0, 1);
