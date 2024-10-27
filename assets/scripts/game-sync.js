@@ -31,6 +31,7 @@ window.gameSync = function (dom, data) {
     var bulletBoundingRect = bulletEl.getBoundingClientRect(); //bullet rect
     var enemyBoundingRect = ene.getBoundingClientRect(); //ship rect
     var bulletEOL = gameReferee.endOfLifeBulletType(
+      currentBullet,
       bulletBoundingRect,
       enemyBoundingRect,
       window.rects_collide,
@@ -52,6 +53,8 @@ window.gameSync = function (dom, data) {
         hitIssued ||= true;
       // fall through
       case "miss":
+        if (dom(`#${currentBullet.towerId}`) == null)
+          currentBullet.killBullet = true;
         rmIdx.push(i);
         break;
       default:
@@ -69,8 +72,11 @@ window.gameSync = function (dom, data) {
     var tId = b.towerId;
     var bulletEl = dom("#" + bId);
     var towerEl = bulletEl.tower;
-    createBullet(towerEl, b.chgX, b.chgY);
-    console.log("restarting bullet", bulletEl);
+    if (b.hasOwnProperty("killBullet") && b.killBullet) {
+    } else {
+      createBullet(towerEl, b.chgX, b.chgY);
+      console.log("restarting bullet", bulletEl);
+    }
     bulletEl.remove();
   });
 
