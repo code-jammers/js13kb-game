@@ -48,11 +48,9 @@ t2.innerHTML = html`
 `;
 
 class GameScene extends HTMLElement {
-  connectedCallback() {
-    setTimeout(() => {
-      const mm = new MusicManager();
-      mm.playBackgroundMusic();
-    }, 500);
+  constructor() {
+    super();
+    this.mm = null;
   }
 
   buildTable(query, side, ctx) {
@@ -248,6 +246,13 @@ class GameScene extends HTMLElement {
   }
 
   connectedCallback() {
+    document.body?.addEventListener("click", () => {
+      if (!this.mm) {
+        this.mm = new MusicManager();
+        this.mm.playBackgroundMusic();
+      }
+    });
+
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.appendChild(t2.content.cloneNode(true));
