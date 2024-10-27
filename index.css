@@ -1,13 +1,22 @@
+html {
+  scrollbar-color: rgb(0 0 0 / 80%) transparent;
+  scrollbar-width: thin;
+  overflow: auto;
+}
+
 body {
   background: #000;
   background: url(assets/images/background1.png);
   color: #f5f5f5;
-  overflow: hidden;
   margin: 0;
+  background-size: cover !important;
+  background-position: center !important;
 }
 
 body > * {
-  font-family: monospace;
+  font-family: "Audiowide", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   user-select: none;
 }
 

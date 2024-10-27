@@ -20,7 +20,9 @@
             background: #000;
             transform: opacity 1s;
             pointer-events: none;
-            font-family: system-ui;
+            font-family: "Audiowide", sans-serif;
+            font-weight: 400;
+            font-style: normal;
             text-align: center;
             box-shadow: 0 1px 2px 2px rgba(255, 255, 255, 0.2);
           }
@@ -34,8 +36,10 @@
 
           .sd-notification p {
             padding: 0;
-            font-family: monospace;
-            font-size: 13px;
+            font-family: "Iceland", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 18px;
             color: #f5f5f5;
             max-width: 250px;
             margin: 6px auto 0 auto;
