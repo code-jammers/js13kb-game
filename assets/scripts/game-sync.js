@@ -1,3 +1,14 @@
+window.removeArrayIndices = function(array, indices, cb) {
+  indices.sort((a, b) => b - a); // desc order
+  for (let i of indices) {
+    cb(i);               // callback must happen before the splice, so caller
+    array.splice(i, 1);  // can use the array data before it is removed
+  }
+  while (indices.length > 0) {
+    indices.splice(0, 1);
+  }
+};
+
 /*
  * Game Sync
  *     Keeps GAME_DATA objects and dom elements in sync.
@@ -50,8 +61,7 @@ window.gameSync = function (dom, data) {
       bulletEl.tower,
     );
   }
-  rmIdx.sort((a, b) => b - a); // desc order
-  for (let i of rmIdx) {
+  window.removeArrayIndices(data.bullets, rmIdx, (i) => {
     var b = data.bullets[i];
     var bId = b.id;
     var tId = b.towerId;
@@ -60,13 +70,12 @@ window.gameSync = function (dom, data) {
     createBullet(towerEl, b.chgX, b.chgY);
     console.log("restarting bullet", bulletEl);
     bulletEl.remove();
-    data.bullets.splice(i, 1);
-  }
+  });
 
   for (var i = 0; i < data.bulletCollisions.length; i++) {
     var collision = data.bulletCollisions[i];
     collision.ticks += 1;
-    if (collision.ticks >= 80) dom(`#${collision.id}`)?.remove();
+    if (collision.ticks >= 80) rmIdx.push(collision);
     if (collision.ticks >= 75) {
       var collisionElement = dom(`#${collision.id}`);
       if (!!collisionElement) {
@@ -74,4 +83,8 @@ window.gameSync = function (dom, data) {
       }
     }
   }
+  window.removeArrayIndices(data.bulletCollisions, rmIdx, (i) => {
+    var collision = data.bulletCollisions[i];
+    dom(`#${collision.id}`)?.remove();
+  });
 };

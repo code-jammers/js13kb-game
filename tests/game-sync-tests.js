@@ -42,7 +42,7 @@ var scenarios = [
     name: "after collision animation ends, collision game data is removed",
     shipRect: [2, 2, 6, 6],
     bulletRect: [-1, -1, 1, 1], // off-screen so new collision is not created
-    data: { wave: 0, bullets: [{ id: 0 }], bulletCollisions: [{ ticks: 500 }] },
+    data: { wave: 0, bullets: [{ id: 0 }], bulletCollisions: [{ id: 'x1', ticks: 500 }] },
     expect: (d) => d.bulletCollisions.length == 0,
   },
 ];

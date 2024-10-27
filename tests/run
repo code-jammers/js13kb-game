@@ -1,6 +1,8 @@
 #!/bin/bash
 
-test_results=$(node tests/game-sync-tests.js | grep "^TEST.*\$")
+output=$(node tests/game-sync-tests.js)
+echo "$output"
+test_results=$(echo "$output" | grep "^TEST.*\$")
 echo "${test_results}"
 
 word_count_lines=$(echo "$test_results" | grep "^TEST.*FAIL\$" | wc -l)
