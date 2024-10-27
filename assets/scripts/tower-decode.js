@@ -4,7 +4,13 @@ function createBullet(tower, chgX = 1, chgY = 0) {
   bullet.tower = tower;
   let chg_x = chgX;
   let chg_y = chgY;
-  var b = { id: bullet.id, towerId: tower.id, chgX: chgX, chgY: chgY };
+  var b = {
+    id: bullet.id,
+    towerId: tower.id,
+    chgX: chgX,
+    chgY: chgY,
+    gridSide: "lhs",
+  };
   GAME_DATA.bullets.push(b);
   // bullet defaults
   bullet.idx = GAME_DATA.bullets.length - 1;
@@ -48,7 +54,7 @@ function createBullet(tower, chgX = 1, chgY = 0) {
   bullet.y = y;
   var tag =
     tower.parentNode.parentNode.parentNode.parentNode.parentNode.tagName; //td //tr //tbody //table //l-g or r-g
-  bullet.lefttower = tag.toUpperCase() == "L-G";
+  if (tag.toUpperCase() == "R-G") b.gridSide = "rhs";
   dba(bullet);
   // var mid_x = document.body.getBoundingClientRect().width / 2.0;
   bullet.style.zIndex = "100000";

@@ -6,7 +6,20 @@ window.GameReferee = class {
     this.screenY2 = screenRect.top + screenRect.height;
   }
 
-  endOfLifeBulletType(bulletRect, enemyRect, rectsCollideFn) {
+  midpointMiss(b) {
+    var bullet = b;
+    let lhs = b.gridSide == "lhs";
+    var mid_x = this.screenX2 / 2.0;
+    if (!lhs && bullet.left < mid_x - 63) {
+      return true;
+    }
+    if (lhs && bullet.left > mid_x + 63) {
+      return true;
+    }
+    return false;
+  }
+
+  endOfLifeBulletType(b, bulletRect, enemyRect, rectsCollideFn) {
     if (rectsCollideFn(bulletRect, enemyRect)) {
       return "hit";
     } else if (
@@ -21,7 +34,8 @@ window.GameReferee = class {
         top: this.screenY2,
         width: 1000,
         height: 1000,
-      })
+      }) ||
+      this.midpointMiss(b)
     ) {
       return "miss";
     } else {
