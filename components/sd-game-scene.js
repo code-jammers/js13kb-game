@@ -1,4 +1,5 @@
 const notificationManager = new NotificationManager();
+const musicManager = new MusicManager();
 
 var t2 = document.createElement("template");
 
@@ -47,12 +48,19 @@ t2.innerHTML = html`
 `;
 
 class GameScene extends HTMLElement {
+  connectedCallback() {
+    setTimeout(() => {
+      const mm = new MusicManager();
+      mm.playBackgroundMusic();
+    }, 500);
+  }
+
   buildTable(query, side, ctx) {
     notificationManager.sendNotification(
       `Attack ${GAME_DATA.wave + 1}`,
       "Build towers to defend this planet from invasion",
       6000,
-      "rgba(238, 153, 18, 1)",
+      "rgba(238, 153, 18, 1)"
     );
     const gc = ctx.shadowRoot.querySelector(query);
     var table = document.createElement("table");
@@ -84,7 +92,7 @@ class GameScene extends HTMLElement {
         var td = document.createElement("td", document);
         td.setAttribute(
           "cost",
-          side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100,
+          side === "left" ? (j + 1) * 100 : (cw / 100 - j) * 100
         );
         tr.appendChild(td);
       }
@@ -116,10 +124,10 @@ class GameScene extends HTMLElement {
           s?.getAttribute("one") === ""
             ? "two"
             : s?.getAttribute("two") === ""
-              ? "three"
-              : s?.getAttribute("three") === ""
-                ? "four"
-                : null;
+            ? "three"
+            : s?.getAttribute("three") === ""
+            ? "four"
+            : null;
         if (!nextLevel) {
           nextLevel = "one";
         }
@@ -142,10 +150,10 @@ class GameScene extends HTMLElement {
             tower === "blaster"
               ? tpCost
               : tower === "thermal"
-                ? tpCost * 1.5
-                : tower === "phaser"
-                  ? tpCost * 2
-                  : tpCost * 2.5;
+              ? tpCost * 1.5
+              : tower === "phaser"
+              ? tpCost * 2
+              : tpCost * 2.5;
           mi.innerHTML = `<span ${nextLevel}></span> ${cost}`;
           mi.setAttribute("menu-item", true);
           mi.addEventListener("click", (e) => {
@@ -155,7 +163,7 @@ class GameScene extends HTMLElement {
                 `Insufficient Funds`,
                 "Defeating waves will earn you money",
                 4000,
-                "red",
+                "red"
               );
               this.closeMenu();
               return;
@@ -285,10 +293,11 @@ class GameScene extends HTMLElement {
           // game loop
           var gameLoopInterval = setInterval(() => {
             if (GAME_DATA.gameOver) return;
-            this.shadowRoot.querySelector("[main-title]").innerText =
-              `Space Defense Engineer (level ${Math.floor(
-                wave / 3,
-              )}/${GAME_DATA.waves?.[0].length / 3})`;
+            this.shadowRoot.querySelector(
+              "[main-title]"
+            ).innerText = `Space Defense Engineer (level ${Math.floor(
+              wave / 3
+            )}/${GAME_DATA.waves?.[0].length / 3})`;
             if (ene.y > document.body.getBoundingClientRect().height) {
               sPassed += 1;
               const planetHealthBar =
@@ -324,7 +333,7 @@ class GameScene extends HTMLElement {
                     `Level ${wave / 3}`,
                     `Contract Paid + $${newMoney}`,
                     3000,
-                    "rgba(238, 153, 18, 1)",
+                    "rgba(238, 153, 18, 1)"
                   );
 
                   var enemyImage = document.querySelector("#sst");
@@ -362,7 +371,7 @@ class GameScene extends HTMLElement {
                   ? "You have fulfilled your contract by successfully defending this planet."
                   : "You have failed to defend this planet.",
                 250000,
-                win ? "green" : "red",
+                win ? "green" : "red"
               );
               return;
             }
@@ -382,7 +391,7 @@ class GameScene extends HTMLElement {
                   selector = "#" + CSS.escape(selector.substring(1));
                 return document.querySelector(selector);
               },
-              /*data:*/ GAME_DATA,
+              /*data:*/ GAME_DATA
             );
           }, 10);
         }, 6000);

@@ -1,6 +1,6 @@
 class NotificationManager {
   constructor(context) {
-    this.notificationsQueue = []; 
+    this.notificationsQueue = [];
     this.currentNotification = null;
     this.showingNotification = false;
     this.context = context || document.body;
@@ -10,7 +10,7 @@ class NotificationManager {
     const notification = document.createElement("sd-notification");
     notification.setAttribute("header", text);
     notification.setAttribute("text", subtext);
-    notification.setAttribute("show", true);
+    notification.setAttribute("show", "true");
     notification.setAttribute("color", color);
 
     return notification;
