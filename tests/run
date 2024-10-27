@@ -1,0 +1,16 @@
+#!/bin/bash
+
+output=$(node tests/game-sync-tests.js)
+hn=$(hostname)
+if [[ "$hn" =~ "dev" ]]; then
+    echo "$output"
+    echo "-------"
+fi
+test_results=$(echo "$output" | grep "^TEST.*\$")
+echo "${test_results}"
+
+word_count_lines=$(echo "$test_results" | grep "^TEST.*FAIL\$" | wc -l)
+
+if [[ ${word_count_lines} -gt 0 ]]; then
+    exit 1;
+fi

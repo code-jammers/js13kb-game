@@ -374,85 +374,16 @@ class GameScene extends HTMLElement {
             ene.velocityTrack = Math.min(ene.velocityTrack, 1);
             ene.style.top = ene.y + "px";
 
-            var bodyRect = document.body.getBoundingClientRect();
-            var gameReferee = new window.GameReferee(bodyRect);
-            var gameElementAnimator = new window.GameElementAnimator(bodyRect);
-            var rmIdx = [];
-            var hitIssued = false;
-            for (var i = 0; i < GAME_DATA.bullets.length; i++) {
-              var currentBullet = GAME_DATA.bullets[i];
-              var bulletEl = document.querySelector(
-                "#" + CSS.escape(currentBullet.id),
-              );
-              if (bulletEl == null) continue;
-              var bulletBoundingRect = bulletEl.getBoundingClientRect(); //bullet rect
-              var enemyBoundingRect = ene.getBoundingClientRect(); //ship rect
-              var bulletEOL = gameReferee.endOfLifeBulletType(
-                bulletBoundingRect,
-                enemyBoundingRect,
-                rects_collide,
-              );
-              switch (bulletEOL) {
-                case "hit":
-                  var collision = { id: crypto.randomUUID(), ticks: 1 };
-                  GAME_DATA.bulletCollisions.push(collision);
-                  gameElementAnimator.animateBulletHit(
-                    collision,
-                    bulletEl,
-                    ene,
-                  );
-                  var bulletType = bulletEl.className.replace("bullet-", "");
-                  gameReferee.adjustShipFromHit(
-                    ene,
-                    currentBullet,
-                    wave,
-                    bulletType,
-                    bulletEl.slow,
-                    hitIssued,
-                  );
-                  hitIssued ||= true;
-                // fall through
-                case "miss":
-                  rmIdx.push(i);
-                  break;
-                default:
-                  break;
-              }
-              gameElementAnimator.animateBulletTick(
-                currentBullet,
-                bulletEl,
-                bulletEl.tower,
-              );
-            }
-            rmIdx.sort((a, b) => b - a); // desc order
-            for (let i of rmIdx) {
-              var b = GAME_DATA.bullets[i];
-              var bId = b.id;
-              var tId = b.towerId;
-              var bulletEl = document.querySelector("#" + CSS.escape(bId));
-              var towerEl = bulletEl.tower;
-              createBullet(towerEl, b.chgX, b.chgY);
-              console.log("restarting bullet", bulletEl);
-              bulletEl.remove();
-              GAME_DATA.bullets.splice(i, 1);
-            }
-
-            for (var i = 0; i < GAME_DATA.bulletCollisions.length; i++) {
-              var collision = GAME_DATA.bulletCollisions[i];
-              collision.ticks += 1;
-              if (collision.ticks >= 80)
-                document
-                  .querySelector(`#${CSS.escape(collision.id)}`)
-                  ?.remove();
-              if (collision.ticks >= 75) {
-                var collisionElement = document.querySelector(
-                  `#${CSS.escape(collision.id)}`,
-                );
-                if (!!collisionElement) {
-                  gameElementAnimator.animateBulletBoom(collisionElement);
-                }
-              }
-            }
+            GAME_DATA.wave = wave;
+            // 'body' selector will return document.body
+            window.gameSync(
+              /*dom:*/ (selector) => {
+                if (selector.startsWith("#") && selector.includes("-"))
+                  selector = "#" + CSS.escape(selector.substring(1));
+                return document.querySelector(selector);
+              },
+              /*data:*/ GAME_DATA,
+            );
           }, 10);
         }, 6000);
       }, 1000);
