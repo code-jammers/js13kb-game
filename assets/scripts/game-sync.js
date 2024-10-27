@@ -22,6 +22,8 @@ window.gameSync = function (dom, data) {
   var rmIdx = [];
   var hitIssued = false;
   var ene = dom("#ene");
+
+  /* SYNC BULLETS */
   for (var i = 0; i < data.bullets.length; i++) {
     var currentBullet = data.bullets[i];
     var bulletEl = dom("#" + currentBullet.id);
@@ -72,10 +74,11 @@ window.gameSync = function (dom, data) {
     bulletEl.remove();
   });
 
+  /* SYNC BULLET COLLISIONS  */
   for (var i = 0; i < data.bulletCollisions.length; i++) {
     var collision = data.bulletCollisions[i];
     collision.ticks += 1;
-    if (collision.ticks >= 80) rmIdx.push(collision);
+    if (collision.ticks >= 80) rmIdx.push(i);
     if (collision.ticks >= 75) {
       var collisionElement = dom(`#${collision.id}`);
       if (!!collisionElement) {

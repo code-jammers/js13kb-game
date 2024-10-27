@@ -1,7 +1,11 @@
 #!/bin/bash
 
 output=$(node tests/game-sync-tests.js)
-echo "$output"
+hn=$(hostname)
+if [[ "$hn" =~ "dev" ]]; then
+    echo "$output"
+    echo "-------"
+fi
 test_results=$(echo "$output" | grep "^TEST.*\$")
 echo "${test_results}"
 
