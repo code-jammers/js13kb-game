@@ -4,25 +4,21 @@ class GameMenu {
     this.trigger = triggerElement;
     this.backdrop = backdropElement;
 
-    // Initialize event listeners
     this.init();
   }
 
   init() {
-    // Open the menu when the trigger button is clicked
     this.trigger.addEventListener("click", () => {
-      if (this.menu.hasAttribute("open")) {
-        this.menu.hidePopover();
-        this.menu.open = false;
-        this.backdrop.style.display = "none";
-      } else {
-        this.menu.showPopover();
-        this.menu.open = true;
-        this.backdrop.style.display = "block";
+      if (!this.menu.hasAttribute("open")) {
+        this.openMenu();
       }
     });
 
-    // Add event listeners to menu options (optional)
+    this.backdrop.addEventListener("click", () => {
+      console.log("Backdrop clicked");
+      this.closeMenu();
+    });
+
     this.menu.querySelectorAll(".menu-option").forEach((option) => {
       option.addEventListener("click", (event) => {
         this.handleMenuOptionClick(event);
@@ -30,11 +26,29 @@ class GameMenu {
     });
   }
 
+  openMenu() {
+    this.menu.showPopover();
+    this.menu.setAttribute("open", true);
+    this.showBackdrop();
+  }
+
+  closeMenu() {
+    this.menu.hidePopover();
+    this.menu.removeAttribute("open");
+    this.hideBackdrop();
+  }
+
+  showBackdrop() {
+    this.backdrop.style.display = "block";
+  }
+
+  hideBackdrop() {
+    this.backdrop.style.display = "none";
+  }
+
   handleMenuOptionClick(event) {
     const option = event.target.textContent;
     console.log(`Selected option: ${option}`);
-
-    // Hide the menu after an option is clicked (optional)
-    this.menu.hidePopover();
+    this.closeMenu();
   }
 }
