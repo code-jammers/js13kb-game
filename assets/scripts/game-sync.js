@@ -84,9 +84,10 @@ window.gameSync = function (dom, data) {
   for (var i = 0; i < data.bulletCollisions.length; i++) {
     var collision = data.bulletCollisions[i];
     collision.ticks += 1;
+    var collisionElement = dom(`#${collision.id}`);
+    gameElementAnimator.animateCollisionTick(collisionElement, collision.ticks);
     if (collision.ticks >= 80) rmIdx.push(i);
     if (collision.ticks >= 75) {
-      var collisionElement = dom(`#${collision.id}`);
       if (!!collisionElement) {
         gameElementAnimator.animateBulletBoom(collisionElement);
       }

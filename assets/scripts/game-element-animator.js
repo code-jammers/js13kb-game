@@ -14,11 +14,21 @@ window.GameElementAnimator = class {
 
     const animatedCollisionSprite = document.createElement("sd-animated-sprite");
     animatedCollisionSprite.setAttribute("show", "true");
+    //animatedCollisionSprite.setAttribute("frame", {index: 0, src: './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png', width: 12, height: 12});
+    animatedCollisionSprite.setAttribute("index", 0);
+    animatedCollisionSprite.setAttribute("src",'assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');
+    animatedCollisionSprite.setAttribute("w",64);
+    animatedCollisionSprite.setAttribute("h", 64);
+    animatedCollisionSprite.setAttribute("count", 13);
     animatedCollisionSprite.id = collision.id;
-    
-    animatedCollisionSprite.update128X128(0, './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');
 
     sEl.appendChild(animatedCollisionSprite); // append collision animation to the ship element
+  }
+
+  animateCollisionTick(animatedCollisionSprite, ticks) {
+    animatedCollisionSprite?.setAttribute("index", ticks>9? (ticks+'')[0]% 13 : 0);
+    /*if (animatedCollisionSprite != null)
+      animatedCollisionSprite?.update128X128(0, './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');*/
   }
 
   animateBulletTick(bulletDataObject, bulletEl, towerEl) {
