@@ -11,66 +11,14 @@ window.GameElementAnimator = class {
   }
 
   animateBulletHit(collision, bEl, sEl) {
-    var factor = 0.2;
 
-    var svgContainer = document.createElement("div");
-    svgContainer.style.position = "absolute";
-    svgContainer.style.width = "100px";
-    svgContainer.style.height = "100px";
-    svgContainer.style.left = "0px";
-    svgContainer.style.top = "0px";
-    svgContainer.id = collision.id;
+    const animatedCollisionSprite = document.createElement("sd-animated-sprite");
+    animatedCollisionSprite.setAttribute("show", "true");
+    animatedCollisionSprite.id = collision.id;
+    
+    animatedCollisionSprite.update128X128(0, './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');
 
-    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
-    svg.setAttribute("width", 100);
-    svg.setAttribute("height", 100);
-    var bulletType = bEl.className.replace("bullet-", "");
-    var color = "#ffffff";
-    var strokeColor = "#000000";
-    if (bulletType == "phaser") {
-      color = "rgb(132, 255, 179)";
-      strokeColor = "#ff0000";
-    } else if (bulletType == "blaster") {
-      color = "rgb(20,20,20)";
-      strokeColor = "#ffff00";
-    } else if (bulletType == "thermal") {
-      color = "#dd0000";
-      strokeColor = "#ffff00";
-    } else if (bulletType == "quantum") {
-      color = "#ffff00";
-      strokeColor = "#000000";
-    }
-    //svg.style.position = 'absolute';
-    // svg.style.transform = `scale(${factor})`;
-
-    svg.style.zIndex = 1000009;
-
-    let center = (el) => {
-      var elRect = el.getBoundingClientRect();
-      return {
-        x: (elRect.left * 1.0 + elRect.width * 1.0) / 2.0,
-        y: (elRect.top * 1.0 + elRect.height * 1.0) / 2.0,
-      };
-    };
-
-    var convertedPt = {
-      x: center(bEl).x - center(sEl).x,
-      y: center(bEl).y - center(sEl).y,
-    };
-
-    //svg.style.backgroundColor = "green";
-    svg.style.transform = `scale(${factor})`;
-    //svg.setAttribute('x', convertedPt.x);
-    //svg.setAttribute('y', convertedPt.y);
-    svg.innerHTML = `<path d="m0,38l37,0l11,-38l11,38l37,0l-30,23l11,38l-30,-23l-30,23l11,-38l-30,-23l0,0z" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="3" fill="${color}" stroke="${strokeColor}" />`;
-
-    svgContainer.style.left = convertedPt.x + "px";
-    svgContainer.style.top = convertedPt.y + "px";
-
-    console.log(convertedPt);
-    svgContainer.appendChild(svg);
-    sEl.appendChild(svgContainer);
+    sEl.appendChild(animatedCollisionSprite); // append collision animation to the ship element
   }
 
   animateBulletTick(bulletDataObject, bulletEl, towerEl) {
