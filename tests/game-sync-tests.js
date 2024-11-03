@@ -3,8 +3,19 @@ global.window = {};
 global.crypto = {
   randomUUID: () => "crypto-" + uuid++,
 };
+var collisionEl;
 global.document = {
-  createElement: () => ({ style: {}, className: "", appendChild: () => false }),
+  createElement: (tag) => {
+    var obj = {};
+    if (tag == "sd-animated-sprite") collisionEl = obj;
+    obj.tagName = tag;
+    obj.style = {};
+    obj.className = "";
+    obj.appendChild = () => false;
+    obj.setAttribute = (n,v) => { this[n] = v; };
+    obj.remove = () => { this.removed=true; };
+    return obj;
+  },
   createElementNS: () => ({ style: {}, setAttribute: () => ({}) }),
 };
 require("../assets/scripts/game-math.js");
@@ -100,6 +111,7 @@ for (let scenario of scenarios) {
       /*dom:*/ (selector) => {
         if (selector == "body") return body;
         if (selector == "#ene") return shipEl;
+        if (selector == "#"+"x1" || selector == "#"+collisionEl?.id) return collisionEl?.removed ? null : collisionEl;
         return bulletEl;
       },
       /*data:*/ scenario.data,
