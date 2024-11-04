@@ -394,7 +394,10 @@ class GameScene extends HTMLElement {
               /*dom:*/ (selector) => {
                 if (selector.startsWith("#") && selector.includes("-"))
                   selector = "#" + CSS.escape(selector.substring(1));
-                return document.querySelector(selector);
+                var domEl = document.querySelector(selector);
+                if (!domEl)
+                  return document.querySelector("sd-game-scene").shadowRoot.querySelector(selector);
+                return domEl;
               },
               /*data:*/ GAME_DATA
             );

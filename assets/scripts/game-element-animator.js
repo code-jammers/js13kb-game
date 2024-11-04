@@ -20,7 +20,19 @@ window.GameElementAnimator = class {
     animatedCollisionSprite.setAttribute("w",64);
     animatedCollisionSprite.setAttribute("h", 64);
     animatedCollisionSprite.setAttribute("count", 13);
-    animatedCollisionSprite.id = collision.id;
+    animatedCollisionSprite.setAttribute("id", collision.id);
+    var shipRect = sEl.getBoundingClientRect();
+    var bulletRect = bEl.getBoundingClientRect();
+
+    animatedCollisionSprite.setAttribute(
+      "shiprectstr",
+      `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`
+    ); // can't pass rect obj through
+
+    animatedCollisionSprite.setAttribute(
+     "bulletrectstr",
+     `${bulletRect.left},${bulletRect.top},${bulletRect.width},${bulletRect.height}`
+    );
 
     sEl.appendChild(animatedCollisionSprite); // append collision animation to the ship element
   }

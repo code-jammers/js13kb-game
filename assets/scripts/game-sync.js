@@ -20,8 +20,8 @@ window.gameSync = function (dom, data) {
   var gameReferee = new window.GameReferee(bodyRect);
   var gameElementAnimator = new window.GameElementAnimator(bodyRect);
   var rmIdx = [];
-  var hitIssued = false;
   var ene = dom("#ene");
+  var hitIssued = false;
 
   /* SYNC BULLETS */
   for (var i = 0; i < data.bullets.length; i++) {
@@ -72,6 +72,7 @@ window.gameSync = function (dom, data) {
     var tId = b.towerId;
     var bulletEl = dom("#" + bId);
     var towerEl = bulletEl.tower;
+    console.log("removing bullet:", b);
     if (b.hasOwnProperty("killBullet") && b.killBullet) {
     } else {
       createBullet(towerEl, b.chgX, b.chgY);
