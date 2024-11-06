@@ -6,7 +6,7 @@ function createBullet(tower, chgX = 1, chgY = 0) {
   let chg_y = chgY;
   var b = {
     id: bullet.id,
-    towerId: tower.id,
+    towerId: tower.id ?? tower?.getAttribute("id"),
     chgX: chgX,
     chgY: chgY,
     gridSide: "lhs",
