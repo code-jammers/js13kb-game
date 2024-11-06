@@ -19,14 +19,14 @@
     }
     */
 
-// before: getSnapshotBeforeUpdate
-// after: componentDidUpdate(prevProps, prevState, snapshot)
+    // before: getSnapshotBeforeUpdate
+    // after: componentDidUpdate(prevProps, prevState, snapshot)
 
     center(elRect) {
       return {
         x: (elRect.left * 1.0 + elRect.width * 1.0) / 2.0,
-        y: (elRect.top * 1.0 + elRect.height * 1.0) / 2.0
-      }
+        y: (elRect.top * 1.0 + elRect.height * 1.0) / 2.0,
+      };
     }
 
     render({ src, show, w, h, index, count, shiprectstr, bulletrectstr }) {
@@ -39,13 +39,29 @@
       // console.log(bulletRectStr, shipRectStr);
       var sVals = shiprectstr.split(",");
       var bVals = bulletrectstr.split(",");
-      var shipRect = { left: parseInt(sVals[0]), top: parseInt(sVals[1]), width: parseInt(sVals[2]), height: parseInt(sVals[3]) };
-      var bulletRect = { left: parseInt(bVals[0]), top: parseInt(bVals[1]), width: parseInt(bVals[2]), height: parseInt(bVals[3]) };
-      var halfWidth = parseInt(w/2.0);
-      var halfHeight = parseInt(h/2.0);
+      var shipRect = {
+        left: parseInt(sVals[0]),
+        top: parseInt(sVals[1]),
+        width: parseInt(sVals[2]),
+        height: parseInt(sVals[3]),
+      };
+      var bulletRect = {
+        left: parseInt(bVals[0]),
+        top: parseInt(bVals[1]),
+        width: parseInt(bVals[2]),
+        height: parseInt(bVals[3]),
+      };
+      var halfWidth = parseInt(w / 2.0);
+      var halfHeight = parseInt(h / 2.0);
       var convertedPt = {
-        x: /*this.center(bulletRect).x*/bulletRect.left - shipRect.left - halfWidth,
-        y: /*this.center(bulletRect).y*/bulletRect.top - shipRect.top - halfHeight,
+        x:
+          /*this.center(bulletRect).x*/ bulletRect.left -
+          shipRect.left -
+          halfWidth,
+        y:
+          /*this.center(bulletRect).y*/ bulletRect.top -
+          shipRect.top -
+          halfHeight,
       };
 
       return html`
@@ -62,8 +78,8 @@
             height: ${height}px;
             width: ${width}px;
             background-image: url("${imgPath}");
-            background-size: ${width*count}px ${height}px;
-            background-position: top 0px left ${index*(width)}px;
+            background-size: ${width * count}px ${height}px;
+            background-position: top 0px left ${index * width}px;
             z-index: 1000000;
           }
         </style>

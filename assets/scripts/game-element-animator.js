@@ -11,13 +11,16 @@ window.GameElementAnimator = class {
   }
 
   animateBulletHit(collision, bEl, sEl) {
-
-    const animatedCollisionSprite = document.createElement("sd-animated-sprite");
+    const animatedCollisionSprite =
+      document.createElement("sd-animated-sprite");
     animatedCollisionSprite.setAttribute("show", "true");
     //animatedCollisionSprite.setAttribute("frame", {index: 0, src: './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png', width: 12, height: 12});
     animatedCollisionSprite.setAttribute("index", 0);
-    animatedCollisionSprite.setAttribute("src",'assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');
-    animatedCollisionSprite.setAttribute("w",64);
+    animatedCollisionSprite.setAttribute(
+      "src",
+      "assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png",
+    );
+    animatedCollisionSprite.setAttribute("w", 64);
     animatedCollisionSprite.setAttribute("h", 64);
     animatedCollisionSprite.setAttribute("count", 13);
     animatedCollisionSprite.setAttribute("id", collision.id);
@@ -27,19 +30,22 @@ window.GameElementAnimator = class {
 
     animatedCollisionSprite.setAttribute(
       "shiprectstr",
-      `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`
+      `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`,
     ); // can't pass rect obj through
 
     animatedCollisionSprite.setAttribute(
-     "bulletrectstr",
-     `${bulletRect.left},${bulletRect.top},${bulletRect.width},${bulletRect.height}`
+      "bulletrectstr",
+      `${bulletRect.left},${bulletRect.top},${bulletRect.width},${bulletRect.height}`,
     );
 
     sEl.appendChild(animatedCollisionSprite); // append collision animation to the ship element
   }
 
   animateCollisionTick(animatedCollisionSprite, ticks) {
-    animatedCollisionSprite?.setAttribute("index", ticks>9? (ticks+'')[0]% 13 : 0);
+    animatedCollisionSprite?.setAttribute(
+      "index",
+      ticks > 9 ? (ticks + "")[0] % 13 : 0,
+    );
     /*if (animatedCollisionSprite != null)
       animatedCollisionSprite?.update128X128(0, './assets/images/space-rage/Explosions/ExplosionLarge_Spritesheet.png');*/
   }

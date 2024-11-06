@@ -12,8 +12,12 @@ global.document = {
     obj.style = {};
     obj.className = "";
     obj.appendChild = () => false;
-    obj.setAttribute = (n,v) => { /*this*/obj[n] = v; };
-    obj.remove = () => { /*this*/obj.removed=true; };
+    obj.setAttribute = (n, v) => {
+      /*this*/ obj[n] = v;
+    };
+    obj.remove = () => {
+      /*this*/ obj.removed = true;
+    };
     return obj;
   },
   createElementNS: () => ({ style: {}, setAttribute: () => ({}) }),
@@ -116,7 +120,8 @@ for (let scenario of scenarios) {
         // console.warn(selector);
         if (selector == "body") return body;
         if (selector == "#ene") return shipEl;
-        if (selector == "#"+"x1" || selector == "#"+collisionEl?.id) return collisionEl?.removed ? null : collisionEl;
+        if (selector == "#" + "x1" || selector == "#" + collisionEl?.id)
+          return collisionEl?.removed ? null : collisionEl;
         return bulletEl;
       },
       /*data:*/ scenario.data,
