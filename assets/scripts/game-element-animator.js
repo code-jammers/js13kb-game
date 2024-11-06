@@ -21,6 +21,7 @@ window.GameElementAnimator = class {
     animatedCollisionSprite.setAttribute("h", 64);
     animatedCollisionSprite.setAttribute("count", 13);
     animatedCollisionSprite.setAttribute("id", collision.id);
+    //animatedCollisionSprite.id = collision.id;
     var shipRect = sEl.getBoundingClientRect();
     var bulletRect = bEl.getBoundingClientRect();
 

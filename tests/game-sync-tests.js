@@ -12,13 +12,17 @@ global.document = {
     obj.style = {};
     obj.className = "";
     obj.appendChild = () => false;
-    obj.setAttribute = (n,v) => { this[n] = v; };
-    obj.remove = () => { this.removed=true; };
+    obj.setAttribute = (n,v) => { /*this*/obj[n] = v; };
+    obj.remove = () => { /*this*/obj.removed=true; };
     return obj;
   },
   createElementNS: () => ({ style: {}, setAttribute: () => ({}) }),
 };
 require("../assets/scripts/game-math.js");
+// require("../modules/preact.js");
+// require("../modules/htm.js");
+// require("../modules/preact-custom-element.js");
+// require("../components/sd-animated-sprite.js");
 require("../assets/scripts/game-element-animator.js");
 require("../assets/scripts/game-referee.js");
 require("../assets/scripts/game-sync.js");
@@ -109,6 +113,7 @@ for (let scenario of scenarios) {
   try {
     window.gameSync(
       /*dom:*/ (selector) => {
+        // console.warn(selector);
         if (selector == "body") return body;
         if (selector == "#ene") return shipEl;
         if (selector == "#"+"x1" || selector == "#"+collisionEl?.id) return collisionEl?.removed ? null : collisionEl;
