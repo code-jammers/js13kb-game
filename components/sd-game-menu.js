@@ -5,12 +5,17 @@
 
   class SDGameMenu extends Component {
     static tagName = "sd-game-menu";
+    static observedAttributes = ["page"];
+
+    constructor() {
+      super();
+    }
 
     componentDidMount() {
       console.log("Component mounted");
     }
 
-    render() {
+    render({ page }) {
       return html`
         <style>
           [popover] {
@@ -108,8 +113,43 @@
           #backdrop.show {
             display: block; /* Show the backdrop when active */
           }
+
+          input[type="checkbox"] {
+            border: none;
+            width: 20px;
+            height: 20px;
+            outline: none;
+            place-self: end;
+            accent-color: rgba(238, 153, 18, 1);
+          }
+
+          input[type="range"] {
+            -webkit-appearance: none;
+          }
+
+          input[type="range"]:focus {
+            outline: none;
+          }
+
+          input[type="range"]::-webkit-slider-runnable-track {
+            background: #f5f5f5;
+            height: 5px;
+          }
+
+          input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            background: rgba(238, 153, 18, 1);
+            border-radius: 50%;
+            height: 15px;
+            width: 15px;
+            margin-top: -5px;
+          }
+
+          .hidden {
+            display: none;
+          }
         </style>
-        <div class="menu">
+        <div class="menu ${page !== "menu" ? "hidden" : ""}">
           <div class="menu-title">
             Space Defense Engineer
             <span class="menu-version">Version 0.0.1</span>
@@ -117,6 +157,17 @@
           <button class="menu-option">Start Game</button>
           <button class="menu-option">Options</button>
           <button class="menu-option">Exit</button>
+        </div>
+        <div class="menu ${page !== "options" ? "hidden" : ""}">
+          <div class="menu-title">Options</div>
+          <span class="menu-version">Volume</span>
+          <input type="range" min="0" max="100" value="50" class="slider" />
+          <span class="menu-version"> Enable Game Sounds </span>
+          <input type="checkbox" />
+          <span class="menu-version">Enable Game Music</span>
+          <input type="checkbox" />
+
+          <button class="menu-option">Back</button>
         </div>
       `;
     }
