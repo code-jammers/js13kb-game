@@ -12,8 +12,23 @@ class MusicManager {
       this.source = this.backgroundMusic.children?.[0];
       this.source.src = `${this.trackList[0]}`;
       this.currentIndex = 0;
-      this.setVolume(0.05);
+      const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
+      this.setVolume(volume);
     }
+
+    window.addEventListener(("volume-changed"), () => {
+      const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
+      this.setVolume(volume);
+    })
+
+    window.addEventListener(("enableGameSound"), () => {
+      const enableGameSound = localStorage.getItem("enableGameSound") === "true";
+      if (enableGameSound) {
+        this.pauseBackgroundMusic();
+      } else {
+        this.playBackgroundMusic();
+      }
+    })
   }
 
   playRandomTrack() {
@@ -56,10 +71,13 @@ class MusicManager {
   }
 
   playBackgroundMusic() {
-    this.backgroundMusic.load();
-    this.backgroundMusic.play().catch((error) => {
-      console.error("Music play failed: ", error);
-    });
+    const enableGameSound = localStorage.getItem("enableGameSound") === "true";
+    if (enableGameSound) {
+      this.backgroundMusic.load();
+      this.backgroundMusic.play().catch((error) => {
+        console.error("Music play failed: ", error);
+      });
+    }
   }
 
   pauseBackgroundMusic() {

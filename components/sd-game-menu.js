@@ -1,18 +1,30 @@
 (() => {
   const html = htm.bind(preact.h);
-  const { Component } = preact;
+  const { Component, createRef } = preact;
   const register = preactCustomElement;
 
   class SDGameMenu extends Component {
     static tagName = "sd-game-menu";
     static observedAttributes = ["page"];
+    input = createRef();
+    checkbox = createRef();
 
-    constructor() {
-      super();
+    componentDidUpdate() {
+      const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
+      const enableGameSound = localStorage.getItem("enableGameSound") === "true";
+
+      this.input.current.value = volume;
+      this.checkbox.current.checked = enableGameSound;
     }
 
-    componentDidMount() {
-      console.log("Component mounted");
+    setGameSound(checked) {
+      localStorage.setItem("enableGameSound", checked?.toString());
+      window.dispatchEvent(new CustomEvent("enableGameSound-changed"));
+    }
+
+    setVolume(volume) {
+      localStorage.setItem("volume", volume?.toString() || "0");
+      window.dispatchEvent(new CustomEvent("volume-changed"));
     }
 
     render({ page }) {
@@ -49,7 +61,8 @@
             font-family: "Audiowide", sans-serif;
             font-weight: 400;
             font-style: normal;
-            text-transform: uppercase;
+            text-transform: uppercase;const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
+
           }
 
           .menu button:hover {
@@ -102,8 +115,7 @@
           #backdrop {
             position: fixed;
             top: 0;
-            left: 0;
-            width: 100%;
+            left: 0; width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9); /* Adjust opacity as needed */
             z-index: 1; /* Ensure it appears behind the popover */
@@ -161,12 +173,9 @@
         <div class="menu ${page !== "options" ? "hidden" : ""}">
           <div class="menu-title">Options</div>
           <span class="menu-version">Volume</span>
-          <input type="range" min="0" max="100" value="50" class="slider" />
-          <span class="menu-version"> Enable Game Sounds </span>
-          <input type="checkbox" />
-          <span class="menu-version">Enable Game Music</span>
-          <input type="checkbox" />
-
+          <input oninput=${(event) => { this.setVolume(event.target.value) }} ref=${this.input} type="range" min="0" max="100" value="50" class="slider" />
+          <span class="menu-version"> Enable Music/Sounds </span>
+          <input oninput=${(event) => { this.setGameSound(event.target.checked) }} ref=${this.checkbox} type="checkbox" />
           <button class="menu-option">Back</button>
         </div>
       `;
