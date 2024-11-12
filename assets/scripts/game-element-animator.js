@@ -6,6 +6,135 @@ window.GameElementAnimator = class {
     this.screenY2 = screenRect.top + screenRect.height;
   }
 
+  buildShipBurn(x, y, shipEl, id, src) {
+      let animatedBurnSprite = document.createElement("sd-animated-sprite");
+      animatedBurnSprite.setAttribute("id", id);
+      animatedBurnSprite.id = id;
+      animatedBurnSprite.setAttribute("show", "false");
+      animatedBurnSprite.setAttribute("w", 64);
+      animatedBurnSprite.setAttribute("h", 64);
+      animatedBurnSprite.setAttribute("count", 8);
+      var shipRect = shipEl.getBoundingClientRect();
+
+      animatedBurnSprite.setAttribute(
+        "shiprectstr",
+        `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`,
+      ); // can't pass rect obj through
+
+      animatedBurnSprite.setAttribute(
+        "bulletrectstr",
+        `${shipRect.left+x},${shipRect.top+y},40,40`,
+      );
+      //animatedBurnSprite.setAttribute("shiprectstr","0,0,0,0");
+      //animatedBurnSprite.setAttribute("bulletrectstr","0,0,0,0");
+      animatedBurnSprite.setAttribute("index", 0);
+      animatedBurnSprite.setAttribute("src", src);
+      shipEl.appendChild(animatedBurnSprite);
+  }
+
+  animateDeadShip(dom, shipEl, deathTicks, maxDeathTicks) {
+
+    if (deathTicks < 1) return;
+
+    let imgDir = "./assets/images/space-rage/Explosions/";
+
+    //let x_positions = [14, 34, 54, 74];
+    //let y_positions = [74, 14, 34, 14];
+
+    let x_positions = [50]; // [0, 64, 36, 36];
+    let y_positions = [50]; // [0, 0, 36, 64];
+
+    for (var i=0; i<x_positions.length; i++) {
+        if (deathTicks >= maxDeathTicks-2) {
+            let animatedBurnSprite = dom(`#shipburn${i}`);
+            animatedBurnSprite?.remove();
+            continue;
+        }
+        if (deathTicks == 1) {
+            this.buildShipBurn(x_positions[i], y_positions[i], shipEl, "shipburn"+i, `${imgDir}/Smoke_Spritesheet.png`);
+            continue;
+        }
+
+        if (deathTicks >= (i+1)*10) {
+            let animatedBurnSprite = dom(`#shipburn${i}`);
+            if (parseInt(animatedBurnSprite.getAttribute("index")) == 7) {
+              animatedBurnSprite?.setAttribute("index", 7);
+              animatedBurnSprite?.setAttribute("show", "true");
+            } else {
+              let adjDeathTicks = deathTicks;// + i*10; // different index timings
+              let index = ((adjDeathTicks + "")[0]-1) % 8;
+              animatedBurnSprite?.setAttribute("index", index);
+              animatedBurnSprite?.setAttribute("show", "true");
+            }
+        }
+    }
+
+//     /* FIRST SHIP BURN */
+//     if (deathTicks == 1) {
+//       this.buildShipBurn(64, 0, shipEl, "shipburn", `${imgDir}/Smoke_Spritesheet.png`);
+//       return;
+//     }
+//     
+//     if(deathTicks == 20) {
+//       let animatedBurnSprite = dom(`#shipburn`);
+//       animatedBurnSprite.setAttribute("show", "true");
+// 
+//       // animatedBurnSprite.setAttribute("index", 0);
+// 
+//       // removed
+//     }
+//     if (deathTicks > 20) {
+//       let animatedBurnSprite = dom(`#shipburn`);
+//       let index = deathTicks > 9 ? (deathTicks + "")[0] % 8 : 0
+//       animatedBurnSprite?.setAttribute(
+//         "index",
+//         index,
+//       );
+//       
+//     }
+// 
+//     /* SECOND SHIP BURN */
+//     if (deathTicks == 21) {
+//       // this.buildShipBurn(0, 64, shipEl, "shipburn2", `${imgDir}/ExplosionRed_Spritesheet.png`);
+//       this.buildShipBurn(0, 64, shipEl, "shipburn2", `${imgDir}/Smoke_Spritesheet.png`);
+//     }
+//     if (deathTicks == 31) {
+//       let animatedBurnSprite = dom(`#shipburn2`);
+// 
+//       animatedBurnSprite.setAttribute("show", "true");
+// 
+//       // animatedBurnSprite.setAttribute("index", 0);
+//     }
+//     if (deathTicks > 31) {
+//       let animatedBurnSprite = dom(`#shipburn2`);
+//       let index = deathTicks > 9 ? (deathTicks + "")[0] % 8 : 0
+//       animatedBurnSprite?.setAttribute(
+//         "index",
+//         index,
+//       );
+//         
+//     }
+// 
+//     /* THIRD SHIP BURN */
+//     if (deathTicks == 11) {
+//       this.buildShipBurn(64, 64, shipEl, "shipburn3", `${imgDir}/Smoke_Spritesheet.png`);
+//     }
+//     if (deathTicks >= 31) {
+//       let animatedBurnSprite = dom(`#shipburn3`);
+//       animatedBurnSprite.setAttribute("show", "true");
+//       let index = deathTicks > 9 ? (deathTicks + "")[0] % 8 : 0
+//       animatedBurnSprite?.setAttribute(
+//         "index",
+//         index,
+//       );
+//     }
+    
+
+    //if (deathTicks == 488)
+    //  console.log(dom(`#shipburn`));
+
+  }
+
   animateBulletBoom(collisionEl) {
     collisionEl.style.transform = `scale(2)`;
   }
