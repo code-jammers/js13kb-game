@@ -10,10 +10,10 @@
     checkbox = createRef();
 
     componentDidUpdate() {
-      const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
+      const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 0.5;
       const enableGameSound = localStorage.getItem("enableGameSound") === "true";
 
-      this.input.current.value = volume;
+      this.input.current.value = volume * 100;
       this.checkbox.current.checked = enableGameSound;
     }
 
@@ -23,7 +23,7 @@
     }
 
     setVolume(volume) {
-      localStorage.setItem("volume", volume?.toString() || "0");
+      localStorage.setItem("volume", (volume / 100)?.toString() || "0");
       window.dispatchEvent(new CustomEvent("volume-changed"));
     }
 
@@ -61,8 +61,7 @@
             font-family: "Audiowide", sans-serif;
             font-weight: 400;
             font-style: normal;
-            text-transform: uppercase;const volume = localStorage.getItem("volume") ? Number(localStorage.getItem("volume")) : 50;
-
+            text-transform: uppercase;
           }
 
           .menu button:hover {
