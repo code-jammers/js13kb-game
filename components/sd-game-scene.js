@@ -301,7 +301,7 @@ class GameScene extends HTMLElement {
           /*var */ window.ene = document.createElement("div");
           ene.velocity = 1; // 1px per game loop iteration
           ene.velocityTrack = 1;
-          ene.health = 25; //100;
+          ene.health = 100;
           ene.id = "ene";
           ene.width = 100;
           ene.height = 100;
