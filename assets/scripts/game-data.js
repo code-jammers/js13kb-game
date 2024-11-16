@@ -13,6 +13,8 @@ GAME_DATA = {
   bullets: [],
   dtowers: [],
   bulletCollisions: [],
+  deathTicks: -1,
+  maxDeathTicks: 48,
   allScenes: [...ALL_SCENES],
   cs: LOADING_SCENE,
   gameOver: false,
