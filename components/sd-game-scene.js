@@ -341,7 +341,7 @@ class GameScene extends HTMLElement {
               GAME_DATA.ei += 1;
               ene.y = 40;
               ene.recentHits = [];
-              ene.health = 25; // 100;
+              ene.health = 100;
 
               if (wave < GAME_DATA.waves[0].length) {
                 wave++;
