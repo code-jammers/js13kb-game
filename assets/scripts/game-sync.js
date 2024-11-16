@@ -72,11 +72,11 @@ window.gameSync = function (dom, data) {
     var tId = b.towerId;
     var bulletEl = dom("#" + bId);
     var towerEl = bulletEl.tower;
-    console.log("removing bullet:", b);
+    //console.log("removing bullet:", b);
     if (b.hasOwnProperty("killBullet") && b.killBullet) {
     } else {
       createBullet(towerEl, b.chgX, b.chgY);
-      console.log("restarting bullet", bulletEl);
+      //console.log("restarting bullet", bulletEl);
     }
     bulletEl.remove();
   });
@@ -98,4 +98,14 @@ window.gameSync = function (dom, data) {
     var collision = data.bulletCollisions[i];
     dom(`#${collision.id}`)?.remove();
   });
+
+  /* SYNC SHIP EXPLOSION */
+  if (data.deathTicks > 0) {
+    gameElementAnimator.animateDeadShip(
+      dom,
+      dom(`#ene`),
+      data.deathTicks,
+      data.maxDeathTicks,
+    );
+  }
 };

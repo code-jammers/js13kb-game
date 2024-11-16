@@ -5,7 +5,11 @@
 
   class SDAnimatedSprite extends Component {
     static tagName = "sd-animated-sprite";
-    static observedAttributes = ["name", "index"];
+    static observedAttributes = [
+      "name",
+      "index",
+      "show" /* "shiprectstr", "bulletrectstr"*/,
+    ];
 
     /*constructor() {
       super();
