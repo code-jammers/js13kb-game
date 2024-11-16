@@ -286,7 +286,6 @@ class GameScene extends HTMLElement {
       }
 
       setTimeout(() => {
-
         let maxDeathTicks = GAME_DATA.maxDeathTicks;
 
         this.buildTable("l-g", "left", this)("r-g", "right", this);
@@ -336,7 +335,7 @@ class GameScene extends HTMLElement {
             }
             if (
               ene.y > document.body.getBoundingClientRect().height ||
-              (ene.health <= 0 && GAME_DATA.deathTicks >= (maxDeathTicks-1))
+              (ene.health <= 0 && GAME_DATA.deathTicks >= maxDeathTicks - 1)
             ) {
               GAME_DATA.ei += 1;
               ene.y = 40;
@@ -405,7 +404,7 @@ class GameScene extends HTMLElement {
 
             if (ene.health <= 0 && GAME_DATA.deathTicks == -1) {
               ene.health = 0;
-              console.log('death', GAME_DATA.deathTicks);
+              console.log("death", GAME_DATA.deathTicks);
               GAME_DATA.deathTicks = 1;
             } else if (GAME_DATA.deathTicks > 0) {
               if (GAME_DATA.deathTicks > maxDeathTicks) {

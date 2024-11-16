@@ -7,33 +7,32 @@ window.GameElementAnimator = class {
   }
 
   buildShipBurn(x, y, shipEl, id, src) {
-      let animatedBurnSprite = document.createElement("sd-animated-sprite");
-      animatedBurnSprite.setAttribute("id", id);
-      animatedBurnSprite.id = id;
-      animatedBurnSprite.setAttribute("show", "false");
-      animatedBurnSprite.setAttribute("w", 64);
-      animatedBurnSprite.setAttribute("h", 64);
-      animatedBurnSprite.setAttribute("count", 8);
-      var shipRect = shipEl.getBoundingClientRect();
+    let animatedBurnSprite = document.createElement("sd-animated-sprite");
+    animatedBurnSprite.setAttribute("id", id);
+    animatedBurnSprite.id = id;
+    animatedBurnSprite.setAttribute("show", "false");
+    animatedBurnSprite.setAttribute("w", 64);
+    animatedBurnSprite.setAttribute("h", 64);
+    animatedBurnSprite.setAttribute("count", 8);
+    var shipRect = shipEl.getBoundingClientRect();
 
-      animatedBurnSprite.setAttribute(
-        "shiprectstr",
-        `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`,
-      ); // can't pass rect obj through
+    animatedBurnSprite.setAttribute(
+      "shiprectstr",
+      `${shipRect.left},${shipRect.top},${shipRect.width},${shipRect.height}`,
+    ); // can't pass rect obj through
 
-      animatedBurnSprite.setAttribute(
-        "bulletrectstr",
-        `${shipRect.left+x},${shipRect.top+y},40,40`,
-      );
-      //animatedBurnSprite.setAttribute("shiprectstr","0,0,0,0");
-      //animatedBurnSprite.setAttribute("bulletrectstr","0,0,0,0");
-      animatedBurnSprite.setAttribute("index", 0);
-      animatedBurnSprite.setAttribute("src", src);
-      shipEl.appendChild(animatedBurnSprite);
+    animatedBurnSprite.setAttribute(
+      "bulletrectstr",
+      `${shipRect.left + x},${shipRect.top + y},40,40`,
+    );
+    //animatedBurnSprite.setAttribute("shiprectstr","0,0,0,0");
+    //animatedBurnSprite.setAttribute("bulletrectstr","0,0,0,0");
+    animatedBurnSprite.setAttribute("index", 0);
+    animatedBurnSprite.setAttribute("src", src);
+    shipEl.appendChild(animatedBurnSprite);
   }
 
   animateDeadShip(dom, shipEl, deathTicks, maxDeathTicks) {
-
     if (deathTicks < 1) return;
 
     let imgDir = "./assets/images/space-rage/Explosions/";
@@ -42,31 +41,37 @@ window.GameElementAnimator = class {
     //let y_positions = [74, 14, 34, 14];
 
     let x_positions = [50]; // [0, 64, 36, 36];
-    let y_positions = [-25];  //[50]; // [0, 0, 36, 64];
+    let y_positions = [-25]; //[50]; // [0, 0, 36, 64];
 
-    for (var i=0; i<x_positions.length; i++) {
-        if (deathTicks >= maxDeathTicks-2) {
-            let animatedBurnSprite = dom(`#shipburn${i}`);
-            animatedBurnSprite?.remove();
-            continue;
-        }
-        if (deathTicks == 1) {
-            this.buildShipBurn(x_positions[i], y_positions[i], shipEl, "shipburn"+i, `${imgDir}/Smoke_Spritesheet.png`);
-            continue;
-        }
+    for (var i = 0; i < x_positions.length; i++) {
+      if (deathTicks >= maxDeathTicks - 2) {
+        let animatedBurnSprite = dom(`#shipburn${i}`);
+        animatedBurnSprite?.remove();
+        continue;
+      }
+      if (deathTicks == 1) {
+        this.buildShipBurn(
+          x_positions[i],
+          y_positions[i],
+          shipEl,
+          "shipburn" + i,
+          `${imgDir}/Smoke_Spritesheet.png`,
+        );
+        continue;
+      }
 
-        if (deathTicks >= (i+1)*10) {
-            let animatedBurnSprite = dom(`#shipburn${i}`);
-            if (parseInt(animatedBurnSprite.getAttribute("index")) == 7) {
-              animatedBurnSprite?.setAttribute("index", 7);
-              animatedBurnSprite?.setAttribute("show", "true");
-            } else {
-              let adjDeathTicks = deathTicks;// + i*10; // different index timings
-              let index = ((adjDeathTicks + "")[0]-1) % 8;
-              animatedBurnSprite?.setAttribute("index", index);
-              animatedBurnSprite?.setAttribute("show", "true");
-            }
+      if (deathTicks >= (i + 1) * 10) {
+        let animatedBurnSprite = dom(`#shipburn${i}`);
+        if (parseInt(animatedBurnSprite.getAttribute("index")) == 7) {
+          animatedBurnSprite?.setAttribute("index", 7);
+          animatedBurnSprite?.setAttribute("show", "true");
+        } else {
+          let adjDeathTicks = deathTicks; // + i*10; // different index timings
+          let index = ((adjDeathTicks + "")[0] - 1) % 8;
+          animatedBurnSprite?.setAttribute("index", index);
+          animatedBurnSprite?.setAttribute("show", "true");
         }
+      }
     }
   }
 

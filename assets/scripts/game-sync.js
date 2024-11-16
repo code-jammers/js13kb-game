@@ -101,7 +101,11 @@ window.gameSync = function (dom, data) {
 
   /* SYNC SHIP EXPLOSION */
   if (data.deathTicks > 0) {
-    gameElementAnimator.animateDeadShip(dom, dom(`#ene`), data.deathTicks, data.maxDeathTicks);
+    gameElementAnimator.animateDeadShip(
+      dom,
+      dom(`#ene`),
+      data.deathTicks,
+      data.maxDeathTicks,
+    );
   }
-
 };
