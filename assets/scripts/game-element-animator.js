@@ -42,7 +42,7 @@ window.GameElementAnimator = class {
     //let y_positions = [74, 14, 34, 14];
 
     let x_positions = [50]; // [0, 64, 36, 36];
-    let y_positions = [50]; // [0, 0, 36, 64];
+    let y_positions = [-25];  //[50]; // [0, 0, 36, 64];
 
     for (var i=0; i<x_positions.length; i++) {
         if (deathTicks >= maxDeathTicks-2) {
