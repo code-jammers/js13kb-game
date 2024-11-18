@@ -3,7 +3,7 @@ class GameMenu {
     this.menu = menuElement;
     this.trigger = triggerElement;
     this.backdrop = backdropElement;
-
+    console.log(this.menu, this.trigger, this.backdrop);
     this.init();
   }
 
@@ -24,6 +24,8 @@ class GameMenu {
         this.handleMenuOptionClick(event);
       });
     });
+
+    this.menu.setAttribute("page", "menu");
   }
 
   openMenu() {
@@ -49,6 +51,12 @@ class GameMenu {
   handleMenuOptionClick(event) {
     const option = event.target.textContent;
     console.log(`Selected option: ${option}`);
-    this.closeMenu();
+    if (option?.toLowerCase() === "options") {
+      this.menu.setAttribute("page", "options");
+    } else if (option?.toLowerCase() === "back") {
+      this.menu.setAttribute("page", "menu");
+    } else if (option?.toLowerCase() === "exit") {
+      this.closeMenu();
+    }
   }
 }

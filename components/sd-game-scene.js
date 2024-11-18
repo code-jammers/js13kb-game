@@ -261,12 +261,12 @@ class GameScene extends HTMLElement {
   }
 
   connectedCallback() {
-    // document.body?.addEventListener("click", () => {
-    //   if (!this.mm) {
-    //     this.mm = new MusicManager();
-    //     this.mm.this.mm.playBackgroundMusic();
-    //   }
-    // });
+    document.body?.addEventListener("click", () => {
+      if (!this.mm) {
+        this.mm = new MusicManager();
+        this.mm.playBackgroundMusic();
+      }
+    });
 
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });

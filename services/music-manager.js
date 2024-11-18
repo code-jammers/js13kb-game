@@ -6,20 +6,44 @@ class MusicManager {
       "./assets/music/amalgam-217007.mp3",
     ];
 
-    const backgroundMusic = document.getElementById("background-music");
-    if (backgroundMusic) {
-      this.backgroundMusic = backgroundMusic;
-      this.source = this.backgroundMusic.children?.[0];
+    const audioElement = document.getElementById("background-music");
+    if (audioElement) {
+      this.audioElement = audioElement;
+      this.source = this.audioElement.children?.[0];
       this.source.src = `${this.trackList[0]}`;
+      this.audioElement.load();
       this.currentIndex = 0;
-      this.setVolume(0.05);
+      const volume = localStorage.getItem("volume")
+        ? Number(localStorage.getItem("volume"))
+        : 0.5;
+      this.setVolume(volume);
     }
+
+    window.addEventListener("volume-changed", () => {
+      const volume = localStorage.getItem("volume")
+        ? Number(localStorage.getItem("volume"))
+        : 0.5;
+      this.setVolume(volume);
+    });
+
+    window.addEventListener("enableGameSound-changed", () => {
+      const enableGameSound =
+        localStorage.getItem("enableGameSound") === "true";
+
+      if (enableGameSound) {
+        this.playBackgroundMusic();
+      } else {
+        this.pauseBackgroundMusic();
+      }
+    });
   }
 
   playRandomTrack() {
     const randomIndex = Math.floor(Math.random() * this.trackList.length);
     const randomTrack = this.trackList[randomIndex];
     this.source.src = randomTrack;
+    this.audioElement.load();
+
     this.playBackgroundMusic();
   }
 
@@ -34,6 +58,8 @@ class MusicManager {
 
     const nextTrack = this.trackList[this.currentIndex];
     this.source.src = nextTrack;
+    this.audioElement.load();
+
     this.playBackgroundMusic();
   }
 
@@ -48,21 +74,25 @@ class MusicManager {
 
     const previousTrack = this.trackList[this.currentIndex];
     this.source.src = previousTrack;
+    this.audioElement.load();
+
     this.playBackgroundMusic();
   }
 
   setVolume(volume) {
-    this.backgroundMusic.volume = volume;
+    this.audioElement.volume = volume;
   }
 
   playBackgroundMusic() {
-    this.backgroundMusic.load();
-    this.backgroundMusic.play().catch((error) => {
-      console.error("Music play failed: ", error);
-    });
+    const enableGameSound = localStorage.getItem("enableGameSound") === "true";
+    if (enableGameSound) {
+      try {
+        this.audioElement.play();
+      } catch {}
+    }
   }
 
   pauseBackgroundMusic() {
-    this.backgroundMusic.pause();
+    this.audioElement.pause();
   }
 }
