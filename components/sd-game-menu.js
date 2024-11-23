@@ -83,6 +83,23 @@
             place-self: end;
           }
 
+          .menu-field a, .menu-field input {
+            font-size: 16px;
+            text-transform: uppercase;
+            font-family: "Iceland", sans-serif;
+            place-self: end;
+            padding-right: 4px;
+          }
+
+          .menu-field a {
+            color: rgba(238, 153, 18, 0.5);
+          }
+
+          .menu-field input {
+            background-color: rgba(10, 10, 10, 0.5);
+            color: white;
+          }
+
           #menuButton {
             outline: none;
             border: none;
@@ -167,6 +184,7 @@
           </div>
           <button class="menu-option">Start Game</button>
           <button class="menu-option">Options</button>
+          <button class="menu-option">Multiplayer</button>
           <button class="menu-option">Exit</button>
         </div>
         <div class="menu ${page !== "options" ? "hidden" : ""}">
@@ -176,6 +194,26 @@
           <span class="menu-version"> Enable Music/Sounds </span>
           <input oninput=${(event) => { this.setGameSound(event.target.checked) }} ref=${this.checkbox} type="checkbox" />
           <button class="menu-option">Back</button>
+        </div>
+        <div class="menu ${page !== "multiplayer" ? "hidden" : ""}">
+            <div class="menu-title">Multiplayer</div>
+            <span class="menu-version">Join a game</span>
+            <span class="menu-field">
+              <a>Game Name: </a>
+              <input name="multi-game-name" type="text" placeholder="CoolGamers_${Math.floor(Math.random() * 500)}" />
+            </span>
+            <span class="menu-field">
+              <a>Display Name: </a>
+              <input type="text" placeholder="BestPlayer${Math.floor(Math.random() * 500)}" />
+            </span>
+            <button class="menu-option">Join</button>
+            <button class="menu-option">Back</button>
+        </div>
+        <div class="menu ${page !== "join" ? "hidden" : ""}">
+            <div class="menu-title">Joining Game</div>
+            <span class="menu-version">Waiting for players</span>
+            <button class="menu-option" disabled>Start</button>
+            <button class="menu-option">Back</button>
         </div>
       `;
     }

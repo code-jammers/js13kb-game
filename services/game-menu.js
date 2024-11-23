@@ -55,6 +55,10 @@ class GameMenu {
       this.menu.setAttribute("page", "options");
     } else if (option?.toLowerCase() === "back") {
       this.menu.setAttribute("page", "menu");
+    } else if (option?.toLowerCase() === "join") {
+      this.menu.setAttribute("page", "join");
+    } else if (option?.toLowerCase() === "multiplayer") {
+      this.menu.setAttribute("page", "multiplayer");
     } else if (option?.toLowerCase() === "exit") {
       this.closeMenu();
     }
