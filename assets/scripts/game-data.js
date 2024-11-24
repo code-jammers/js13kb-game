@@ -15,6 +15,7 @@ GAME_DATA = {
   bulletCollisions: [],
   deathTicks: -1,
   maxDeathTicks: 48,
+  multiplayer: false,
   allScenes: [...ALL_SCENES],
   cs: LOADING_SCENE,
   gameOver: false,

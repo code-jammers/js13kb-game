@@ -48,6 +48,26 @@ class GameMenu {
     this.backdrop.style.display = "none";
   }
 
+  async schedule() {
+    try {
+      var url = localStorage.getItem("scheduler");
+      if (url.endsWith("/"))
+        url = url.substring(0, url.length-1);
+      const response = await fetch(url + "/schedule");
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log(data);
+
+      setTimeout(() => {
+        this.menu.setAttribute("players", data.players);
+      }, 3000);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+
   handleMenuOptionClick(event) {
     const option = event.target.textContent;
     console.log(`Selected option: ${option}`);
@@ -57,8 +77,12 @@ class GameMenu {
       this.menu.setAttribute("page", "menu");
     } else if (option?.toLowerCase() === "join") {
       this.menu.setAttribute("page", "join");
+      this.schedule();
     } else if (option?.toLowerCase() === "multiplayer") {
       this.menu.setAttribute("page", "multiplayer");
+    } else if (option?.toLowerCase() === "start") {
+      window.GAME_DATA.multiplayer = true;
+      this.closeMenu();
     } else if (option?.toLowerCase() === "exit") {
       this.closeMenu();
     }
