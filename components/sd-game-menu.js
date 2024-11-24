@@ -5,7 +5,7 @@
 
   class SDGameMenu extends Component {
     static tagName = "sd-game-menu";
-    static observedAttributes = ["page"];
+    static observedAttributes = ["page", "players"];
     input = createRef();
     checkbox = createRef();
 
@@ -27,7 +27,26 @@
       window.dispatchEvent(new CustomEvent("volume-changed"));
     }
 
-    render({ page }) {
+    setGame(val) {
+      localStorage.setItem("game", val);
+    }
+
+    setDisplayName(val) {
+      localStorage.setItem("displayName", val);
+    }
+
+    setScheduler(val) {
+      localStorage.setItem("scheduler", val);
+    }
+
+    render({ page, players }) {
+      var game = localStorage.getItem("game");
+      var displayName = localStorage.getItem("displayName");
+      var scheduler = localStorage.getItem("scheduler");
+      var player1 = players == null ? "Waiting..." : players.split(",")[0];
+      var player2 = players == null ? "Waiting..." : players.split(",")[1];
+      var player3 = players == null ? "Waiting..." : players.split(",")[2];
+
       return html`
         <style>
           [popover] {
@@ -81,6 +100,24 @@
             text-transform: uppercase;
             font-family: "Iceland", sans-serif;
             place-self: end;
+          }
+
+          .menu-field a, .menu-field input {
+            font-size: 16px;
+            text-transform: uppercase;
+            font-family: "Iceland", sans-serif;
+            place-self: end;
+            padding-right: 4px;
+          }
+
+          .menu-field a, .menu-field ol {
+            color: rgba(238, 153, 18, 0.5);
+          }
+
+          .menu-field input {
+            background-color: rgba(10, 10, 10, 0.5);
+            color: white;
+            width: 100%;
           }
 
           #menuButton {
@@ -167,6 +204,7 @@
           </div>
           <button class="menu-option">Start Game</button>
           <button class="menu-option">Options</button>
+          <button class="menu-option">Multiplayer</button>
           <button class="menu-option">Exit</button>
         </div>
         <div class="menu ${page !== "options" ? "hidden" : ""}">
@@ -176,6 +214,54 @@
           <span class="menu-version"> Enable Music/Sounds </span>
           <input oninput=${(event) => { this.setGameSound(event.target.checked) }} ref=${this.checkbox} type="checkbox" />
           <button class="menu-option">Back</button>
+        </div>
+        <div class="menu ${page !== "multiplayer" ? "hidden" : ""}">
+            <div class="menu-title">Multiplayer</div>
+            <span class="menu-version">Join a game</span>
+            <span class="menu-field">
+              <a>Game Name: </a>
+              <input name="multi-game-name" type="text"
+                value=${game}
+                placeholder="CoolGamers_${Math.floor(Math.random() * 500)}"
+                oninput=${(event) => { this.setGame(event.target.value); }}
+              />
+            </span>
+            <span class="menu-field">
+              <a>Display Name: </a>
+              <input type="text"
+                value=${displayName}
+                placeholder="BestPlayer${Math.floor(Math.random() * 500)}"
+                oninput=${(event) => { this.setDisplayName(event.target.value); }}
+              />
+            </span>
+            <span class="menu-field">
+              <a>Game Scheduling Service Url: </a>
+              <input type="text"
+                value=${scheduler}
+                placeholder="https://localhost:8080"
+                oninput=${(event) => { this.setScheduler(event.target.value); }}
+              />
+            </span>
+            <button class="menu-option">Join</button>
+            <button class="menu-option">Back</button>
+        </div>
+        <div class="menu ${page !== "join" ? "hidden" : ""}">
+            <div class="menu-title">Joining Game</div>
+            <span class="menu-version">Waiting for players</span>
+            <div class="menu-field">
+              <a>Game: ${game}</a><br/>
+              <a>Display Name: ${displayName}</a><br/>
+              <a>Scheduler Url: ${scheduler}</a>
+            </div>
+            <div class="menu-field">
+              <ol>
+                <li>${player1}</li>
+                <li>${player2}</li>
+                <li>${player3}</li>
+              </ol>
+            </div>
+            <button class="menu-option ${players == null ? "hidden" : ""}">Start</button>
+            <button class="menu-option">Back</button>
         </div>
       `;
     }
